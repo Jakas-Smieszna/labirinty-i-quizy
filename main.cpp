@@ -6,7 +6,7 @@ int main() {
     while (!WindowShouldClose())
     {
         BeginDrawing();
-        ClearBackground(RED);
+        ClearBackground(YELLOW);
         DrawText("Congrats!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
