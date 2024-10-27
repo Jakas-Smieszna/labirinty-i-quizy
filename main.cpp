@@ -1,4 +1,4 @@
-#include "raylib.h"
+﻿#include "raylib.h"
 
 int main() {
     InitWindow(800, 450, "raylib [core] example - basic window");
@@ -7,7 +7,7 @@ int main() {
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("!", 190, 200, 20, LIGHTGRAY);
+        DrawText("Witaj, Swiecie!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
 
