@@ -7,7 +7,7 @@ int main() {
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Witaj, Swiecie!", 190, 200, 20, LIGHTGRAY);
+        DrawText("Macie jest cudownym chlopcem!", 190, 200, 20, LIGHTGRAY);
         EndDrawing();
     }
 
