@@ -133,6 +133,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grafika1\Tlo1.png" />
+    <Image Include="Grafika1\Tlo2.png" />
+    <Image Include="Grafika1\Tlo3.png" />
+    <Image Include="Grafika1\Tlo4.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
