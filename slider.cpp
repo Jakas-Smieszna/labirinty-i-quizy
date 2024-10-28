@@ -25,5 +25,6 @@ void slider::update() {
 		clickXNormalised -= posX * GetScreenWidth();
 		clickXNormalised /= (width) * GetScreenWidth();
 		value = min + clickXNormalised * (max - min);
+		onChange(value);
 	}
 }
