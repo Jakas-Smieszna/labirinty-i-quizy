@@ -9,13 +9,14 @@
 // gamestate.h
 StanEkranu stanGry = MAIN_MENU;
 // !!
-
+void Init();
 void Rysowanie();
 void Update();
 
 int main() {
     InitWindow(800, 450, "Labirynty i Quizy");
     SetWindowState(FLAG_WINDOW_RESIZABLE);
+    Init();
     while (!WindowShouldClose())
     {
         Update();
@@ -25,6 +26,10 @@ int main() {
     }
     CloseWindow();
     return 0;
+}
+
+void Init() {
+    ustawienia::initSettings();
 }
 
 void Update() {
