@@ -132,6 +132,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="przycisk.cpp" />
+    <ClCompile Include="slider.cpp" />
+    <ClCompile Include="ustawienia.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="funkcjePomocnicze.h" />
+    <ClInclude Include="gamestate.h" />
+    <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="przycisk.h" />
+    <ClInclude Include="slider.h" />
+    <ClInclude Include="ustawienia.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
