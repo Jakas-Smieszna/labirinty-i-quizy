@@ -131,6 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="gra_labirynt.cpp" />
+    <ClCompile Include="gra_quiz.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="przycisk.cpp" />
@@ -140,10 +142,21 @@
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h" />
     <ClInclude Include="gamestate.h" />
+    <ClInclude Include="gra_labirynt.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="Grafika.h" />
     <ClInclude Include="przycisk.h" />
     <ClInclude Include="slider.h" />
     <ClInclude Include="ustawienia.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grafika1\Ikona1.png" />
+    <Image Include="Grafika1\Puchar1.png" />
+    <Image Include="Grafika1\Puchar2.png" />
+    <Image Include="Grafika1\Tlo1.png" />
+    <Image Include="Grafika1\Tlo2.png" />
+    <Image Include="Grafika1\Tlo3.png" />
+    <Image Include="Grafika1\Tlo4.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
