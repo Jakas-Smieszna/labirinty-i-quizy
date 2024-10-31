@@ -30,6 +30,12 @@
     <ClCompile Include="slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gra_labirynt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gra_quiz.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -50,5 +56,34 @@
     <ClInclude Include="slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Grafika.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gra_labirynt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grafika1\Tlo1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Ikona1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Puchar1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Puchar2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
