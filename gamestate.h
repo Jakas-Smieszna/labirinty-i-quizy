@@ -12,12 +12,8 @@ enum StanEkranu {
     // gdy Miłosz zrobi menu instrukcji, doda tu stan
     // i może go nazwie INSTRUKCJA
     // potem dodać do switcha w Rysowanie() i Update(), na dole pod mainem,
-    DO_LABIRYNT = 7,
-    GRA_LABIRYNT = 8,
-    Z_LABIRYNT = 9,
-    DO_QUIZ = 10,
-    GRA_QUIZ = 11,
-    Z_QUIZ = 12,
+    GRA_LABIRYNT = 7,//JG:labirynt
+    GRA_QUIZ = 8,//JG:quiz
     EXIT // Na koniec - wyjście.
 };
 
@@ -34,23 +30,22 @@ public:
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
     char epizod_doc;//JG:Sluzy do zmiany epizodu w ustawieniach i z losowania (specjalna funkcja sprawdza czy ep docelowy jest biezacym ep, a jak nie to ustawia biezacy ep i powiazane parametry (w tym grafiki) na docelowy ep.
-    char poziom;//JG:
-    char poziom_doc;
-    double czas;
-    double kontrola_czas;
-    double limit_czas;
-    double kontrola_wynik;
-    double wynik;
-    double rekord_wlasny;
-    double rekord_lokalny;
-    double rekord_swiata;
-    bool pauza;
-    char pauza_czulosc;
-    int cofniecia;
-    int kontrola_cofniecia;
-    int limit_cofniecia;
-    char trudnosc_labirynt;
-    char trudnosc_pytania;
+    char poziom;//JG:chyba nie zrobimy wiecej niz 5 poziomow na epizod wiec int nie jest tu potrzebny (a poza tym, kto nie lubi czarow?)
+    char poziom_doc;//JG:Dziala (nie ma jeszcze funkcji w przeciwienstwie) analogicznie jak epizod_doc tylko dla poziomow
+    double czas;//JG:licznik czasu; liczenie na klatke zamiast czasomierzem systemowym jest sprawiedliwsze, bo uwzglednia poslizg zaciec, nierownomiernego tempa realizacji klatek itp
+    double kontrola_czas;//JG:czas z punkty kontrolnego, wczytywany przy cofnieciu - wynik i tak sie obnizy z powodu wiekszej liczby cofniec
+    double limit_czas;//JG:jesli nie przejdziesz poziomu w wyznaczonym czasie, przegrywasz, chociaz pelni to raczej funkcje ogranicznika dlugosci wyswietlanej liczby niz dodatkowego wyzwania
+    double kontrola_wynik;//JG:wynik przywracany po cofnieciu do punktu kontrolnego
+    double wynik;//JG:biezacy wynik gracza
+    double rekord_wlasny;//JG:najlepszy wynik biezacego gracza na tym poziomie przy biezacych ustawieniach trudnosci
+    double rekord_lokalny;//JG:najlepszy wynik dowolnego gracza ze wszystkich dostepnych na urzadzeniu uzytkownikow na tym poziomie przy biezacych ustawieniach trudnosci
+    double rekord_swiata;//JG:najlepszy wynik w chmurze (najlepszy na podlaczonym do sieci swiecie) na tym poziomie przy biezacych ustawieniach trudnosci
+    bool pauza;//JG:czy pauza aktywna / ruch nieaktywny
+    char pauza_czulosc;//JG:odlicza klatki nim mozna bedzie zmienic ustawienie / uzyc przycisku ponownie
+    int cofniecia;//JG:liczba cofniec do punktow kontrolnych podczas biezacej rozgrywki
+    int limit_cofniecia;//JG:limit cofniec na poziomie, ktorego wyczzerpanie oznacza porazke
+    char trudnosc_labirynt;//JG:trudnosc labiryntow
+    char trudnosc_pytania;//JG:zakres pytan
     /*JG:TRUDNOSCI:
         a)labirynty:
         '0' - poczatkujacy
@@ -64,26 +59,36 @@ public:
         's' - podstawowka + liceum + pare pytan wiedzy hobbistycznej i poziomu akademickiego
     Do ewentualnych zmian.
     */
-    float glosnosc;//zmienna pod glosnosc, suwak z rozgrywki podpiety
+    float glosnosc;//JG:zmienna pod glosnosc, suwak z rozgrywki podpiety
     
-    char wyzwanie;
-    double punkty;
-    double punkty_wymagane;
-    char odp_zaznaczona;
-    char ministan;
-    int proba;
-    int proba_max;
-    char* pytanie_opis;
-    char* pytanie;
-    char* odp_wytlumaczenie;
+    char wyzwanie;//JG:poziom konsekwencji za niepowodzenie qizu
+    /*JG:wyzwanie:
+       'b' - bezpieczny (pozwala podejsc do quizu drugi raz bez cofania)
+       's' - straznik - switch od progu punktowego
+       'p' - pulapka - cofa do punktu kontrolnego przy porazce calego quizu
+       */
+    double punkty;//JG:punkty uzyskane za odpowiedzi w czasie biezacego quizu
+    double punkty_wymagane;//JG:punkty wymagane do pomyslnego przejsca quizu
+    char odp_zaznaczona;//JG:zaznaczona obecnie odpowiedz (domyslnie A)
+    char ministan;//JG:pelni funkcje analogiczna do stanGry, ale na podpoziomie poszczegolnych stanow
+    /*QUIZY:
+        'q' - faza pytania
+        'd' - faza uzyskania wytlumaczenia odpowiedzi po pytaniu
+        'u' - ostatnie 'd' quizu gdy ukonczony
+    */
+    int proba;//JG:numer pytania w biezacym quizie - wsn, ktore to pytanie w serii
+    int proba_max;//JG:maksymalna liczba pytan w serii - po wyczerpaniu przegrywasz quiz i ponosisz konsekwencje zalezne od wyzwania; na koncu znak '\0'
+    char* pytanie_opis;//JG:caly tekst opisu fabularnego pytania
+    char* pytanie;//JG:caly tekst pytania z odpowiedziami; dzielony na 5 segmentow - w tym 4 z odpowiedziami i 1 z pytaniem; segmenty oddzielone znakie '\n'; na koncu znak '\0'
+    char* odp_wytlumaczenie;//JG:caly tekst wytlumaczenia wraz z opisem fabularnym odzielone na 2 segmenty, analogicznie jak pytanie; najpierw opis, potem tlumaczenie; 
     char odp_pop;
     
     //JG:TABLICE POD PRZYCISKI TRYBU GRY
-    float LAB_zaczep_dec_przycisku[24];//JG:obszary poboru tekstur
-    char LAB_czulosc_przycisku[9];//JG:liczniki odliczajace do 0 przed mozliwoscia ponownego klikniecia
+    float LAB_zaczep_dec_przycisku[24];//JG:obszary poboru tekstur (po 2 na przycisk, 1 dla x, 1 dla y)
+    char LAB_czulosc_przycisku[9];//JG:liczniki odliczajace do 0 przed mozliwoscia ponownego klikniecia (po 1 na prycisk, nie wszystkie uzywaja)
     
 
-    PakietZmiennych() {
+    PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
         uzytkownik = "Rimek Wesolek";
         koniec = false;
         mysz_x = GetMouseX();
@@ -92,7 +97,7 @@ public:
         mysz_pop_y = GetMouseY();
         kurosr_czulosc = 0;
         srand(time(NULL));
-        epizod_doc = (char)(rand()%4 + 1);
+        epizod_doc = (char)(rand()%4 + 1);//losuje epizod pod tlo po uruchomieniu
         epizod = 1;
         poziom = 1;
         poziom_doc = 1;
@@ -107,18 +112,13 @@ public:
         pauza = false;
         pauza_czulosc = 0;
         cofniecia = 0;
-        kontrola_cofniecia = 0;
         limit_cofniecia = 20;
         trudnosc_labirynt = '0';
         trudnosc_pytania = '6';
         glosnosc = 50.0f;
 
         wyzwanie = 'b';
-        /*JG:wyzwanie:
-        'b' - bezpieczny (pozwala podejsc do quizu drugi raz bez cofania)
-        's' - straznik - switch od progu punktowego
-        'p' - pulapka - cofa do punktu kontrolnego przy porazce calego quizu
-        */
+       
         punkty = 0.0;
         punkty_wymagane = 10.0;
         odp_zaznaczona = 'A';
