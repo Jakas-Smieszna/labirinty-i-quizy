@@ -22,10 +22,10 @@ namespace menu {
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
 		if (szer >= wys * grafiki->tlo.szer / grafiki->tlo.wys) {
-			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, szer, szer * grafiki->tlo.wys / grafiki->tlo.szer }, {0.0f, 0.0f}, 0.0f, WHITE);
+			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, szer, szer * grafiki->tlo.wys / grafiki->tlo.szer }, {0.0f, 0.0f}, 0.0f, ColorBrightness(WHITE, -0.25f));
 		}
 		else {
-			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, WHITE);
+			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
 		}
 		//DrawTexturePro(tlo.text, {0.0f, 0.0f, tlo.szer, tlo.wys}, {0.0f, 0.0f, tlo.szer, tlo.wys}, {0.0f, 0.0f}, 0.0f, WHITE);
 		// Tekst Główny

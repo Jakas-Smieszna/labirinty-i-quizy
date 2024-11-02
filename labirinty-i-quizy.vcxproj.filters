@@ -62,6 +62,9 @@
     <ClInclude Include="gra_labirynt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gra_quiz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Tlo1.png">
@@ -85,5 +88,10 @@
     <Image Include="Grafika1\Puchar2.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Kursor.cur">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
