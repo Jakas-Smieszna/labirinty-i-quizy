@@ -6,12 +6,15 @@
 #include "slider.h"
 #include <string>
 namespace ustawienia {
+	int volume = 35;
 	Przycisk Buttons[] = {
-		Przycisk("Powróć", 0, 1, 30, false, [&] {stanGry = StanEkranu::MAIN_MENU;}, true)
+		Przycisk("Powróć", 0, 1, 30, BUTTON_FIT, [&] {stanGry = StanEkranu::MAIN_MENU;}),
+		Przycisk("VOL", 0.2, 0.7, 30, BUTTON_CENTER, [&] {volume = 64; })
 	};
 	std::string volstr;
-	int volume = 35;
 	slider Volume("Głośność", 0.25, 0.3, 0.5);
+	RadioPrzycisk lowVol("VOL<50", 0.25, 0.4, 30, BUTTON_NONE, [&] {Volume.change(25); }, [&] {return Volume.value < 50; });
+	RadioPrzycisk hiVol("VOL>50", 0.55, 0.4, 30, BUTTON_NONE, [&] {Volume.change(75); }, [&] {return Volume.value >= 50; });
 	void initSettings() {
 		Volume.value = volume;
 		volstr = "Głośność: " + std::to_string(static_cast<int>(Volume.value)) + "%";
@@ -27,6 +30,8 @@ namespace ustawienia {
 			b.draw();
 		}
 		Volume.draw();
+		lowVol.draw();
+		hiVol.draw();
 	}
 
 	void updateSettings() {
@@ -34,5 +39,7 @@ namespace ustawienia {
 			b.update();
 		}
 		Volume.update();
+		lowVol.update();
+		hiVol.update();
 	}
 }

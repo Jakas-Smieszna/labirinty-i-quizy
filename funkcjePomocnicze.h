@@ -53,4 +53,5 @@ namespace helper {
 		int txtWidth = MeasureText(text, fontSize);
 		return IsInArea(textX - txtWidth/2, textY, textX + txtWidth/2, textY + fontSize, posX, posY);
 	}
+
 }

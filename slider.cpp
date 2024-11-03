@@ -14,17 +14,28 @@ void slider::draw() {
 }
 
 void slider::update() {
-	if (!CheckCollisionPointRec(
+	if (CheckCollisionPointCircle(
+		GetMousePosition(), 
+		Vector2{ GetScreenWidth() * (posX + width * ((value - min) / max)), GetScreenHeight() * posY },
+		rH * 1) || _dragging){
+		_dragging = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+	}
+	if (!_dragging && !CheckCollisionPointRec(
 		Vector2{ static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) },
 		Rectangle{ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2, GetScreenWidth() * width, rH })
-		) {
+		) 
+	{
 		return;
 	}
-	if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && !_dragging) {
+	bool MBR = IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
+	if (MBR || _dragging) {
 		float clickXNormalised = std::max(posX * GetScreenWidth(), std::min((posX + width) * GetScreenWidth(), static_cast<float>(GetMouseX())));
 		clickXNormalised -= posX * GetScreenWidth();
 		clickXNormalised /= (width) * GetScreenWidth();
-		value = min + clickXNormalised * (max - min);
-		onChange(value);
+		change(min + clickXNormalised * (max - min));
 	}
+}
+void slider::change(float newVal) {
+	value = newVal;
+	onChange(value);
 }

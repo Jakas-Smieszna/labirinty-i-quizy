@@ -7,12 +7,12 @@
 namespace menu {
 	// Definicja Przycisków w menu
 	Przycisk Buttons[] = {
-		Przycisk("Wybierz Poziom", 0.5, 0.3, 20, true),
-		Przycisk("Instrukcja", 0.5, 0.4, 20, true),
-		Przycisk("Zmień Użytkownika", 0.5, 0.5, 20, true),
-		Przycisk("Ustawienia", 0.5, 0.6, 20, true, [&] {stanGry = StanEkranu::USTAWIENIA;}),
-		Przycisk("Twórcy", 0.5, 0.7, 20, true, [&] {stanGry = StanEkranu::TWÓRCY;}),
-		Przycisk("Wyjdź", 0.5, 0.8, 20, true, [&] {stanGry = StanEkranu::EXIT;}),
+		Przycisk("Wybierz Poziom", 0.5, 0.3, 20, BUTTON_CENTER),
+		Przycisk("Instrukcja", 0.5, 0.4, 20, BUTTON_CENTER),
+		Przycisk("Zmień Użytkownika", 0.5, 0.5, 20, BUTTON_CENTER),
+		Przycisk("Ustawienia", 0.5, 0.6, 20, BUTTON_CENTER, [&] {stanGry = StanEkranu::USTAWIENIA;}),
+		Przycisk("Twórcy", 0.5, 0.7, 20, BUTTON_CENTER, [&] {stanGry = StanEkranu::TWÓRCY;}),
+		Przycisk("Wyjdź", 0.5, 0.8, 20, BUTTON_CENTER, [&] {stanGry = StanEkranu::EXIT;}),
 	};
 
 	// Rysowanie

@@ -15,6 +15,7 @@ struct slider {
 		posX(posX), posY(posY), width(width), onChange(onChange) {};
 	void draw();
 	void update();
+	void change(float newVal);
 
 	float rH = 8;
 	bool _dragging = false;
