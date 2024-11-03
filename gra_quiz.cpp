@@ -362,6 +362,14 @@ namespace quiz {
 			DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[20], zmienne->LAB_zaczep_dec_przycisku[21], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f, 84.0f * Skala_liter + wys_pom, 66.0f * Skala_liter, 66.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
 			DrawText("D", 290.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f, 84.0f * Skala_liter + wys_pom, (int)(70.0f * Skala_liter), napis_epizodu);
 		}
+		else {
+			DrawRectangle((szer - 272.0f * Skala_liter) * 0.5f - 80.0f * Skala_liter, wys * 0.5f - 30.0f * Skala_liter, 160.0f * Skala_liter, 60.0f * Skala_liter, Fade(szata_epizodu, 0.75f));
+			DrawRectangle((szer - 272.0f * Skala_liter) * 0.5f - 81.0f * Skala_liter, wys * 0.5f - 31.0f * Skala_liter, 3.0f * Skala_liter, 62.0f * Skala_liter, BLACK);
+			DrawRectangle((szer - 272.0f * Skala_liter) * 0.5f + 79.0f * Skala_liter, wys * 0.5f - 31.0f * Skala_liter, 3.0f * Skala_liter, 62.0f * Skala_liter, BLACK);
+			DrawRectangle((szer - 272.0f * Skala_liter) * 0.5f - 81.0f * Skala_liter, wys * 0.5f + 29.0f * Skala_liter, 162.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
+			DrawRectangle((szer - 272.0f * Skala_liter) * 0.5f - 81.0f * Skala_liter, wys * 0.5f - 31.0f * Skala_liter, 162.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
+			DrawText("PAUZA", (szer - 272.0f * Skala_liter) * 0.5f - 67.0f * Skala_liter, wys * 0.5f - 17.0f * Skala_liter, (int)(40.0f * Skala_liter), napis_epizodu);
+		}
 
 		//JG:PRZYCISK PAUZA
 		DrawRectangle(szer - 248.0f * Skala_liter, 410.0f * Skala_liter, 70.0f * Skala_liter, 70.0f * Skala_liter, napis_epizodu);
@@ -370,7 +378,7 @@ namespace quiz {
 			jasnosc_pom = -0.5f;
 			SetMouseCursor(4);
 			zmienne->kurosr_czulosc = 1;
-			DrawText("Wlacz/wylacz ruch", szer - 258.0f * Skala_liter, 490.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
+			DrawText("Pauza (zmienia pytanie!)", szer - 258.0f * Skala_liter, 490.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
 		}
 		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[0], zmienne->LAB_zaczep_dec_przycisku[1], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { szer - 246.0f * Skala_liter, 412.0f * Skala_liter, 66.0f * Skala_liter, 66.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
 		if (!zmienne->pauza) {
@@ -400,7 +408,7 @@ namespace quiz {
 		DrawRectangle(szer - 130.0f * Skala_liter, 466.0f * Skala_liter, 14.0f * Skala_liter, 2.0f * Skala_liter, napis_epizodu);
 		DrawRectangle(szer - 142.0f * Skala_liter, 423.0f * Skala_liter, 5.0f * Skala_liter, 11.0f * Skala_liter, napis_epizodu);
 
-		//JG:PRZYCISK COFNIECIE DO PUNKTU KONTROLNEGO
+		//JG:PRZYCISK COFNIECIE DO LABIRYNTU
 		DrawRectangle(szer - 78.0f * Skala_liter, 410.0f * Skala_liter, 70.0f * Skala_liter, 70.0f * Skala_liter, napis_epizodu);
 		if (zmienne->cofniecia >= zmienne->limit_cofniecia) {
 			jasnosc_pom = -0.75f;
@@ -409,7 +417,7 @@ namespace quiz {
 			jasnosc_pom = -0.5f;
 			SetMouseCursor(4);
 			zmienne->kurosr_czulosc = 1;
-			DrawText("Cofnij sie do PK", szer - 258.0f * Skala_liter, 490.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
+			DrawText("Poddaj sie/wroc", szer - 258.0f * Skala_liter, 490.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
 		}
 		else jasnosc_pom = 0.0f;
 		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[4], zmienne->LAB_zaczep_dec_przycisku[5], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { szer - 76.0f * Skala_liter, 412.0f * Skala_liter, 66.0f * Skala_liter, 66.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
@@ -591,6 +599,7 @@ namespace quiz {
 		}
 		else if (IsKeyDown(KEY_Q) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 248.0f * Skala_liter && zmienne->mysz_x < szer - 178.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter)) {
 			zmienne->pauza = !zmienne->pauza;
+			if (zmienne->pauza) zmienne->ministan = 'q';
 			zmienne->pauza_czulosc = 25;
 		}
 
