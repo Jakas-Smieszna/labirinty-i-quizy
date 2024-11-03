@@ -1,6 +1,6 @@
-﻿#include "przycisk.h"
+﻿#include "Przycisk.h"
 #include "funkcjePomocnicze.h"
-void Przycisk::draw() const {
+void PrzyciskTekst::draw() const {
 	if (flags & BUTTON_DISABLED) return;
 	int x, y;
 	getDrawCoords(&x, &y);
@@ -17,61 +17,60 @@ void Przycisk::draw() const {
 	}
 }
 
-void Przycisk::drawInactive(int x, int y) const {
-	if(flags & BUTTON_CENTER)
-		helper::DrawTextCentered(text, x, y, fontSize, colorInactive);
-	else
-		DrawText(text, x, y, fontSize, colorInactive);
+void PrzyciskTekst::drawInactive(int x, int y) const {
+	//if(flags & BUTTON_CENTER)
+	//	helper::DrawTextCentered(text, x, y, fontSize, colorInactive);
+	//else
+	DrawText(text, x, y, fontSize, colorInactive);
 }
-void Przycisk::drawHover(int x, int y) const {
-	if (flags & BUTTON_CENTER)
-		helper::DrawTextCenteredBackgroundColor(text, x, y, fontSize, colorInactive, colorActive);
-	else
-		helper::DrawTextBackgroundColor(text, x, y, fontSize, colorInactive, colorActive);
+void PrzyciskTekst::drawHover(int x, int y) const {
+	//if (flags & BUTTON_CENTER)
+	//	helper::DrawTextCenteredBackgroundColor(text, x, y, fontSize, colorInactive, colorActive);
+	//else
+	helper::DrawTextBackgroundColor(text, x, y, fontSize, colorInactive, colorActive);
 }
-void Przycisk::drawActive(int x, int y) const {
+void PrzyciskTekst::drawActive(int x, int y) const {
 	drawHover(x, y);
 }
 
-void Przycisk::update() {
+void PrzyciskTekst::update() {
 	if (flags & BUTTON_DISABLED) return;
 	handleStateChangeConditions();
 	afterStateChangeLogic();
 
 }
-void Przycisk::handleStateChangeConditions() {
+void PrzyciskTekst::handleStateChangeConditions() {
 	int x, y;
 	getDrawCoords(&x, &y);
 	bool hover = false;
-	if (flags & BUTTON_CENTER)
-		hover = helper::IsInTextAreaCentered(text, x, y, fontSize, GetMouseX(), GetMouseY());
-	else
-		hover = helper::IsInTextArea(text, x, y, fontSize, GetMouseX(), GetMouseY());
+	//if (flags & BUTTON_CENTER)
+	//	hover = helper::IsInTextAreaCentered(text, x, y, fontSize, GetMouseX(), GetMouseY());
+	//else
+	hover = helper::IsInTextArea(text, x, y, fontSize, GetMouseX(), GetMouseY());
 	state = hover ? NAJECHANY : NIEAKTYWNY;
 }
 
-void Przycisk::afterStateChangeLogic() {
+void PrzyciskTekst::afterStateChangeLogic() {
 	if (state == NAJECHANY && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-		onPress();
+		onActivation();
 	}
 }
 
-void Przycisk::getDrawCoords(int* x, int* y) const {
-	*x = GetScreenWidth() * posX, *y = GetScreenHeight() * posY;
-	if (flags & BUTTON_FIT) { // jak musi być na ekranie to yyy przesuwam
-		*x = std::max(0, std::min(GetScreenWidth() - MeasureText(text, fontSize), *x));
-		*y = std::max(0, std::min(GetScreenHeight() - fontSize, *y));
-	}
+void PrzyciskTekst::getDrawCoords(int* x, int* y) const {
+	*x = GetScreenWidth() * pozycja.absX, *y = GetScreenHeight() * pozycja.absY;
+	*x += static_cast<int>(MeasureText(text, fontSize) * pozycja.offsetX);
+	*y += static_cast<int>(fontSize * pozycja.offsetY);
 }
-
-void RadioPrzycisk::drawActive(int x, int y) const {
+/*
+void RadioPrzyciskTekst::drawActive(int x, int y) const {
 	if (flags & BUTTON_CENTER)
 		helper::DrawTextCenteredBackgroundColor(text, x, y, fontSize, colorInactive, colorActive, 4);
 	else
 		helper::DrawTextBackgroundColor(text, x, y, fontSize, colorInactive, colorActive, 4);
 }
-void RadioPrzycisk::handleStateChangeConditions() {
-	Przycisk::handleStateChangeConditions();
+void RadioPrzyciskTekst::handleStateChangeConditions() {
+	PrzyciskTekst::handleStateChangeConditions();
 	if (activeCondition())
 		state = AKTYWNY;
 }
+*/

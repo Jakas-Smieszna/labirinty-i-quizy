@@ -50,5 +50,8 @@
     <ClInclude Include="slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="positioning.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

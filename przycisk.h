@@ -29,6 +29,24 @@ struct _Przycisk {
 	// przykłady w mainMenu.cpp
 	std::function<void()> onActivation;
 
+	_Przycisk(ScreenPos Pozycja, ScreenPos Rozmiar, std::function<void()> FunkcjaAktywacji = [&] {}, int Flagi = BUTTON_NONE) {
+		pozycja = Pozycja;
+		rozmiar = Rozmiar;
+		onActivation = FunkcjaAktywacji;
+		flags = Flagi;
+		state = NIEAKTYWNY;
+	}
+	_Przycisk() {
+		pozycja = { 0,0,0,0 };
+		rozmiar = { 0,0,0,0 };
+		onActivation = [&] {};
+		flags = BUTTON_DISABLED;
+		state = NIEAKTYWNY;
+	}
+
+	virtual void update() = 0; // Update, przed rysowaniem.
+	virtual void draw() const = 0; // Logika sterująca rysowaniem
+
 };
 
 struct PrzyciskTekst : public _Przycisk {
@@ -39,32 +57,32 @@ struct PrzyciskTekst : public _Przycisk {
 
 	// Tworzy nowy przycisk.
 	// const char* text - tekst. Albo "taki" w cudzysłowiu albo std::string i c_str().
-	// float posX - Pozycja tekstu na ekranie od 0 do 1. 0 - na lewo, 1 - na prawo, 0.5 - środek.
-	// float posY - Pozycja tekstu na ekranie od 0 do 1. 0 - na górze, 1 - na dole, 0.5 - środek.
+	// ScreenPos position - pozycja, patrz positioning.h, ale przykłady:
+	// lewy dolny róg ekranu, tak by sie przycisk mieścił: {0, 1, 0, -1}
+	// środek, wyśrodkowany: {0.5, 0.5, -0.5, -0.5}
+	// itp. dokładniejsze info w positioning.h
 	// int fontSize - rozmiar czcionki tekstu
-	// bool center - czy tekst jest wyśrodkowany
 	// std::function<void()> onPress - lambda function która się odpali gdy tekst
 	// coś w stylu:
 	// [&] {/* KOD */};
 	// Zobaczcie mainMenu.cpp aby dokładniej obczaić o co mi chodzi z tym
-	Przycisk(
+	// int flags - flagi; na tą chwile nieużywane
+	PrzyciskTekst(
 		const char* text, // Test
-		float posX,
-		float posY,
+		ScreenPos position,
 		int fontSize,
-		int flags = BUTTON_NONE,
 		std::function<void()> onPress = [&] {},
+		int flags = BUTTON_NONE,
 		Color colorActive = WHITE,
 		Color colorInactive = BLACK) :
-		text(text), posX(posX), posY(posY), fontSize(fontSize), flags(flags), onPress(onPress),
+		_Przycisk(position, {0,0,0,0}, onPress, flags),
+		text(text), fontSize(fontSize),
 		colorActive(colorActive), colorInactive(colorInactive)
-	{
-		state = NIEAKTYWNY;
-	}
+	{};
 	void update(); // Update, przed rysowaniem.
 
 	// Te funkcje nie mogą zmienić stanu przycisku:
-	void draw() const; // Logika sterująca rysowaniem:
+	void draw() const;
 	void drawInactive(int x, int y) const; // Rysowanie, gdy nie jest zaznaczony.
 	void drawHover(int x, int y) const; // Rysowanie, gdy najechany.
 	void drawActive(int x, int y) const; // Rysowanie, gdy jest *aktywny*
@@ -73,7 +91,7 @@ protected:
 	void handleStateChangeConditions();
 	void afterStateChangeLogic();
 };
-
+/*
 struct RadioPrzycisk : public Przycisk {
 	std::function<bool()> activeCondition;
 
@@ -93,3 +111,4 @@ struct RadioPrzycisk : public Przycisk {
 	void handleStateChangeConditions();
 
 };
+*/
