@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -30,6 +30,12 @@
     <ClCompile Include="slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gra_labirynt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gra_quiz.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -53,5 +59,42 @@
     <ClInclude Include="positioning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Grafika.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gra_labirynt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gra_quiz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Grafika1\Tlo1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Tlo4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Ikona1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Puchar1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Puchar2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Kursor.cur">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
