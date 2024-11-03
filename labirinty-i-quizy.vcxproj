@@ -145,6 +145,7 @@
     <ClInclude Include="gra_labirynt.h" />
     <ClInclude Include="gra_quiz.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="positioning.h" />
     <ClInclude Include="Grafika.h" />
     <ClInclude Include="przycisk.h" />
     <ClInclude Include="slider.h" />

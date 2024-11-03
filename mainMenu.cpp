@@ -7,17 +7,22 @@
 #include <string>
 namespace menu {
 	// Definicja Przycisków w menu
-	Przycisk Buttons[] = {
-		Przycisk("Wybierz Poziom", 0.5, 0.3, 20, true),
-		Przycisk("Instrukcja", 0.5, 0.4, 20, true),
-		Przycisk("Zmień Użytkownika", 0.5, 0.5, 20, true),
-		Przycisk("Ustawienia", 0.5, 0.6, 20, true, [&] {stanGry = StanEkranu::USTAWIENIA;}),
-		Przycisk("Twórcy", 0.5, 0.7, 20, true, [&] {stanGry = StanEkranu::TWÓRCY;}),
-		Przycisk("Wyjdź", 0.5, 0.8, 20, true, [&] {stanGry = StanEkranu::EXIT;}),
+	_Przycisk* Buttons[] = {
+		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30),
+		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20),
+		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20),
+		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA;}),
+		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
+		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT;}),
+#ifdef _DEBUG // tego w Release nie będzie
+		new PrzyciskTekst("QUIZ", {0.2, 0.2, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
+		new PrzyciskTekst("LABIRYNT", {0.2, 0.3, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
+#endif // _DEBUG // tego w Release nie będzie
+
 	};
 
 	// Rysowanie
-	void drawMainMenu(GRAFIKI* grafiki) {
+	void drawMainMenu() {
 		ClearBackground(DARKGREEN);
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
@@ -29,15 +34,15 @@ namespace menu {
 		}
 		//DrawTexturePro(tlo.text, {0.0f, 0.0f, tlo.szer, tlo.wys}, {0.0f, 0.0f, tlo.szer, tlo.wys}, {0.0f, 0.0f}, 0.0f, WHITE);
 		// Tekst Główny
-		helper::DrawTextCentered("Labirynty i Quizy", GetScreenWidth() / 2, GetScreenHeight() * 0.10, 30, WHITE);
+		helper::DrawTextCentered("Labirynty i Quizy", GetScreenWidth() / 2, GetScreenHeight() * 0.10, 40, WHITE);
 		// Opcje menu
 		for (auto& B : Buttons) {
-			B.draw();
+			B->draw();
 		}
 	}
 	void updateMainMenu() {
 		for (auto& B : Buttons) {
-			B.update();
+			B->update();
 		}
 	}
 }

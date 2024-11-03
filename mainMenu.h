@@ -3,5 +3,5 @@
 #include "Grafika.h"
 namespace menu {
 	void updateMainMenu();
-	void drawMainMenu(GRAFIKI* grafiki);
+	void drawMainMenu();
 }
