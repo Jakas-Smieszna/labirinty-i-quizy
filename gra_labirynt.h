@@ -4,5 +4,5 @@
 #include "gamestate.h"
 namespace labirynt {
 	void updateLabirynt(PakietZmiennych* zmienne, grafika* tlo);
-	void drawLabirynt(GRAFIKI* grafiki, PakietZmiennych* zmienne);
+	void drawLabirynt(PakietZmiennych* zmienne);
 }

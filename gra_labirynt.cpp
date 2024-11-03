@@ -1,4 +1,4 @@
-#include "funkcjePomocnicze.h"
+﻿#include "funkcjePomocnicze.h"
 #include "raylib.h"
 #include "Grafika.h"
 #include "gamestate.h"
@@ -9,7 +9,7 @@ namespace labirynt {
 	
 
 	// Rysowanie
-	void drawLabirynt(GRAFIKI* grafiki, PakietZmiennych* zmienne) {
+	void drawLabirynt(PakietZmiennych* zmienne) {
 		if (zmienne->kurosr_czulosc == 0) SetMouseCursor(1);
 		else if (zmienne->kurosr_czulosc > 0) zmienne->kurosr_czulosc = zmienne->kurosr_czulosc - 1;
 		else zmienne->kurosr_czulosc = 0;
@@ -55,6 +55,8 @@ namespace labirynt {
 		DrawText(TextFormat("Epizod: %d", zmienne->epizod), 10.0f * Skala_liter, 11.5f * Skala_liter, (int)(21.0f * Skala_liter), napis_epizodu);//JG:wyswietla biezacy epizod
 		DrawText(TextFormat("Poziom: %d", zmienne->poziom), 124.0f * Skala_liter, 11.5f * Skala_liter, (int)(21.0f * Skala_liter), napis_epizodu);//JG:wyswietla biezacy poziom
 		char* trudnosc_napis = "";
+		//MG: nie byłoby najwydajniej użyć mapy?
+		// https://en.cppreference.com/w/cpp/container/map
 		switch (zmienne->trudnosc_labirynt) {//JG:chyba wydajniejsze niz string i konwersja
 		default:
 		case '0':

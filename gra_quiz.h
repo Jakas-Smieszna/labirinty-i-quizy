@@ -4,5 +4,5 @@
 #include "gamestate.h"
 namespace quiz {
 	void updateQuiz(PakietZmiennych* zmienne, grafika* tlo);
-	void drawQuiz(GRAFIKI* grafiki, PakietZmiennych* zmienne);
+	void drawQuiz(PakietZmiennych* zmienne);
 }

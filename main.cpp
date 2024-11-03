@@ -11,33 +11,36 @@
 // gamestate.h
 StanEkranu stanGry = GRA_QUIZ;
 // !!
+GRAFIKI* grafiki = nullptr;
+Theme EpisodeTheme = Theme();
 
 void UstawEkran0(Image ikona);
-void Rysowanie(GRAFIKI* grafiki, PakietZmiennych* zmienne);
-void Update(PakietZmiennych* zmienne, GRAFIKI* grafiki);
+void Rysowanie(PakietZmiennych* zmienne);
+void Update(PakietZmiennych* zmienne);
 
 int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
     PakietZmiennych Zmienne;
-    GRAFIKI GRAFIKI;
-    UstawEkran0(GRAFIKI.ikona);
+    grafiki = new GRAFIKI;
+    UstawEkran0(grafiki->ikona);
 
     while (!WindowShouldClose() && !Zmienne.koniec)
     {
-        Update(&Zmienne, &GRAFIKI);
+        Update(&Zmienne);
         BeginDrawing();
-        Rysowanie(&GRAFIKI, &Zmienne);
+        Rysowanie(&Zmienne);
         EndDrawing();
     }
-    GRAFIKI.D_GRAFIKI();
+    grafiki->D_GRAFIKI();
     CloseWindow();
     return 0;
 }
 
-void Update(PakietZmiennych* zmienne, GRAFIKI* grafiki) {
+void Update(PakietZmiennych* zmienne) {
     if (zmienne->epizod != zmienne->epizod_doc) {
         zmienne->epizod = zmienne->epizod_doc;
         grafiki->aktualizuj_tlo(zmienne->epizod);
+        EpisodeTheme.Update(zmienne->epizod);
     }
     switch (stanGry) {
         case MAIN_MENU:
@@ -46,7 +49,7 @@ void Update(PakietZmiennych* zmienne, GRAFIKI* grafiki) {
         case USTAWIENIA:
             ustawienia::updateSettings();
             break;
-        case TWÓRCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
+        case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // update
             break;
         case EXIT:
@@ -66,26 +69,26 @@ void Update(PakietZmiennych* zmienne, GRAFIKI* grafiki) {
 }
 
 // Bardziej zaawansowane rysowanie i update-y lepiej pewnie umieścić w oddzielnych funkcjach
-void Rysowanie(GRAFIKI* grafiki, PakietZmiennych* zmienne) {
+void Rysowanie(PakietZmiennych* zmienne) {
     switch (stanGry) {
         case MAIN_MENU:
             // jak np. tu zrobiłem
-            menu::drawMainMenu(grafiki);
+            menu::drawMainMenu();
             break;
         case USTAWIENIA:
             ustawienia::drawSettings();
             // draw
             break;
-        case TWÓRCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
+        case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // draw
             break;
         case GRA_LABIRYNT:
             // JJJ
-            labirynt::drawLabirynt(grafiki, zmienne);
+            labirynt::drawLabirynt(zmienne);
             break;
         case GRA_QUIZ:
             // JJJ
-            quiz::drawQuiz(grafiki, zmienne);
+            quiz::drawQuiz(zmienne);
             break;
     }
 }

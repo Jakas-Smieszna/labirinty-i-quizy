@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "raylib.h"
 
 #define OknoSzerBaz 1080
@@ -101,3 +101,36 @@ public:
 	}
 
 };
+
+extern GRAFIKI* grafiki;
+
+struct Theme {
+	Color textColor;
+	Color borderColor;
+	Color bgColor;
+	Theme() { textColor = borderColor = bgColor = BLACK; }
+	void Update(int episodenum) {
+		switch (episodenum) {
+		default:
+		case 1:
+			bgColor = BROWN;
+			textColor = YELLOW;
+			break;
+		case 2:
+			bgColor = DARKGREEN;
+			textColor = ColorBrightness(SKYBLUE, 0.15f);
+			break;
+		case 3:
+			bgColor = DARKGRAY;
+			textColor = RED;
+			break;
+		case 4:
+			bgColor = BLACK;
+			textColor = WHITE;
+			break;
+		}
+	}
+};
+
+// szata epizodu; do przycisków, głównie.
+extern Theme EpisodeTheme;

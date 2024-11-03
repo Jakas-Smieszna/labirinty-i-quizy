@@ -8,7 +8,7 @@
 namespace quiz {
 
 	// Rysowanie
-	void drawQuiz(GRAFIKI* grafiki, PakietZmiennych* zmienne) {
+	void drawQuiz(PakietZmiennych* zmienne) {
 		if (zmienne->kurosr_czulosc == 0) SetMouseCursor(1);
 		else if (zmienne->kurosr_czulosc > 0) zmienne->kurosr_czulosc = zmienne->kurosr_czulosc - 1;
 		else zmienne->kurosr_czulosc = 0;

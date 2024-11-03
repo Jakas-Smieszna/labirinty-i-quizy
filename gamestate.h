@@ -6,7 +6,7 @@
 enum StanEkranu {
     MAIN_MENU = 0,
     USTAWIENIA,
-    TWÓRCY,
+    TWORCY,
     // Dodajcie tutaj nowe stany, jak je utworzycie.
     // Przez stan mam na myśli inne "menu", np
     // gdy Miłosz zrobi menu instrukcji, doda tu stan
@@ -16,7 +16,7 @@ enum StanEkranu {
     GRA_QUIZ = 8,//JG:quiz
     EXIT // Na koniec - wyjście.
 };
-
+extern StanEkranu stanGry;
 
 //JG:Nie chcialo mi sie robic na to nowego pliku. Mam nadzieje, ze Wam to nie przeszkada. Ogolnie baza czesto uzywanych zmiennych do ,,globalnego" zasiegu.
 class PakietZmiennych {
@@ -98,7 +98,7 @@ public:
         kurosr_czulosc = 0;
         srand(time(NULL));
         epizod_doc = (char)(rand()%4 + 1);//losuje epizod pod tlo po uruchomieniu
-        epizod = 1;
+        epizod = 0;
         poziom = 1;
         poziom_doc = 1;
         czas = 0.0;
@@ -138,5 +138,3 @@ public:
         }
     }
 };
-
-extern StanEkranu stanGry;

@@ -12,12 +12,17 @@ namespace menu {
 		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20),
 		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20),
 		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA;}),
-		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWÓRCY;}),
+		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
 		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT;}),
+#ifdef _DEBUG // tego w Release nie będzie
+		new PrzyciskTekst("QUIZ", {0.2, 0.2, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
+		new PrzyciskTekst("LABIRYNT", {0.2, 0.3, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
+#endif // _DEBUG // tego w Release nie będzie
+
 	};
 
 	// Rysowanie
-	void drawMainMenu(GRAFIKI* grafiki) {
+	void drawMainMenu() {
 		ClearBackground(DARKGREEN);
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();

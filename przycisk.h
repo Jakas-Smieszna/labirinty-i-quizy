@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include "raylib.h"
 #include "positioning.h"
+#include "Grafika.h"
 #include <functional>
+#include <iostream>
 enum StanPrzycisku {
 	NIEAKTYWNY = 0,
 	NAJECHANY,
@@ -11,6 +13,7 @@ enum StanPrzycisku {
 // flagi
 #define BUTTON_NONE	(0)		// Default.
 #define BUTTON_DISABLED (1<<0)	// Czy przycisk jest wyłączony?
+#define BUTTON_NO_OUTLINE (1<<1) // Czy nie rysować go w prostokącie?
 
 struct _Przycisk {
 	ScreenPos pozycja; // pozycja przycisku na ekranie
@@ -52,8 +55,6 @@ struct _Przycisk {
 struct PrzyciskTekst : public _Przycisk {
 	const char* text; // text, oczywiście
 	int fontSize; // rozmiar czcionki 
-	Color colorActive;
-	Color colorInactive;
 
 	// Tworzy nowy przycisk.
 	// const char* text - tekst. Albo "taki" w cudzysłowiu albo std::string i c_str().
@@ -68,17 +69,17 @@ struct PrzyciskTekst : public _Przycisk {
 	// Zobaczcie mainMenu.cpp aby dokładniej obczaić o co mi chodzi z tym
 	// int flags - flagi; na tą chwile nieużywane
 	PrzyciskTekst(
-		const char* text, // Test
+		const char* tekst, // Test
 		ScreenPos position,
-		int fontSize,
+		int _fontSize,
 		std::function<void()> onPress = [&] {},
-		int flags = BUTTON_NONE,
-		Color colorActive = WHITE,
-		Color colorInactive = BLACK) :
-		_Przycisk(position, {0,0,0,0}, onPress, flags),
-		text(text), fontSize(fontSize),
-		colorActive(colorActive), colorInactive(colorInactive)
-	{};
+		int flags = BUTTON_NONE) :
+		_Przycisk(position, {0,0,0,0}, onPress, flags)
+	{
+		text = tekst;
+		fontSize = _fontSize;
+		//std::cout << (MeasureText(tekst, _fontSize)) << " | " << static_cast<float>(_fontSize) << std::endl;
+	};
 	void update(); // Update, przed rysowaniem.
 
 	// Te funkcje nie mogą zmienić stanu przycisku:
@@ -90,6 +91,17 @@ protected:
 	void getDrawCoords(int* x, int* y) const; // zwraca, przez wskaźnik, x i y koordynatów do rysowania
 	void handleStateChangeConditions();
 	void afterStateChangeLogic();
+	Rectangle getBoundingRect() const;
+	bool initialized = false;
+	void initialize() {
+		rozmiar = {
+			static_cast<float>(MeasureText(text, fontSize)) / static_cast<float>(OknoSzerBaz),
+			static_cast<float>(fontSize) / static_cast<float>(OknoWysBaz),
+			0.05f,
+			0.2f
+		};
+		initialized = true;
+	}
 };
 /*
 struct RadioPrzycisk : public Przycisk {

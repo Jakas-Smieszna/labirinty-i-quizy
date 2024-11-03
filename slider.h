@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include <functional>
 struct slider {
-	float min = 0, max = 100, value = 50;
+	float min = 0, max = 1, value = 0.5;
 	Color barColor = DARKGRAY;
 	Color fillColor = WHITE;
 	Color dotColor = GRAY;

@@ -3,11 +3,11 @@
 #include <iostream>
 
 void slider::draw() {
-	DrawRectangleRounded(Rectangle{ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2,
+	DrawRectangleRounded({ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2,
 		GetScreenWidth() * width, rH },
 		1, 12, barColor);
-	DrawRectangleRounded(Rectangle{ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2,
-		GetScreenWidth() * width * ((value - min) / max), rH},
+	DrawRectangleRounded({ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2,
+		GetScreenWidth() * width * value, rH},
 		1, 12, fillColor);
 	DrawCircleV(Vector2{ GetScreenWidth() * (posX + width * ((value - min) / max)), GetScreenHeight()* posY },
 		rH * 1, dotColor);
@@ -21,6 +21,7 @@ void slider::update() {
 		_dragging = IsMouseButtonDown(MOUSE_BUTTON_LEFT);
 	}
 	if (!_dragging && !CheckCollisionPointRec(
+		GetMousePosition()
 		Vector2{ static_cast<float>(GetMouseX()), static_cast<float>(GetMouseY()) },
 		Rectangle{ GetScreenWidth() * posX,GetScreenHeight() * posY - rH / 2, GetScreenWidth() * width, rH })
 		) 
