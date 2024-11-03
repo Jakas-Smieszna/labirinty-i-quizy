@@ -12,7 +12,7 @@ namespace ustawienia {
 		PrzyciskTekst("VOL", {0.2, 0.7,0,0}, 30, [&] {volume = 64; })
 	};
 	std::string volstr;
-	slider Volume("Głośność", 0.25, 0.3, 0.5);
+	sliderHorizontal Volume({ 0.25, 0.3, 0, 0 }, 0.5);
 	//RadioPrzycisk lowVol("VOL<50", 0.25, 0.4, 30, BUTTON_NONE, [&] {Volume.change(25); }, [&] {return Volume.value < 50; });
 	//RadioPrzycisk hiVol("VOL>50", 0.55, 0.4, 30, BUTTON_NONE, [&] {Volume.change(75); }, [&] {return Volume.value >= 50; });
 	void initSettings() {
