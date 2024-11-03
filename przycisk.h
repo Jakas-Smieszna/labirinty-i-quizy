@@ -74,11 +74,10 @@ struct PrzyciskTekst : public _Przycisk {
 		int _fontSize,
 		std::function<void()> onPress = [&] {},
 		int flags = BUTTON_NONE) :
-		_Przycisk(position, {0,0,0,0}, onPress, flags)
+		_Przycisk(position, {0.f,0.f,0.05f,0.2f}, onPress, flags)
 	{
 		text = tekst;
 		fontSize = _fontSize;
-		//std::cout << (MeasureText(tekst, _fontSize)) << " | " << static_cast<float>(_fontSize) << std::endl;
 	};
 	void update(); // Update, przed rysowaniem.
 
@@ -86,41 +85,36 @@ struct PrzyciskTekst : public _Przycisk {
 	void draw() const;
 	void drawInactive(int x, int y) const; // Rysowanie, gdy nie jest zaznaczony.
 	void drawHover(int x, int y) const; // Rysowanie, gdy najechany.
-	void drawActive(int x, int y) const; // Rysowanie, gdy jest *aktywny*
+	void virtual drawActive(int x, int y) const; // Rysowanie, gdy jest *aktywny*
 protected:
 	void getDrawCoords(int* x, int* y) const; // zwraca, przez wskaźnik, x i y koordynatów do rysowania
-	void handleStateChangeConditions();
+	void virtual handleStateChangeConditions() ;
 	void afterStateChangeLogic();
 	Rectangle getBoundingRect() const;
-	bool initialized = false;
-	void initialize() {
-		rozmiar = {
-			static_cast<float>(MeasureText(text, fontSize)) / static_cast<float>(OknoSzerBaz),
-			static_cast<float>(fontSize) / static_cast<float>(OknoWysBaz),
-			0.05f,
-			0.2f
-		};
-		initialized = true;
+	int getFontSizeScaled() const {
+		float scale = 1.f;
+		if (GetScreenWidth() >= GetScreenHeight() * grafiki->tlo.szer / grafiki->tlo.wys) {
+			scale = (float)GetScreenHeight() / OknoWysBaz;
+		} else {
+			scale = (float)GetScreenWidth() / OknoSzerBaz;
+		}
+		return static_cast<int>(static_cast<float>(fontSize) * scale);
 	}
 };
-/*
-struct RadioPrzycisk : public Przycisk {
+
+struct RadioPrzyciskTekst : public PrzyciskTekst {
 	std::function<bool()> activeCondition;
 
-	RadioPrzycisk(
-		const char* text, // Test
-		float posX,
-		float posY,
-		int fontSize,
-		int flags,
+	RadioPrzyciskTekst(
+		const char* tekst, // Test
+		ScreenPos position,
+		int _fontSize,
 		std::function<void()> onPress = [&] {},
-		std::function<bool()> activeCondition = [&] {return false; },
-		Color colorActive = WHITE,
-		Color colorInactive = BLACK) :
-		Przycisk(text, posX, posY, fontSize, flags, onPress, colorActive, colorInactive),
-		activeCondition(activeCondition) {};
+		std::function<bool()> activeCond = [&] {return false; },
+		int flags = BUTTON_NONE) :
+		PrzyciskTekst(tekst, position, _fontSize, onPress, flags),
+		activeCondition(activeCond) {};
 	void drawActive(int x, int y) const; // Rysowanie, gdy jest *aktywny*
-	void handleStateChangeConditions();
+	void handleStateChangeConditions() ;
 
 };
-*/

@@ -17,21 +17,18 @@ void PrzyciskTekst::draw() const {
 	}
 }
 
+#define SCALING (1.f)
+
 void PrzyciskTekst::drawInactive(int x, int y) const {
 	if (!(flags & BUTTON_NO_OUTLINE)) {
-		int pad = 5;
-		float txtWidth = (float)MeasureText(text, fontSize);
 		DrawRectangleLinesEx(getBoundingRect(), 2.5f, EpisodeTheme.borderColor);
 		DrawRectangleRec(getBoundingRect(), Fade(EpisodeTheme.bgColor, 0.65f));
 	}
-	DrawText(text, x, y, fontSize, EpisodeTheme.textColor);
+	DrawTextEx(EpisodeTheme.textFont, text, {(float)x, (float)y}, getFontSizeScaled(), SCALING, EpisodeTheme.textColor);
 }
 void PrzyciskTekst::drawHover(int x, int y) const {
-	int pad = 5;
-	float txtWidth = (float)MeasureText(text, fontSize);
 	DrawRectangleRec(getBoundingRect(), ColorBrightness(EpisodeTheme.bgColor, 0.35f));
-	DrawText(text, x, y, fontSize, Fade(EpisodeTheme.textColor, 0.3f));
-	//helper::DrawTextBackgroundColor(text, x, y, fontSize, EpisodeTheme.textColor, colorActive);
+	DrawTextEx(EpisodeTheme.textFont, text, { (float)x, (float)y }, getFontSizeScaled(), SCALING, Fade(EpisodeTheme.textColor, 0.3f));
 }
 void PrzyciskTekst::drawActive(int x, int y) const {
 	drawHover(x, y);
@@ -39,7 +36,6 @@ void PrzyciskTekst::drawActive(int x, int y) const {
 
 void PrzyciskTekst::update() {
 	if (flags & BUTTON_DISABLED) return;
-	if (!initialized) initialize();
 	handleStateChangeConditions();
 	afterStateChangeLogic();
 
@@ -59,31 +55,32 @@ void PrzyciskTekst::afterStateChangeLogic() {
 
 Rectangle PrzyciskTekst::getBoundingRect() const
 {
-	float rectX = GetScreenWidth() * rozmiar.absX;
-	float rectY = GetScreenHeight() * rozmiar.absY;
+	/*
+	float rectX = MeasureText(text, getFontSizeScaled());// *rozmiar.absX;
+	float rectY = static_cast<float>(getFontSizeScaled());// *rozmiar.absY;
+	*/
+	Vector2 rectPos = MeasureTextEx(EpisodeTheme.textFont, text, getFontSizeScaled(), SCALING);
 	int x, y; getDrawCoords(&x, &y);
-	Rectangle ret = { static_cast<float>(x) - rectX * rozmiar.offsetX, static_cast<float>(y) - rectY * rozmiar.offsetY,
-		rectX * (1 + 2*rozmiar.offsetX), rectY * (1 + 2*rozmiar.offsetY)
+	return Rectangle{ 
+		static_cast<float>(x) - rectPos.x * rozmiar.offsetX,
+		static_cast<float>(y) - rectPos.y * rozmiar.offsetY,
+		rectPos.x * (1 + 2*rozmiar.offsetX),
+		rectPos.y * (1 + 2*rozmiar.offsetY)
 	};
-	return ret;
 }
 
 void PrzyciskTekst::getDrawCoords(int* x, int* y) const {
 	*x = GetScreenWidth() * pozycja.absX, *y = GetScreenHeight() * pozycja.absY;
-	*x += static_cast<int>(MeasureText(text, fontSize) * pozycja.offsetX);
-	*y += static_cast<int>(fontSize * pozycja.offsetY);
+	*x += static_cast<int>(MeasureText(text, getFontSizeScaled()) * pozycja.offsetX);
+	*y += static_cast<int>(getFontSizeScaled() * pozycja.offsetY);
 }
 
-/*
 void RadioPrzyciskTekst::drawActive(int x, int y) const {
-	if (flags & BUTTON_CENTER)
-		helper::DrawTextCenteredBackgroundColor(text, x, y, fontSize, colorInactive, colorActive, 4);
-	else
-		helper::DrawTextBackgroundColor(text, x, y, fontSize, colorInactive, colorActive, 4);
+	DrawRectangleRec(getBoundingRect(), ColorBrightness(EpisodeTheme.bgColor, -0.35f));
+	DrawTextEx(EpisodeTheme.textFont, text, { (float)x, (float)y }, getFontSizeScaled(), SCALING, Fade(EpisodeTheme.textColor, 0.3f));
 }
-void RadioPrzyciskTekst::handleStateChangeConditions() {
+void RadioPrzyciskTekst::handleStateChangeConditions()  {
 	PrzyciskTekst::handleStateChangeConditions();
-	if (activeCondition())
+	if (activeCondition() && state != NAJECHANY)
 		state = AKTYWNY;
 }
-*/

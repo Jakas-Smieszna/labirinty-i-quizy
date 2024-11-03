@@ -9,7 +9,7 @@ namespace labirynt {
 	
 
 	// Rysowanie
-	void drawLabirynt(PakietZmiennych* zmienne) {
+	void drawLabirynt() {
 		if (zmienne->kurosr_czulosc == 0) SetMouseCursor(1);
 		else if (zmienne->kurosr_czulosc > 0) zmienne->kurosr_czulosc = zmienne->kurosr_czulosc - 1;
 		else zmienne->kurosr_czulosc = 0;
@@ -254,7 +254,7 @@ namespace labirynt {
 	}
 
 
-	void updateLabirynt(PakietZmiennych* zmienne, grafika* tlo) {
+	void updateLabirynt(grafika* tlo) {
 		
 		//JG:USTAWIANIE ZMIENNYCH ZWIAZANYCH Z WYMIARAMI OKNA
 		float szer = (float)GetScreenWidth();

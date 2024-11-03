@@ -138,3 +138,5 @@ public:
         }
     }
 };
+
+extern PakietZmiennych* zmienne;

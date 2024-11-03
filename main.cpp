@@ -12,23 +12,23 @@
 StanEkranu stanGry = GRA_QUIZ;
 // !!
 GRAFIKI* grafiki = nullptr;
+PakietZmiennych* zmienne = new PakietZmiennych;
 Theme EpisodeTheme = Theme();
 
 void UstawEkran0(Image ikona);
-void Rysowanie(PakietZmiennych* zmienne);
-void Update(PakietZmiennych* zmienne);
+void Rysowanie();
+void Update();
 
 int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
-    PakietZmiennych Zmienne;
     grafiki = new GRAFIKI;
     UstawEkran0(grafiki->ikona);
-
-    while (!WindowShouldClose() && !Zmienne.koniec)
+    ustawienia::initSettings();
+    while (!WindowShouldClose() && !zmienne->koniec)
     {
-        Update(&Zmienne);
+        Update();
         BeginDrawing();
-        Rysowanie(&Zmienne);
+        Rysowanie();
         EndDrawing();
     }
     grafiki->D_GRAFIKI();
@@ -36,7 +36,7 @@ int main() {
     return 0;
 }
 
-void Update(PakietZmiennych* zmienne) {
+void Update() {
     if (zmienne->epizod != zmienne->epizod_doc) {
         zmienne->epizod = zmienne->epizod_doc;
         grafiki->aktualizuj_tlo(zmienne->epizod);
@@ -59,17 +59,17 @@ void Update(PakietZmiennych* zmienne) {
             break;
         case GRA_LABIRYNT:
             // JJJ
-            labirynt::updateLabirynt(zmienne, &(grafiki->tlo));
+            labirynt::updateLabirynt(&(grafiki->tlo));
             break;
         case GRA_QUIZ:
             // JJJ
-            quiz::updateQuiz(zmienne, &(grafiki->tlo));
+            quiz::updateQuiz(&(grafiki->tlo));
             break;
     }
 }
 
 // Bardziej zaawansowane rysowanie i update-y lepiej pewnie umieścić w oddzielnych funkcjach
-void Rysowanie(PakietZmiennych* zmienne) {
+void Rysowanie() {
     switch (stanGry) {
         case MAIN_MENU:
             // jak np. tu zrobiłem
@@ -84,11 +84,11 @@ void Rysowanie(PakietZmiennych* zmienne) {
             break;
         case GRA_LABIRYNT:
             // JJJ
-            labirynt::drawLabirynt(zmienne);
+            labirynt::drawLabirynt();
             break;
         case GRA_QUIZ:
             // JJJ
-            quiz::drawQuiz(zmienne);
+            quiz::drawQuiz();
             break;
     }
 }

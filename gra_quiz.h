@@ -3,6 +3,6 @@
 #include "Grafika.h"
 #include "gamestate.h"
 namespace quiz {
-	void updateQuiz(PakietZmiennych* zmienne, grafika* tlo);
-	void drawQuiz(PakietZmiennych* zmienne);
+	void updateQuiz(grafika* tlo);
+	void drawQuiz();
 }

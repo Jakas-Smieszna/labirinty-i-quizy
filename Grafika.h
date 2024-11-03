@@ -108,7 +108,9 @@ struct Theme {
 	Color textColor;
 	Color borderColor;
 	Color bgColor;
-	Theme() { textColor = borderColor = bgColor = BLACK; }
+	Font textFont;
+	bool fontInit = false;
+	Theme() { textColor = borderColor = bgColor = BLACK; textFont = GetFontDefault(); }
 	void Update(int episodenum) {
 		switch (episodenum) {
 		default:
@@ -129,6 +131,15 @@ struct Theme {
 			textColor = WHITE;
 			break;
 		}
+		if (!fontInit) {
+			fontInit = true;
+			textFont = GetFontDefault();
+			//textFont = LoadFont("Fonts/Inconsolata/static/Inconsolata_Expanded-Medium.ttf");
+			//SetTextureFilter(textFont.texture, TEXTURE_FILTER_BILINEAR);
+		}
+	}
+	~Theme() {
+		UnloadFont(textFont);
 	}
 };
 
