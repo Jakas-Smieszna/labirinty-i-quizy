@@ -33,6 +33,11 @@ namespace helper {
 
 		return true; // jak powyższy if nie przeszedł to jest git
 	}
+
+	inline bool IsInRect(Rectangle where, int posX, int posY) {
+		return (posX >= where.x && posX <= where.x + where.width && posY >= where.y && posY <= where.y + where.height);
+	}
+
 	// Pozwala sprawdzić, czy dany punkt (posX, posY)
 	// jest na danym tekście.
 	// const char* text - ww. dany tekst
@@ -53,4 +58,5 @@ namespace helper {
 		int txtWidth = MeasureText(text, fontSize);
 		return IsInArea(textX - txtWidth/2, textY, textX + txtWidth/2, textY + fontSize, posX, posY);
 	}
+
 }
