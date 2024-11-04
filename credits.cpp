@@ -24,8 +24,8 @@ namespace credits {
 		DrawText("Projekt stworzony przez studentow Informatyki Technicznej", szer * 0.025, wys * 0.05, scale * 30, WHITE);
 		DrawText("Akademii Gorniczo-Hutniczej w Krakowie jako projekt zaliczeniowy", szer * 0.025, wys * 0.1, scale * 30, WHITE);
 		DrawText("na przedmiot \"Inzynieria Oprogramowania\".", szer * 0.025, wys * 0.15, scale * 30, WHITE);
-		DrawText("Zespol Fido/Gas/Gladysiak/Grudniok", szer * 0.025, wys * 0.2, scale * 30, WHITE);
-		DrawText("W naszym projekcie wykorzystalismy biblioteke \"Raylib\". ", szer * 0.025, wys * 0.3, scale * 30, WHITE);
+		DrawText("Zespol M. Fido/J. Gas/M. Gladysiak/A. Grudniok", szer * 0.025, wys * 0.2, scale * 30, WHITE);
+		DrawText("W naszym projekcie wykorzystalismy biblioteke \"Raylib\" (raylib.com). ", szer * 0.025, wys * 0.3, scale * 30, WHITE);
 		
 		for (auto& b : Buttons) {
 			b->draw();
