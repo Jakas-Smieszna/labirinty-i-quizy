@@ -24,7 +24,6 @@ namespace menu {
 
 	// Rysowanie
 	void drawMainMenu() {
-		ClearBackground(DARKGREEN);
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
 		if (szer >= wys * grafiki->tlo.szer / grafiki->tlo.wys) {

@@ -3,6 +3,7 @@
 #include "gra_labirynt.h"
 #include "gra_quiz.h"
 #include "ustawienia.h"
+#include "credits.h"
 #include "gamestate.h"
 #include <stdlib.h>
 
@@ -50,6 +51,7 @@ void Update() {
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // update
+            credits::updateCredits();
             break;
         case EXIT:
             zmienne->koniec = true;
@@ -79,6 +81,7 @@ void Rysowanie() {
             // draw
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
+            credits::drawCredits();
             // draw
             break;
         case GRA_LABIRYNT:
