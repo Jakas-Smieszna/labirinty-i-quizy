@@ -2,7 +2,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
-
+#include <vector>
 enum StanEkranu {
     MAIN_MENU = 0,
     USTAWIENIA,
@@ -10,7 +10,8 @@ enum StanEkranu {
     // Dodajcie tutaj nowe stany, jak je utworzycie.
     // Przez stan mam na myśli inne "menu", np
     // gdy Miłosz zrobi menu instrukcji, doda tu stan
-    // i może go nazwie INSTRUKCJA
+    INSTRUKCJA,// i może go nazwie INSTRUKCJA
+    WYBOR_UZYTKOWNIKA,
     // potem dodać do switcha w Rysowanie() i Update(), na dole pod mainem,
     GRA_LABIRYNT = 7,//JG:labirynt
     GRA_QUIZ = 8,//JG:quiz
@@ -21,7 +22,8 @@ extern StanEkranu stanGry;
 //JG:Nie chcialo mi sie robic na to nowego pliku. Mam nadzieje, ze Wam to nie przeszkada. Ogolnie baza czesto uzywanych zmiennych do ,,globalnego" zasiegu.
 class PakietZmiennych {
 public:
-    char* uzytkownik;//JG:nazwa biezacego uzytkownika
+    std::string nazwa_uzytkownika;//MF: Aktualna nazwa uzytkownika
+    std::vector<std::string> users;//MF: lista wszystkich uzytkownikow - w przyszlosci mozliwa do edytowania
     bool koniec;//JG:czy program ma wyjsc z glownej petli i zakonczyc dzialanie
     float mysz_x;//JG:pozycja X myszy w tej klatce
     float mysz_y;//JG:pozycja Y myszy w tej klatce
@@ -89,7 +91,8 @@ public:
     
 
     PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
-        uzytkownik = "Rimek Wesolek";
+        nazwa_uzytkownika = "Uzytkownik1";
+        users = { "Uzytkownik1", "Uzytkownik2", "Uzytkownik3", "Uzytkownik4", "Uzytkownik5" };
         koniec = false;
         mysz_x = GetMouseX();
         mysz_y = GetMouseY();
