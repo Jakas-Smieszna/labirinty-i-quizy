@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include "raylib.h"
 
 enum StanEkranu {
     MAIN_MENU = 0,
