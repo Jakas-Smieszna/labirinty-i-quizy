@@ -1,0 +1,1 @@
+Rozpoczniesz gre z kursorem myszy na polu start. Przesuwaj kursor po labiryncie w kierunku kolejnych przejsc unikajac przy tym pojawiajacych sie przeszkod. Po osiagnieciu kazdego przejscia rozwiaz Quiz wybierajac poprawna odpowiedz na wyswietlone pytanie. Postepujac zgodnie z tymi krokami osiagniesz ostatni etap, na ktorym po dotarciu do mety zakonczysz poziom.
