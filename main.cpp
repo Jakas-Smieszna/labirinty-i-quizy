@@ -5,12 +5,13 @@
 #include "ustawienia.h"
 #include "gamestate.h"
 #include "instrukcja.h"
+#include "wybor_uzytkownika.h"
 #include <stdlib.h>
 
 // !!
 // Gdzie dodać nowy "stan gry"?
 // gamestate.h
-StanEkranu stanGry = GRA_QUIZ;
+StanEkranu stanGry = MAIN_MENU;
 // !!
 GRAFIKI* grafiki = nullptr;
 PakietZmiennych* zmienne = new PakietZmiennych;
@@ -56,6 +57,9 @@ void Update() {
         case INSTRUKCJA:
            instrukcja::updateInstruction();
             break;
+        case WYBOR_UZYTKOWNIKA:
+           wybor_uzytkownika::updateUserMenu();
+           break;
         case EXIT:
             zmienne->koniec = true;
            /* CloseWindow();//JG: lepiej wyjsc z petli, by nie ominac zwalniania pamieci
@@ -86,6 +90,9 @@ void Rysowanie() {
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // draw
             break;
+        case WYBOR_UZYTKOWNIKA:
+           wybor_uzytkownika::drawUserMenu();
+           break;
         case GRA_LABIRYNT:
             // JJJ
             labirynt::drawLabirynt();
@@ -96,6 +103,7 @@ void Rysowanie() {
             break;
         case INSTRUKCJA:
            instrukcja::drawInstruction();
+           break;
     }
 }
 

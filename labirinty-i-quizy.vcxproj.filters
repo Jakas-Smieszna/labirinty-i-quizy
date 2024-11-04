@@ -39,6 +39,9 @@
     <ClCompile Include="instrukcja.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="wybor_uzytkownika.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -69,6 +72,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gra_quiz.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="instrukcja.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wybor_uzytkownika.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

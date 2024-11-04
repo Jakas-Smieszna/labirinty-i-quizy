@@ -8,8 +8,8 @@
 #include "DivideText.h"
 
 namespace instrukcja {
-	Przycisk Buttons[] = {
-		Przycisk("Powróæ", 0, 1, 30, false, [&] {stanGry = StanEkranu::MAIN_MENU; }, true)
+	_Przycisk* Buttons[] = {
+		new PrzyciskTekst("Powróæ",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; }),
 	};
 	void drawInstruction() {
 		ClearBackground(BLUE);
@@ -21,13 +21,13 @@ namespace instrukcja {
 			DrawText(lines[i].c_str(), 10, GetScreenHeight() * (height + 0.05*i), 20, BLACK);
 		}
 		for (auto& b : Buttons) {
-			b.draw();
+			b->draw();
 		}
 	}
 
 	void updateInstruction() {
 		for (auto& b : Buttons) {
-			b.update();
+			b->update();
 		}
 	}
 }

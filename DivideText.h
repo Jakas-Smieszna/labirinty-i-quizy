@@ -25,5 +25,10 @@ vector <string> DivideText(string s)
          tekst = "";
       }
    }
+   if (tekst != "")
+   {
+      lines.push_back(tekst);
+      tekst = "";
+   }
    return lines;
 }
