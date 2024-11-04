@@ -3,6 +3,7 @@
 #include "gra_labirynt.h"
 #include "gra_quiz.h"
 #include "ustawienia.h"
+#include "credits.h"
 #include "gamestate.h"
 #include "instrukcja.h"
 #include "wybor_uzytkownika.h"
@@ -25,7 +26,6 @@ int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
     grafiki = new GRAFIKI;
     UstawEkran0(grafiki->ikona);
-    ustawienia::initSettings();
     while (!WindowShouldClose() && !zmienne->koniec)
     {
         Update();
@@ -53,6 +53,7 @@ void Update() {
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // update
+            credits::updateCredits();
             break;
         case INSTRUKCJA:
            instrukcja::updateInstruction();
@@ -88,6 +89,7 @@ void Rysowanie() {
             // draw
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
+            credits::drawCredits();
             // draw
             break;
         case WYBOR_UZYTKOWNIKA:

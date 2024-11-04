@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="credits.cpp" />
     <ClCompile Include="gra_labirynt.cpp" />
     <ClCompile Include="gra_quiz.cpp" />
     <ClCompile Include="instrukcja.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="wybor_uzytkownika.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="credits.h" />
     <ClInclude Include="DivideText.h" />
     <ClInclude Include="funkcjePomocnicze.h" />
     <ClInclude Include="gamestate.h" />

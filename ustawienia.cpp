@@ -6,7 +6,6 @@
 #include "slider.h"
 #include <string>
 namespace ustawienia {
-	int volume = 35;
 	sliderHorizontal Volume({ 0.25, 0.7, 0, 0 }, 0.5);
 
 #define LABIRYNTX 0.04
@@ -28,14 +27,23 @@ namespace ustawienia {
 	//RadioPrzycisk lowVol("VOL<50", 0.25, 0.4, 30, BUTTON_NONE, [&] {Volume.change(25); }, [&] {return Volume.value < 50; });
 	//RadioPrzycisk hiVol("VOL>50", 0.55, 0.4, 30, BUTTON_NONE, [&] {Volume.change(75); }, [&] {return Volume.value >= 50; });
 	void initSettings() {
-		Volume.value = static_cast<float>(volume)/100;
+		Volume.value = (zmienne->glosnosc)/100;
 		volstr = "Głośność: " + std::to_string(static_cast<int>(Volume.value*100)) + "%";
 		Volume.onChange = [&](float changed) {
 			volstr = "Głośność: " + std::to_string(static_cast<int>(changed*100)) + "%";
+			zmienne->glosnosc = changed * 100;
 			};
 	}
 	void drawSettings() {
-		ClearBackground(RED);
+		float szer = (float)GetScreenWidth();
+		float wys = (float)GetScreenHeight();
+		if (szer >= wys * grafiki->tlo.szer / grafiki->tlo.wys) {
+			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, szer, szer * grafiki->tlo.wys / grafiki->tlo.szer }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
+		}
+		else {
+			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
+		}
+		DrawRectangleRec({ szer * 0.005f, wys * 0.005f, szer * 0.99f, wys * 0.99f }, Fade(EpisodeTheme.bgColor, 0.5));
 		helper::DrawTextCentered("Ustawienia", GetScreenWidth() / 2, GetScreenHeight() * 0.10, 30, WHITE);
 		DrawText("Poziomy Trudności", GetScreenWidth() * LABIRYNTX, GetScreenHeight() * 0.2, 30, WHITE);
 		DrawText("Labiryntu:", GetScreenWidth() * LABIRYNTX, GetScreenHeight() * 0.25, 26, WHITE);

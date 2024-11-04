@@ -2,7 +2,9 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include "raylib.h"
 #include <vector>
+
 enum StanEkranu {
     MAIN_MENU = 0,
     USTAWIENIA,
