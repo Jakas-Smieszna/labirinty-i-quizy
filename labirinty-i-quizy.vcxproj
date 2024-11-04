@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="instrukcja.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="przycisk.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="ustawienia.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DivideText.h" />
     <ClInclude Include="funkcjePomocnicze.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="mainMenu.h" />

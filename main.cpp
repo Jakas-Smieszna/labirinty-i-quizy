@@ -2,6 +2,7 @@
 #include "mainMenu.h"
 #include "ustawienia.h"
 #include "gamestate.h"
+#include "instrukcja.h"
 #include <stdlib.h>
 
 // !!
@@ -38,6 +39,9 @@ void Update() {
         case TWÓRCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // update
             break;
+        case INSTRUKCJA:
+           instrukcja::updateInstruction();
+            break;
         case EXIT:
             CloseWindow();
             exit(0);
@@ -59,5 +63,7 @@ void Rysowanie() {
         case TWÓRCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // draw
             break;
+        case INSTRUKCJA:
+           instrukcja::drawInstruction();
     }
 }

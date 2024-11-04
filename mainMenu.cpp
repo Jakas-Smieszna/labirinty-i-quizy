@@ -8,7 +8,7 @@ namespace menu {
 	// Definicja Przycisków w menu
 	Przycisk Buttons[] = {
 		Przycisk("Wybierz Poziom", 0.5, 0.3, 20, true),
-		Przycisk("Instrukcja", 0.5, 0.4, 20, true),
+		Przycisk("Instrukcja", 0.5, 0.4, 20, true, [&] {stanGry = StanEkranu::INSTRUKCJA; }),
 		Przycisk("Zmień Użytkownika", 0.5, 0.5, 20, true),
 		Przycisk("Ustawienia", 0.5, 0.6, 20, true, [&] {stanGry = StanEkranu::USTAWIENIA;}),
 		Przycisk("Twórcy", 0.5, 0.7, 20, true, [&] {stanGry = StanEkranu::TWÓRCY;}),

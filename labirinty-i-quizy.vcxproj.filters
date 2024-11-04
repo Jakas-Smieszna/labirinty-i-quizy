@@ -30,6 +30,9 @@
     <ClCompile Include="slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="instrukcja.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="slider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DivideText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
