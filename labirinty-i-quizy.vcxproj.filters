@@ -42,6 +42,12 @@
     <ClCompile Include="wybor_uzytkownika.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="credits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wybor_poziomu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wybor_uzytkownika.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="credits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wybor_poziomu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

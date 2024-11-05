@@ -8,6 +8,7 @@
 #include "instrukcja.h"
 #include "wybor_uzytkownika.h"
 #include <stdlib.h>
+#include "wybor_poziomu.h"
 
 // !!
 // Gdzie dodać nowy "stan gry"?
@@ -48,6 +49,9 @@ void Update() {
         case MAIN_MENU:
             menu::updateMainMenu();
             break;
+        case WYBOR_POZIOMU:
+            wybor_poziomu::updateLevelMenu();
+            break;
         case USTAWIENIA:
             ustawienia::updateSettings();
             break;
@@ -83,6 +87,10 @@ void Rysowanie() {
         case MAIN_MENU:
             // jak np. tu zrobiłem
             menu::drawMainMenu();
+            break;
+        case WYBOR_POZIOMU:
+            wybor_poziomu::drawLevelMenu();
+            // draw
             break;
         case USTAWIENIA:
             ustawienia::drawSettings();
