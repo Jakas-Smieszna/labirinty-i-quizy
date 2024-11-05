@@ -2,9 +2,12 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include "raylib.h"
 #include <vector>
+
 enum StanEkranu {
     MAIN_MENU = 0,
+    WYBOR_POZIOMU,
     USTAWIENIA,
     TWORCY,
     // Dodajcie tutaj nowe stany, jak je utworzycie.
@@ -100,7 +103,7 @@ public:
         mysz_pop_y = GetMouseY();
         kurosr_czulosc = 0;
         srand(time(NULL));
-        epizod_doc = (char)(rand()%4 + 1);//losuje epizod pod tlo po uruchomieniu
+        epizod_doc = 1; //AG usunalem losowanie bo nie ma sensu losować poziomu trudnosci, niech bedzie lvl 1 diff na poczatku
         epizod = 0;
         poziom = 1;
         poziom_doc = 1;

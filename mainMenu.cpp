@@ -2,16 +2,17 @@
 #include "funkcjePomocnicze.h"
 #include "raylib.h"
 #include "Grafika.h"
+#include "ustawienia.h"
 #include "gamestate.h"
 #include "przycisk.h"
 #include <string>
 namespace menu {
 	// Definicja Przycisków w menu
 	_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30),
+		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30, [&] { {stanGry = StanEkranu::WYBOR_POZIOMU; }}),
 		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::INSTRUKCJA; }}),
 		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::WYBOR_UZYTKOWNIKA; }}),
-		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA;}),
+		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA; ustawienia::initSettings();}),
 		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
 		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT;}),
 #ifdef _DEBUG // tego w Release nie będzie
@@ -23,7 +24,6 @@ namespace menu {
 
 	// Rysowanie
 	void drawMainMenu() {
-		ClearBackground(DARKGREEN);
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
 		if (szer >= wys * grafiki->tlo.szer / grafiki->tlo.wys) {

@@ -3,10 +3,12 @@
 #include "gra_labirynt.h"
 #include "gra_quiz.h"
 #include "ustawienia.h"
+#include "credits.h"
 #include "gamestate.h"
 #include "instrukcja.h"
 #include "wybor_uzytkownika.h"
 #include <stdlib.h>
+#include "wybor_poziomu.h"
 
 // !!
 // Gdzie dodać nowy "stan gry"?
@@ -25,7 +27,6 @@ int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
     grafiki = new GRAFIKI;
     UstawEkran0(grafiki->ikona);
-    ustawienia::initSettings();
     while (!WindowShouldClose() && !zmienne->koniec)
     {
         Update();
@@ -48,11 +49,15 @@ void Update() {
         case MAIN_MENU:
             menu::updateMainMenu();
             break;
+        case WYBOR_POZIOMU:
+            wybor_poziomu::updateLevelMenu();
+            break;
         case USTAWIENIA:
             ustawienia::updateSettings();
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
             // update
+            credits::updateCredits();
             break;
         case INSTRUKCJA:
            instrukcja::updateInstruction();
@@ -83,11 +88,16 @@ void Rysowanie() {
             // jak np. tu zrobiłem
             menu::drawMainMenu();
             break;
+        case WYBOR_POZIOMU:
+            wybor_poziomu::drawLevelMenu();
+            // draw
+            break;
         case USTAWIENIA:
             ustawienia::drawSettings();
             // draw
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
+            credits::drawCredits();
             // draw
             break;
         case WYBOR_UZYTKOWNIKA:
