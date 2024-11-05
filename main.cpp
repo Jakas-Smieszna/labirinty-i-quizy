@@ -27,6 +27,7 @@ int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
     grafiki = new GRAFIKI;
     UstawEkran0(grafiki->ikona);
+    ustawienia::initSettings();
     while (!WindowShouldClose() && !zmienne->koniec)
     {
         Update();
