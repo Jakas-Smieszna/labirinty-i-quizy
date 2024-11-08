@@ -16,6 +16,12 @@ enum StanPrzycisku {
 #define BUTTON_NO_OUTLINE (1<<1) // Czy nie rysować go w prostokącie?
 
 struct _Przycisk {
+
+	//JG+:do losowej tekstury:
+	float los_pole_x;
+	float los_pole_y;
+	//JG+:koniec
+
 	ScreenPos pozycja; // pozycja przycisku na ekranie
 	ScreenPos rozmiar; // rozmiar przycisku na ekranie
 	StanPrzycisku state; // stan przycisku
@@ -38,6 +44,9 @@ struct _Przycisk {
 		onActivation = FunkcjaAktywacji;
 		flags = Flagi;
 		state = NIEAKTYWNY;
+
+		los_pole_x = (float)(rand() % 51) * 0.01f * 1000.0f;//JG+
+		los_pole_y = (float)(rand() % 51) * 0.01f * 1000.0f;//JG+
 	}
 	_Przycisk() {
 		pozycja = { 0,0,0,0 };
@@ -45,6 +54,9 @@ struct _Przycisk {
 		onActivation = [&] {};
 		flags = BUTTON_DISABLED;
 		state = NIEAKTYWNY;
+
+		los_pole_x = (float)(rand() % 51) * 0.01f * 1000.0f;//JG+
+		los_pole_y = (float)(rand() % 51) * 0.01f * 1000.0f;//JG+
 	}
 
 	virtual void update() = 0; // Update, przed rysowaniem.
