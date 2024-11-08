@@ -103,7 +103,8 @@ public:
         mysz_pop_y = GetMouseY();
         kurosr_czulosc = 0;
         srand(time(NULL));
-        epizod_doc = 1; //AG usunalem losowanie bo nie ma sensu losować poziomu trudnosci, niech bedzie lvl 1 diff na poczatku
+        epizod_doc = (char)(rand() % 4 + 1);//JG:losuje epizod pod tlo po uruchomieniu, dotyczy szaty graficznej, poziomy z dalszych epizodow beda zablokowane w wyborze poziomow
+        //epizod_doc = 1; //AG usunalem losowanie bo nie ma sensu losować poziomu trudnosci, niech bedzie lvl 1 diff na poczatku
         epizod = 0;
         poziom = 1;
         poziom_doc = 1;
