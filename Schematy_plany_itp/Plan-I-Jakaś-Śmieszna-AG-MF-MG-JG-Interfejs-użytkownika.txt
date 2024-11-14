@@ -1,0 +1,14 @@
+Planujemy:
+1. Plan wstępnej ścieżki nawigacji menu i okna gry.
+2. Grafiki do części elementów menu i rozgrywki.
+3. Ogólny plan kolorystyczny:
+- podział na 4  szaty graficzne po 1 na epizod.
+- szata menu losowana z puli powyżej przy każdym uruchomieniu/ powrocie z gry do menu (wtedy może być ustawiana na podstawie tego, który epizod był ostatnio rozgrywany).
+- kolory raczej intensywne (lepiej wygląda z prostą grafiką), ale bez przesadzania.
+- epizod 1 - głównie odcienie brązu.
+- ep 2 - dużo zielonego, jakieś kolory przy np kwiatach, wodzie itp..
+- ep 3 - sporo szarości, granatu, połysków (jak uda się je otrzymać), trochę kolorów, w tym czerwony.
+- ep 4 - sporo szarości, trochę niebieskości, dużo efektów częściowej przeźroczystości.
+4. Aplikacja nie mobilna - interfejs pod laptop/komputer.
+5. Opisaną szatę graficzną uważamy za uniwersalną dla wszystkich grup wiekowych.
+6. Ze względu na charakter oprogramowania i grafiki nie planujemy trybu ciemnego ani kontrastów w głównym planie projektu.
