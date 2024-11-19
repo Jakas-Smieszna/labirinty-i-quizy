@@ -1,0 +1,8 @@
+Jakaś Śmieszna - plan na 5.11.2024 - 19.11.2024
+
+Zagadnienie - Wzorzec projektowy:
+1. Znaleźć możliwie dużo wzorców projektowych dla zagadnień tworzonej aplikacji.
+2. Przeanalizować znalezione wzorce projektowe i korzyści jakie mogą zapewnić.
+3. Wybrać najbardziej zbliżone dla konkretnego/konkretnych zagadnień wzorce.
+4. Wybrać drugie w kolejności najbardziej zbliżone dla konkretnego/konkretnych zagadnień wzorce.
+5. Przeanalizować zasadnicze różnice między problemami rozwiązywanymi przez wybrane wzorce a problemami tworzonego projektu, których rozwiązanie mają ułatwić.
