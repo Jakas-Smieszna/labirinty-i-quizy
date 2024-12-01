@@ -22,11 +22,10 @@ namespace menu {
 #endif // _DEBUG // tego w Release nie będzie
 
 	};
-	testRect A({ 0.05, 0.05 }, { 0.3, 0.3 }, RED);
-	testRect B({ 0.05, 0.05 }, { 0.9, 0.9 }, GREEN);
+
 
 	void init() {
-		A.addChild(&B);
+
 	}
 
 	// Rysowanie
@@ -42,7 +41,6 @@ namespace menu {
 			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
 			Skala_liter = szer / OknoSzerBaz;//JG+
 		}
-		A.draw();
 		//JG+poczatek - panelek
 		float szer_pom = 500.0 * Skala_liter;
 		float wys_pom = 560.0f * Skala_liter;

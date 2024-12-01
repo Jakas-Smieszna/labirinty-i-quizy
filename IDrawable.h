@@ -3,7 +3,11 @@
 #include <initializer_list>
 #include "raylib.h"
 class IBase {
+#ifndef _DEBUG
 protected:
+#else
+public:
+#endif
 	Vector2 position; // pozycja od 0 do 1, względem elementu w którym sie znajduje
 	Vector2 size; // rozmiar od 0 do 1, no podobnie jak wyżej
 	Vector2 offset;
@@ -36,9 +40,6 @@ public:
 
 	IDrawable* getParent() { return parent; }
 };
-#include <iostream>
-#include <concepts>
-
 
 class IContainer : public IDrawable
 {
@@ -57,6 +58,16 @@ public:
 			kid->draw();
 		}
 	}
-	
-	void addChild(IDrawable* kid) { children.push_back(kid); kid->registerParent(this); }
+	// upewnijcie sie, że dodajecie tylko rzeczy które da się rysować (IDrawable)
+	template <typename... Drawables>
+	void addChildren(Drawables... kids) {
+		for (auto k : { kids... }) {
+			addChild(k);
+		}
+	}
+	void addChild(IDrawable* kid = nullptr) {
+		if (kid == nullptr) return;
+		children.push_back(kid); 
+		kid->registerParent(this); 
+	}
 };
