@@ -156,6 +156,7 @@
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="instrukcja.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="Panel.h" />
     <ClInclude Include="positioning.h" />
     <ClInclude Include="Grafika.h" />
     <ClInclude Include="przycisk.h" />

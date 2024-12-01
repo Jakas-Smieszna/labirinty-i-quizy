@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Header Files\Rysowanie">
+      <UniqueIdentifier>{8677d2e1-04b5-4a23-a700-f93a566c3506}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -62,13 +65,7 @@
     <ClInclude Include="mainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="przycisk.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ustawienia.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="positioning.h">
@@ -96,10 +93,19 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IDrawable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Rysowanie</Filter>
+    </ClInclude>
+    <ClInclude Include="przycisk.h">
+      <Filter>Header Files\Rysowanie</Filter>
+    </ClInclude>
+    <ClInclude Include="slider.h">
+      <Filter>Header Files\Rysowanie</Filter>
     </ClInclude>
     <ClInclude Include="TestDraw.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Rysowanie</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
+      <Filter>Header Files\Rysowanie</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
