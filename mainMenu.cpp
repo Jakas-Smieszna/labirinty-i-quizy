@@ -27,6 +27,7 @@ namespace menu {
 	void init() {
 		test.setOffset({ -0.5, -0.4 });
 		test.setSizeRelative(500, 560);
+		test.setFlags(DRAWABLE_MAINTAIN_ASPECT_RATIO);
 	}
 
 	// Rysowanie
@@ -47,7 +48,6 @@ namespace menu {
 		float wys_pom = 560.0f * Skala_liter;
 		float x_pom = (szer - szer_pom) * 0.5f;
 		float y_pom = (wys - wys_pom) * 0.5f + 60.0f * Skala_liter;
-		std::cout << Skala_liter << std::endl;
 		DrawRectangle(x_pom, y_pom, szer_pom, wys_pom, Fade(EpisodeTheme.bgColor, 0.75f));
 		DrawRectangle(x_pom - 1.0f * Skala_liter, y_pom - 1.0f * Skala_liter, 3.0f * Skala_liter, wys_pom + 2.0f * Skala_liter, BLACK);
 		DrawRectangle(x_pom - 1.0f * Skala_liter + szer_pom, y_pom - 1.0f * Skala_liter, 3.0f * Skala_liter, wys_pom + 2.0f * Skala_liter, BLACK);

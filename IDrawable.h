@@ -36,10 +36,13 @@ public:
 	void setOffset(Vector2 newOffset) { offset = newOffset; }
 };
 
+#define DRAWABLE_MAINTAIN_ASPECT_RATIO (1<<0)
+
 class IDrawable : public IBase
 {
 protected:
 	IDrawable* parent;
+	unsigned int drawFlags : 4;
 	// funkcje do rysowania
 	Vector2 getParentPos() const;
 	Vector2 getParentSize() const;
@@ -50,11 +53,14 @@ public:
 	virtual void update() = 0; // Update, przed rysowaniem.
 	virtual void draw() const = 0; // Logika sterująca rysowaniem
 
-	IDrawable(Vector2 pos, Vector2 size) : IBase(pos, size), parent(nullptr) {};
+	IDrawable(Vector2 pos, Vector2 size) : IBase(pos, size), parent(nullptr), drawFlags(0) {};
+
+	Vector2 getSizePixels() const;
 
 	void registerParent(IDrawable* who) {
 		parent = who;
 	};
+	void setFlags(int flags) { drawFlags = flags; }
 
 	IDrawable* getParent() { return parent; }
 };
