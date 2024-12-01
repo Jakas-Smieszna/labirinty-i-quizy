@@ -48,6 +48,9 @@
     <ClCompile Include="wybor_poziomu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IDrawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -90,6 +93,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wybor_poziomu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestDraw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

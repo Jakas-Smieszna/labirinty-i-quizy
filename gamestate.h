@@ -4,6 +4,7 @@
 #include <string>
 #include "raylib.h"
 #include <vector>
+#include <string>
 
 enum StanEkranu {
     MAIN_MENU = 0,
@@ -83,9 +84,9 @@ public:
     */
     int proba;//JG:numer pytania w biezacym quizie - wsn, ktore to pytanie w serii
     int proba_max;//JG:maksymalna liczba pytan w serii - po wyczerpaniu przegrywasz quiz i ponosisz konsekwencje zalezne od wyzwania; na koncu znak '\0'
-    char* pytanie_opis;//JG:caly tekst opisu fabularnego pytania
-    char* pytanie;//JG:caly tekst pytania z odpowiedziami; dzielony na 5 segmentow - w tym 4 z odpowiedziami i 1 z pytaniem; segmenty oddzielone znakie '\n'; na koncu znak '\0'
-    char* odp_wytlumaczenie;//JG:caly tekst wytlumaczenia wraz z opisem fabularnym odzielone na 2 segmenty, analogicznie jak pytanie; najpierw opis, potem tlumaczenie; 
+    std::string pytanie_opis;//JG:caly tekst opisu fabularnego pytania
+    std::string pytanie;//JG:caly tekst pytania z odpowiedziami; dzielony na 5 segmentow - w tym 4 z odpowiedziami i 1 z pytaniem; segmenty oddzielone znakie '\n'; na koncu znak '\0'
+    std::string odp_wytlumaczenie;//JG:caly tekst wytlumaczenia wraz z opisem fabularnym odzielone na 2 segmenty, analogicznie jak pytanie; najpierw opis, potem tlumaczenie; 
     char odp_pop;
     
     //JG:TABLICE POD PRZYCISKI TRYBU GRY

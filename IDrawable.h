@@ -37,11 +37,13 @@ public:
 	IDrawable* getParent() { return parent; }
 };
 #include <iostream>
+#include <concepts>
+
+
 class IContainer : public IDrawable
 {
 	std::vector<IDrawable*> children;
 public:
-	template<typename... Ts>
 	IContainer(Vector2 pos, Vector2 size) : IDrawable(pos, size) {};
 
 	virtual void update() {
@@ -55,6 +57,6 @@ public:
 			kid->draw();
 		}
 	}
-
+	
 	void addChild(IDrawable* kid) { children.push_back(kid); kid->registerParent(this); }
 };
