@@ -22,8 +22,18 @@ void PrzyciskTekst::draw() const {
 void PrzyciskTekst::drawInactive(int x, int y) const {
 	Rectangle pom = getBoundingRect();//JG mod MG0
 	if (!(flags & BUTTON_NO_OUTLINE)) {
-		DrawRectangleRec({ pom.x - 2.5f * SCALING, pom.y - 2.5f * SCALING, pom.width + 5.0f * SCALING, pom.height + 5.0f * SCALING }, BLACK);//JG mod MG0 kontur
-		DrawRectangleRec({pom.x - 1.5f *SCALING, pom.y - 1.5f * SCALING, pom.width + 3.0f *SCALING, pom.height + 3.0f * SCALING}, EpisodeTheme.textColor);//JG mod MG0
+		DrawRectangleRec(
+			{ pom.x - 2.5f * SCALING, 
+			pom.y - 2.5f * SCALING, 
+			pom.width + 5.0f * SCALING, 
+			pom.height + 5.0f * SCALING 
+			}, BLACK);//JG mod MG0 kontur
+		DrawRectangleRec(
+			{pom.x - 1.5f *SCALING,
+			pom.y - 1.5f * SCALING, 
+			pom.width + 3.0f *SCALING, 
+			pom.height + 3.0f * SCALING
+			}, EpisodeTheme.textColor);//JG mod MG0
 		DrawTexturePro(grafiki->pole1.text, {los_pole_x, los_pole_y, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, pom, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, 0.0f));//JG+
 		/*DrawRectangleLinesEx(getBoundingRect(), 2.5f, EpisodeTheme.borderColor);
 		DrawRectangleRec(getBoundingRect(), Fade(EpisodeTheme.bgColor, 0.65f));*/

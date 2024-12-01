@@ -134,6 +134,7 @@
     <ClCompile Include="credits.cpp" />
     <ClCompile Include="gra_labirynt.cpp" />
     <ClCompile Include="gra_quiz.cpp" />
+    <ClCompile Include="IDrawable.cpp" />
     <ClCompile Include="instrukcja.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
@@ -150,12 +151,14 @@
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="gra_labirynt.h" />
     <ClInclude Include="gra_quiz.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="instrukcja.h" />
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="positioning.h" />
     <ClInclude Include="Grafika.h" />
     <ClInclude Include="przycisk.h" />
     <ClInclude Include="slider.h" />
+    <ClInclude Include="TestDraw.h" />
     <ClInclude Include="ustawienia.h" />
     <ClInclude Include="wybor_poziomu.h" />
     <ClInclude Include="wybor_uzytkownika.h" />

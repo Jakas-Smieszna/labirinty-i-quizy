@@ -5,6 +5,7 @@
 #include "ustawienia.h"
 #include "gamestate.h"
 #include "przycisk.h"
+#include "TestDraw.h"
 #include <string>
 namespace menu {
 	// Definicja Przycisków w menu
@@ -12,15 +13,21 @@ namespace menu {
 		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30, [&] { {stanGry = StanEkranu::WYBOR_POZIOMU; }}),
 		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::INSTRUKCJA; }}),
 		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::WYBOR_UZYTKOWNIKA; }}),
-		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA; ustawienia::initSettings();}),
-		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
-		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT;}),
+		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA; ustawienia::initSettings(); }),
+		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY; }),
+		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT; }),
 #ifdef _DEBUG // tego w Release nie będzie
 		new PrzyciskTekst("QUIZ", {0.2, 0.2, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
 		new PrzyciskTekst("LABIRYNT", {0.2, 0.3, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
 #endif // _DEBUG // tego w Release nie będzie
 
 	};
+	testRect A({ 0.05, 0.05 }, { 0.3, 0.3 }, RED);
+	testRect B({ 0.05, 0.05 }, { 0.9, 0.9 }, GREEN);
+
+	void init() {
+		A.addChild(&B);
+	}
 
 	// Rysowanie
 	void drawMainMenu() {
@@ -35,7 +42,7 @@ namespace menu {
 			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
 			Skala_liter = szer / OknoSzerBaz;//JG+
 		}
-
+		A.draw();
 		//JG+poczatek - panelek
 		float szer_pom = 500.0 * Skala_liter;
 		float wys_pom = 560.0f * Skala_liter;
