@@ -73,7 +73,16 @@ protected:
 	void virtual handleStateChangeConditions() ;
 	void afterStateChangeLogic();
 	int getFontSizeScaled() const {
-		float fontSize = getBoundingBox().y - 2.f;
+		const Rectangle boundingBox = getBoundingBox();
+		float fontSize = boundingBox.width;
+		Vector2 fontMeasure;
+		while (
+			(fontMeasure = MeasureTextEx(GetFontDefault(), text, fontSize, 1.f)).x > boundingBox.width || \
+			fontMeasure.y > boundingBox.height) 
+		{
+			fontSize--;
+		}
+		fontSize -= 4.f;
 		float scale = 1.f;
 		if (GetScreenWidth() >= GetScreenHeight() * grafiki->tlo.szer / grafiki->tlo.wys) {
 			scale = (float)GetScreenHeight() / OknoWysBaz;
