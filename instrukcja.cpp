@@ -9,7 +9,7 @@
 
 namespace instrukcja {
 	_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Powróæ",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; }),
+		new PrzyciskTekst("Powrót",{0, 8},{0.2, 0.1}, [&] {stanGry = StanEkranu::MAIN_MENU; }),
 	};
 	void drawInstruction() {
 		ClearBackground(BLUE);

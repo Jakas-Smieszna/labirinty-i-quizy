@@ -4,7 +4,7 @@
 
 namespace credits {
 	_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Powróć",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; })
+		new PrzyciskTekst("Powróć",{0, 8}, {0, 0.2}, [&] {stanGry = StanEkranu::MAIN_MENU; })
 	};
 
 	void drawCredits() {

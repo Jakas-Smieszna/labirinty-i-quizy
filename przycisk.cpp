@@ -1,9 +1,9 @@
 ﻿#include "Przycisk.h"
 #include "funkcjePomocnicze.h"
 void PrzyciskTekst::draw() const {
-	if (flags & BUTTON_DISABLED) return;
-	int x, y;
-	getDrawCoords(&x, &y);
+	if (buttonFlags & BUTTON_DISABLED) { return; }
+	Vector2 drawPos = getDrawPos();
+	int x = static_cast<int>(drawPos.x), y = static_cast<int>(drawPos.y);
 	switch (state) {
 		case NIEAKTYWNY:
 			drawInactive(x, y);
@@ -20,8 +20,8 @@ void PrzyciskTekst::draw() const {
 #define SCALING (1.f)
 
 void PrzyciskTekst::drawInactive(int x, int y) const {
-	Rectangle pom = getBoundingRect();//JG mod MG0
-	if (!(flags & BUTTON_NO_OUTLINE)) {
+	Rectangle pom = getBoundingBox();//JG mod MG0
+	if (!(buttonFlags & BUTTON_NO_OUTLINE)) {
 		DrawRectangleRec(
 			{ pom.x - 2.5f * SCALING, 
 			pom.y - 2.5f * SCALING, 
@@ -42,7 +42,7 @@ void PrzyciskTekst::drawInactive(int x, int y) const {
 }
 void PrzyciskTekst::drawHover(int x, int y) const {
 	//DrawRectangleRec(getBoundingRect(), ColorBrightness(EpisodeTheme.bgColor, 0.35f));
-	Rectangle pom = getBoundingRect();//JG mod MG0
+	Rectangle pom = getBoundingBox();//JG mod MG0
 	DrawRectangleRec({ pom.x - 2.5f * SCALING, pom.y - 2.5f * SCALING, pom.width + 5.0f * SCALING, pom.height + 5.0f * SCALING }, BLACK);//JG mod MG0 kontur
 	DrawRectangleRec({ pom.x - 1.5f * SCALING, pom.y - 1.5f * SCALING, pom.width + 3.0f * SCALING, pom.height + 3.0f * SCALING }, EpisodeTheme.textColor);//JG mod MG0
 	DrawTexturePro(grafiki->pole1.text, { los_pole_x, los_pole_y, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, pom, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.5f));//JG+
@@ -51,7 +51,7 @@ void PrzyciskTekst::drawHover(int x, int y) const {
 }
 void PrzyciskTekst::drawActive(int x, int y) const {
 	//drawHover(x, y);
-	Rectangle pom = getBoundingRect();//JG mod MG0
+	Rectangle pom = getBoundingBox();//JG mod MG0
 	DrawRectangleRec({ pom.x - 2.5f * SCALING, pom.y - 2.5f * SCALING, pom.width + 5.0f * SCALING, pom.height + 5.0f * SCALING }, BLACK);//JG mod MG0 kontur
 	DrawRectangleRec({ pom.x - 1.5f * SCALING, pom.y - 1.5f * SCALING, pom.width + 3.0f * SCALING, pom.height + 3.0f * SCALING }, EpisodeTheme.textColor);//JG mod MG0
 	DrawTexturePro(grafiki->pole1.text, { los_pole_x, los_pole_y, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, pom, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.75f));//JG+
@@ -60,15 +60,14 @@ void PrzyciskTekst::drawActive(int x, int y) const {
 }
 
 void PrzyciskTekst::update() {
-	if (flags & BUTTON_DISABLED) return;
+	if (buttonFlags & BUTTON_DISABLED) return;
 	handleStateChangeConditions();
 	afterStateChangeLogic();
-
 }
 void PrzyciskTekst::handleStateChangeConditions() {
-	int x, y;
-	getDrawCoords(&x, &y);
-	bool hover = helper::IsInRect(getBoundingRect(), GetMouseX(), GetMouseY());
+	Vector2 drawPos = getDrawPos();
+	int x = static_cast<int>(drawPos.x), y = static_cast<int>(drawPos.y);
+	bool hover = helper::IsInRect(getBoundingBox(), GetMouseX(), GetMouseY());
 	state = hover ? NAJECHANY : NIEAKTYWNY;
 }
 
@@ -78,32 +77,32 @@ void PrzyciskTekst::afterStateChangeLogic() {
 	}
 }
 
-Rectangle PrzyciskTekst::getBoundingRect() const
-{
-	/*
-	float rectX = MeasureText(text, getFontSizeScaled());// *rozmiar.absX;
-	float rectY = static_cast<float>(getFontSizeScaled());// *rozmiar.absY;
-	*/
-	Vector2 rectPos = MeasureTextEx(EpisodeTheme.textFont, text, getFontSizeScaled(), SCALING);
-	int x, y; getDrawCoords(&x, &y);
-	return Rectangle{ 
-		static_cast<float>(x) - rectPos.x * rozmiar.offsetX,
-		static_cast<float>(y) - rectPos.y * rozmiar.offsetY,
-		rectPos.x * (1 + 2*rozmiar.offsetX),
-		rectPos.y * (1 + 2*rozmiar.offsetY)
-	};
-}
+//Rectangle PrzyciskTekst::getBoundingRect() const
+//{
+//	/*
+//	float rectX = MeasureText(text, getFontSizeScaled());// *rozmiar.absX;
+//	float rectY = static_cast<float>(getFontSizeScaled());// *rozmiar.absY;
+//	*/
+//	Vector2 rectPos = MeasureTextEx(EpisodeTheme.textFont, text, getFontSizeScaled(), SCALING);
+//	int x, y; getDrawCoords(&x, &y);
+//	return Rectangle{ 
+//		static_cast<float>(x) - rectPos.x * rozmiar.offsetX,
+//		static_cast<float>(y) - rectPos.y * rozmiar.offsetY,
+//		rectPos.x * (1 + 2*rozmiar.offsetX),
+//		rectPos.y * (1 + 2*rozmiar.offsetY)
+//	};
+//}
 
-void PrzyciskTekst::getDrawCoords(int* x, int* y) const {
-	*x = GetScreenWidth() * pozycja.absX, *y = GetScreenHeight() * pozycja.absY;
-	*x += static_cast<int>(MeasureText(text, getFontSizeScaled()) * pozycja.offsetX);
-	*y += static_cast<int>(getFontSizeScaled() * pozycja.offsetY);
-}
+//void PrzyciskTekst::getDrawCoords(int* x, int* y) const {
+//	*x = GetScreenWidth() * pozycja.absX, *y = GetScreenHeight() * pozycja.absY;
+//	*x += static_cast<int>(MeasureText(text, getFontSizeScaled()) * pozycja.offsetX);
+//	*y += static_cast<int>(getFontSizeScaled() * pozycja.offsetY);
+//}
 
 void RadioPrzyciskTekst::drawActive(int x, int y) const {
 	//DrawRectangleRec(getBoundingRect(), ColorBrightness(EpisodeTheme.bgColor, -0.35f));
 	//DrawTextEx(EpisodeTheme.textFont, text, { (float)x, (float)y }, getFontSizeScaled(), SCALING, Fade(EpisodeTheme.textColor, 0.3f));
-	Rectangle pom = getBoundingRect();//JG mod MG0
+	Rectangle pom = getBoundingBox();//JG mod MG0
 	DrawRectangleRec({ pom.x - 2.5f * SCALING, pom.y - 2.5f * SCALING, pom.width + 5.0f * SCALING, pom.height + 5.0f * SCALING }, BLACK);//JG mod MG0 kontur
 	DrawRectangleRec({ pom.x - 1.5f * SCALING, pom.y - 1.5f * SCALING, pom.width + 3.0f * SCALING, pom.height + 3.0f * SCALING }, EpisodeTheme.textColor);//JG mod MG0
 	DrawTexturePro(grafiki->pole1.text, { los_pole_x, los_pole_y, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, pom, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.75f));//JG+

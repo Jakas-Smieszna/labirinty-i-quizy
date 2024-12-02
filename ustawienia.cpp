@@ -11,7 +11,8 @@ namespace ustawienia {
 #define LABIRYNTX 0.04
 #define QUESTIONX (LABIRYNTX+0.21)
 	_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Powróć",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU;}),
+		new PrzyciskTekst("Powrót",{0, 8},{0.2, 0.1}, [&] {stanGry = StanEkranu::MAIN_MENU; }),
+		/*
 		// poziom trudności labiryntu
 		new RadioPrzyciskTekst("Początkujący", {LABIRYNTX, 0.3, 0, 0}, 26, [&] {zmienne->trudnosc_labirynt = '0'; }, [&] {return zmienne->trudnosc_labirynt == '0'; }),
 		new RadioPrzyciskTekst("Łatwy", {LABIRYNTX, 0.37, 0, 0}, 26, [&] {zmienne->trudnosc_labirynt = 'l'; }, [&] {return zmienne->trudnosc_labirynt == 'l'; }),
@@ -22,6 +23,7 @@ namespace ustawienia {
 		new RadioPrzyciskTekst("Uczeń", {QUESTIONX, 0.3, 0, 0}, 26, [&] {zmienne->trudnosc_pytania = '2'; }, [&] {return zmienne->trudnosc_pytania == '2'; }),
 		new RadioPrzyciskTekst("Odkrywca", {QUESTIONX, 0.37, 0, 0}, 26, [&] {zmienne->trudnosc_pytania = '6'; }, [&] {return zmienne->trudnosc_pytania == '6'; }),
 		new RadioPrzyciskTekst("Ekspert", {QUESTIONX, 0.44, 0, 0}, 26, [&] {zmienne->trudnosc_pytania = 's'; }, [&] {return zmienne->trudnosc_pytania == 's'; }),
+		*/
 	};
 	std::string volstr;
 	//RadioPrzycisk lowVol("VOL<50", 0.25, 0.4, 30, BUTTON_NONE, [&] {Volume.change(25); }, [&] {return Volume.value < 50; });
