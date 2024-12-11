@@ -92,6 +92,9 @@
     <ClInclude Include="wybor_poziomu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Poziom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Tlo1.png">
