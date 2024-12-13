@@ -4,6 +4,9 @@
 #include <string>
 #include "raylib.h"
 #include <vector>
+#include "Poziom.h"
+
+#define TOL (double)(1e-12)
 
 enum StanEkranu {
     MAIN_MENU = 0,
@@ -25,6 +28,10 @@ extern StanEkranu stanGry;
 //JG:Nie chcialo mi sie robic na to nowego pliku. Mam nadzieje, ze Wam to nie przeszkada. Ogolnie baza czesto uzywanych zmiennych do ,,globalnego" zasiegu.
 class PakietZmiennych {
 public:
+
+    Poziom poziomik;//JG:Nasz poziom przechowywany
+    int biezacy_etap;//JG:Biezacy etap przechodzonego poziomu (miejsce w tablicy etapow poziomu)
+
     std::string nazwa_uzytkownika;//MF: Aktualna nazwa uzytkownika
     std::vector<std::string> users;//MF: lista wszystkich uzytkownikow - w przyszlosci mozliwa do edytowania
     bool koniec;//JG:czy program ma wyjsc z glownej petli i zakonczyc dzialanie
@@ -73,6 +80,8 @@ public:
        'p' - pulapka - cofa do punktu kontrolnego przy porazce calego quizu
        */
     double punkty;//JG:punkty uzyskane za odpowiedzi w czasie biezacego quizu
+    double punkty_odpowiedzi[4] = {};//JG:tablica z punktami za odpowiedzi
+    double punkty_straznik;//JG:zawiera ilosc punktow po zdobyciu ktorej gracz jest bezpieczny przy porazce quizu (dotyczy wyzwania 's')
     double punkty_wymagane;//JG:punkty wymagane do pomyslnego przejsca quizu
     char odp_zaznaczona;//JG:zaznaczona obecnie odpowiedz (domyslnie A)
     char ministan;//JG:pelni funkcje analogiczna do stanGry, ale na podpoziomie poszczegolnych stanow
@@ -85,8 +94,21 @@ public:
     int proba_max;//JG:maksymalna liczba pytan w serii - po wyczerpaniu przegrywasz quiz i ponosisz konsekwencje zalezne od wyzwania; na koncu znak '\0'
     char* pytanie_opis;//JG:caly tekst opisu fabularnego pytania
     char* pytanie;//JG:caly tekst pytania z odpowiedziami; dzielony na 5 segmentow - w tym 4 z odpowiedziami i 1 z pytaniem; segmenty oddzielone znakie '\n'; na koncu znak '\0'
-    char* odp_wytlumaczenie;//JG:caly tekst wytlumaczenia wraz z opisem fabularnym odzielone na 2 segmenty, analogicznie jak pytanie; najpierw opis, potem tlumaczenie; 
-    char odp_pop;
+    char* odp_opis[5];/*JG: 5 tekstow uzaleznionych od poprawnosci obranej odpowiedzi - fabula
+        0 - koniec quizu: zwyciestwo - prog punktowy osiagniety
+        1 - etap quizu: najlepsza odpowiedz
+        2 - etap quizu: odpowiedz punktowana ale nie w pelni poprawna odpowiedz
+        3 - etap quizu: odpowiedz bez punktow
+        4 - koniec quizu: niepowodzenie (brak mozliwosci uzyskania progu punktowego w liczbie dostepnych prob)
+    */
+    char* odp_wytlumaczenie;/*JG:caly tekst wytlumaczenia wraz z opisem fabularnym odzielone na 5 segmentow, analogicznie jak pytanie :
+        1. - opis zagadnienia
+        2. - opis odpowiedzi A
+        3. - opis odpowiedzi B
+        4. - opis odpowiedzi C
+        5. - opis odpowiedzi D
+    */
+    char odp_pop;//JG:poprawna odpowiedz
     
     //JG:TABLICE POD PRZYCISKI TRYBU GRY
     float LAB_zaczep_dec_przycisku[24];//JG:obszary poboru tekstur (po 2 na przycisk, 1 dla x, 1 dla y)
@@ -94,6 +116,9 @@ public:
     
 
     PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
+
+        biezacy_etap = 0;
+
         nazwa_uzytkownika = "Uzytkownik1";
         users = { "Uzytkownik1", "Uzytkownik2", "Uzytkownik3", "Uzytkownik4", "Uzytkownik5" };
         koniec = false;
@@ -124,10 +149,11 @@ public:
         trudnosc_pytania = '6';
         glosnosc = 50.0f;
 
-        wyzwanie = 'b';
+        wyzwanie = 's';
        
         punkty = 0.0;
         punkty_wymagane = 10.0;
+        punkty_straznik = 5.0;
         odp_zaznaczona = 'A';
         ministan = 'q';
         proba = 1;
@@ -135,7 +161,17 @@ public:
         pytanie_opis = "Bladzac w tajemniczym labiryncie w koncu udaje Ci sie odnalezc wyjscie. Czy to juz koniec wedrowki? Czy wreszcie uda Ci sie wydostac i wrocic do swojego swiata? Podchodzisz do drzwi i naciskasz klamke. Zamkniete. Dostrzegasz jednak tajemnicze, wydrazone inskrypcje na drzwiach. Moze to zagadka?\0";
         pytanie = "Ile to 2 * 5 - 7?\nA - 8,\nB - 4,\nC - 3,\nD - 7\0";
         odp_pop = 'C';
-        odp_wytlumaczenie = "Z wielka niecierpliwoscia przechodzisz przez otwarte drzwi...\nPoniewaz dwie kupki po 5 jablek to 10 jablek a jak zjemy z tego 7 jablek to zostanie nam ich 3.\0";
+        for (int i = 0; i < 4; i++) {
+            punkty_odpowiedzi[i] = 0.0;
+        }
+        punkty_odpowiedzi[int(odp_pop -'A')] = 5.0;
+        punkty_odpowiedzi[1] = 1.0;//JG:Odpowiedz B, bo najblizsza poprawnej
+        odp_opis[0] = "Udało Ci się w pełni rozpracować szyfr! Wypowiadasz magiczne słowa i drzwi otwierają się na tyle, że możesz przejść. Z wielka niecierpliwoscia przechodzisz na drugą stronę...";
+        odp_opis[1] = "Wypowiadasz magiczne słowa i drzwi się otwieraja, jednak tylko przez parę sekund.Szpara jest za mała by się prześlizgnąć, więc trzeba próbować dalej.";
+        odp_opis[2] = "Wypowiadasz magiczne słowa i naciskasz klamke. Drzwi się otwieraja. Ale tylko przez ułamek sekundy.Trzeba będzie spróbować ponownie.";
+        odp_opis[3] = "Wypowiadasz magiczne słowa - rozwiązanie zagadki i naciskasz klamkę, ale drzwi się nie otwierają...";
+        odp_opis[4] = "Dość!Kopiesz drzwi z całej siły, jednak ten argument do nich nie przemawia.Za to do komórek nerwowych twojej stopy już tak...";
+        odp_wytlumaczenie = "Poniewaz dwie kupki po 5 jablek to 10 jablek a jak zjemy z tego 7 jablek to zostanie nam ich 3.\nA - niepoprawna (0pkt)\nB - niepoprawna, ale rozni sie tylko o 1 od poprawnej (1pkt)\nC - poprawna (5pkt)\nD - niepoprawna (0pkt)\0";
         //JG:inicjuje losowe bazy grafik przyciskow po rozpoczeciu gry oraz zeruje ich czulosc
         for (int i = 0; i <24; i++) {
             LAB_zaczep_dec_przycisku[i] = (float)(rand() % 51) * 0.01f * 1000.0f;

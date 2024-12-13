@@ -4,6 +4,7 @@
 #include "gamestate.h"
 #include "przycisk.h"
 #include <string>
+#include "Poziom.h"
 
 namespace labirynt {
 	
@@ -250,6 +251,36 @@ namespace labirynt {
 		else jasnosc_pom = 0.0f;
 		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[12], zmienne->LAB_zaczep_dec_przycisku[13], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { pozX_pom + 2.0f * Skala_liter, 517.0f * Skala_liter, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
 	
+
+
+
+
+
+
+
+		//LABIRYNT - ELEMENTY:
+
+		
+		//int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
+		//while (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[0] != '=') {
+		//	int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
+		//	int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
+		//	while (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[charakter] != '-') {
+		//		switch (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[charakter]) {
+
+		//		case 'p':
+
+
+		//		default:
+		//			break;
+
+		//		}
+		//		charakter = charakter + 1;
+		//	}
+
+
+		//}
+
 
 	}
 

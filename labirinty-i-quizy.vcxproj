@@ -154,6 +154,7 @@
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="positioning.h" />
     <ClInclude Include="Grafika.h" />
+    <ClInclude Include="Poziom.h" />
     <ClInclude Include="przycisk.h" />
     <ClInclude Include="slider.h" />
     <ClInclude Include="ustawienia.h" />
