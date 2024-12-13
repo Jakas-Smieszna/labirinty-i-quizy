@@ -60,8 +60,10 @@ namespace quiz {
 			else if (Skala_liter < 0.67f) linia_dlugosc = (int)(szer_pom / (9.0f * Skala_liter));
 			int j = 0;
 			int i = 0;
+			int odp_fab = 0;//JG:odpowiada za wybor tekstu z fabuly zaleznie od poprawnosci odpowiedzi (tylko do ministanu 'd' lub 'u')
 			float nowa_linia = 0.0f;
 			bool sekcja_tekstu = true;
+			char* napis_pom = "BLAD!";
 			DrawRectangle(60.0f * Skala_liter, 80.0f * Skala_liter, szer_pom, wys_pom, Fade(szata_epizodu, 0.75f));
 			DrawRectangle(59.0f * Skala_liter, 79.0f * Skala_liter, 3.0f * Skala_liter, wys_pom + 2.0f * Skala_liter, BLACK);
 			DrawRectangle(59.0f * Skala_liter + szer_pom, 79.0f * Skala_liter, 3.0f * Skala_liter, wys_pom + 2.0f * Skala_liter, BLACK);
@@ -117,8 +119,58 @@ namespace quiz {
 					}
 				}
 			}
-			else if (zmienne->ministan == 'd') {
-				for (int k = 0; k < 2; k++) {
+			else if (zmienne->ministan == 'd' || zmienne->ministan == 'u') {
+				
+				if (zmienne->ministan == 'u') {
+					if (zmienne->proba >= zmienne->proba_max) {
+						odp_fab = 4;
+						napis_pom = "Porazka!";
+					}
+					else {
+						odp_fab = 0;
+						napis_pom = "Droga wolna!";
+					}
+				}
+				else {
+					if (zmienne->odp_pop == zmienne->odp_zaznaczona) {
+						odp_fab = 1;
+						napis_pom = "Sukces!";
+					}
+					else if (zmienne->punkty_odpowiedzi[(int)(zmienne->odp_zaznaczona - 'A')]) {
+						odp_fab = 2;
+						napis_pom = "Powoli do przodu";
+					}
+					else {
+						odp_fab = 3;
+						napis_pom = "Niepowodzenie";
+					}
+				}
+				helper::DrawTextCentered(napis_pom, 60.0f * Skala_liter + szer_pom * 0.5f + 5.0f * Skala_liter, 100.0f * Skala_liter, 60.0f * Skala_liter, BLACK);//JG 'cien'
+				helper::DrawTextCentered(napis_pom, 60.0f * Skala_liter + szer_pom * 0.5f, 95.0f * Skala_liter, 60.0f * Skala_liter, EpisodeTheme.textColor);
+				nowa_linia = nowa_linia + 75.0f * Skala_liter;
+
+				while (sekcja_tekstu) {
+					i = 0;
+					char* linia = new char[linia_dlugosc + 1];
+					for (i; i < linia_dlugosc && zmienne->odp_opis[odp_fab][j] != '\n' && zmienne->odp_opis[odp_fab][j] != '\0'; i++) {
+						if (!(i == 0 && zmienne->odp_opis[odp_fab][j] == ' ')) linia[i] = zmienne->odp_opis[odp_fab][j];
+						else i--;
+						j++;
+					}
+					linia[i] = '\0';
+					if (zmienne->odp_opis[odp_fab][j] == '\0') sekcja_tekstu = false;
+					while (linia[i] != ' ' && sekcja_tekstu) {
+						linia[i] = '\0';
+						i--;
+						j--;
+					}
+					DrawText(linia, 70.0f * Skala_liter, 90.5f * Skala_liter + nowa_linia, (int)(16.0f * Skala_liter), napis_epizodu);
+					delete[] linia;
+					nowa_linia = nowa_linia + 26.0f * Skala_liter;
+				}
+				sekcja_tekstu = true;
+				j = 0;
+				for (int k = 0; k < 5; k++) {
 					sekcja_tekstu = true;
 					while (sekcja_tekstu) {
 						i = 0;
@@ -308,7 +360,7 @@ namespace quiz {
 			if (zmienne->odp_zaznaczona == 'A') {
 				jasnosc_pom = -0.75f;
 			}
-			else if (zmienne->LAB_czulosc_przycisku[4] == 0 && zmienne->mysz_x > 62.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 128.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
+			else if (zmienne->ministan == 'q' && zmienne->LAB_czulosc_przycisku[4] == 0 && zmienne->mysz_x > 62.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 128.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
 				jasnosc_pom = -0.5f;
 				SetMouseCursor(4);
 				zmienne->kurosr_czulosc = 1;
@@ -323,7 +375,7 @@ namespace quiz {
 			if (zmienne->odp_zaznaczona == 'B') {
 				jasnosc_pom = -0.75f;
 			}
-			else if (zmienne->LAB_czulosc_przycisku[5] == 0 && zmienne->mysz_x > 134.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 200.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
+			else if (zmienne->ministan == 'q' && zmienne->LAB_czulosc_przycisku[5] == 0 && zmienne->mysz_x > 134.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 200.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
 				jasnosc_pom = -0.5f;
 				SetMouseCursor(4);
 				zmienne->kurosr_czulosc = 1;
@@ -338,7 +390,7 @@ namespace quiz {
 			if (zmienne->odp_zaznaczona == 'C') {
 				jasnosc_pom = -0.75f;
 			}
-			else if (zmienne->LAB_czulosc_przycisku[6] == 0 && zmienne->mysz_x > 206.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 272.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
+			else if (zmienne->ministan == 'q' && zmienne->LAB_czulosc_przycisku[6] == 0 && zmienne->mysz_x > 206.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 272.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
 				jasnosc_pom = -0.5f;
 				SetMouseCursor(4);
 				zmienne->kurosr_czulosc = 1;
@@ -353,7 +405,7 @@ namespace quiz {
 			if (zmienne->odp_zaznaczona == 'D') {
 				jasnosc_pom = -0.75f;
 			}
-			else if (zmienne->LAB_czulosc_przycisku[7] == 0 && zmienne->mysz_x > 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 344.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
+			else if (zmienne->ministan == 'q' && zmienne->LAB_czulosc_przycisku[7] == 0 && zmienne->mysz_x > 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 344.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom) {
 				jasnosc_pom = -0.5f;
 				SetMouseCursor(4);
 				zmienne->kurosr_czulosc = 1;
@@ -501,7 +553,7 @@ namespace quiz {
 		}
 
 		//JG:PRZYCISK ODPOWIEDZ A
-		if (!zmienne->pauza) {
+		if (!zmienne->pauza && zmienne->ministan == 'q') {
 			if (zmienne->LAB_czulosc_przycisku[4] > 0) {
 				zmienne->LAB_czulosc_przycisku[4] = zmienne->LAB_czulosc_przycisku[4] - 1;
 			}
@@ -517,7 +569,7 @@ namespace quiz {
 		}
 
 		//JG:PRZYCISK ODPOWIEDZ B
-		if (!zmienne->pauza) {
+		if (!zmienne->pauza && zmienne->ministan == 'q') {
 			if (zmienne->LAB_czulosc_przycisku[5] > 0) {
 				zmienne->LAB_czulosc_przycisku[5] = zmienne->LAB_czulosc_przycisku[5] - 1;
 			}
@@ -533,7 +585,7 @@ namespace quiz {
 		}
 
 		//JG:PRZYCISK ODPOWIEDZ C
-		if (!zmienne->pauza) {
+		if (!zmienne->pauza && zmienne->ministan == 'q') {
 			if (zmienne->LAB_czulosc_przycisku[6] > 0) {
 				zmienne->LAB_czulosc_przycisku[6] = zmienne->LAB_czulosc_przycisku[6] - 1;
 			}
@@ -549,7 +601,7 @@ namespace quiz {
 		}
 
 		//JG:PRZYCISK ODPOWIEDZ D
-		if (!zmienne->pauza) {
+		if (!zmienne->pauza && zmienne->ministan == 'q') {
 			if (zmienne->LAB_czulosc_przycisku[7] > 0) {
 				zmienne->LAB_czulosc_przycisku[7] = zmienne->LAB_czulosc_przycisku[7] - 1;
 			}
@@ -574,13 +626,30 @@ namespace quiz {
 			}
 			else if (((IsKeyDown(KEY_R) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x > 350.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 416.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom)))) {
 				if (zmienne->ministan == 'q' && zmienne->proba < zmienne->proba_max && zmienne->punkty < zmienne->punkty_wymagane) { 
-					zmienne->ministan = 'd';
+					zmienne->punkty = zmienne->punkty + zmienne->punkty_odpowiedzi[int(zmienne->odp_zaznaczona - 'A')];
+					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) zmienne->ministan = 'u';
+					else zmienne->ministan = 'd';
 				}
 				else if (zmienne->ministan == 'd') {
 					zmienne->ministan = 'q';
 					zmienne->proba = zmienne->proba + 1;
 				}
+				else if (zmienne->ministan != 'u' && zmienne->proba >= zmienne->proba_max) {
+					zmienne->ministan = 'u';
+				}
 				else {
+					switch (zmienne->wyzwanie) {
+					default:
+					case 'b':
+						break;
+					case 's':
+						if (zmienne->punkty > zmienne->punkty_straznik - TOL) break;
+					case 'p':
+						zmienne->cofniecia = zmienne->cofniecia + 1;
+						zmienne->wynik = zmienne->kontrola_wynik;
+						zmienne->czas = zmienne->kontrola_czas;
+						break;
+					}
 					stanGry = GRA_LABIRYNT;
 					zmienne->pauza = true;
 				}
@@ -630,7 +699,7 @@ namespace quiz {
 			case 'b':
 				break;
 			case 's':
-				if (zmienne->punkty > zmienne->punkty_wymagane) break;
+				if (zmienne->punkty > zmienne->punkty_straznik - TOL) break;
 			case 'p':
 				zmienne->cofniecia = zmienne->cofniecia + 1;
 				zmienne->wynik = zmienne->kontrola_wynik;

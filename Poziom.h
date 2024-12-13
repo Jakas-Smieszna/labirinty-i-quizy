@@ -7,6 +7,11 @@
 
 ROZDZIAL I - typ (do typ_tab):
 
+= - ten element znakuje koniec tablicy i nie peleni zadnej innej roli
+	(wyklucza: wszystkie inne)
+
+- - oznacza koniec listy podtypow w danym elemencie
+
 p - pole: 
 	ma ID do pola do tablicy {Pole* pola} z danymi wycinka tekstury z grafiki pol/przyciskow
 	otrzymuje funkcje rysowania pola, 
@@ -113,7 +118,8 @@ u - portal, element wizualny, z ktorego wychodza kolczatki, bije przy kontakcie
 
 
 class Element {
-	
+public:
+
 	char* typ_tab;//charaktery
 	int* ID_tab;//ID w tablicach charakterow
 	float x;//pozycja x
@@ -128,6 +134,7 @@ class Element {
 };
 
 class Pole {//charakter - pole CHAR = 'p'
+public:
 
 	float x_zrodla;//x zrodlowe cwiartki grafiki
 	float y_zrodla;//y zrodlowe cwiartki grafiki
@@ -139,6 +146,8 @@ class Pole {//charakter - pole CHAR = 'p'
 };
 
 class Labirynt {
+public:
+
 	Element* elementy;//wszystkie pola i przeciwnicy
 	Pole* pola;//wszystkie dane zrodlowe wycinku grafiki pol
 	char* zmienne_pomocnicze;//przechowuje np 2 zmienne ktore trwale ustawiaj sie na TAK po jednorazowym wcisnieciu przycisku
@@ -153,6 +162,8 @@ class Labirynt {
 };
 
 class Poziom {
+public:
+
 	char* etapy;// np. [l,q,l,l,q] - uruchom poziom >> labirynt1 >> quiz1 >> labirynt2 >> labirynt3 >> quiz2 >> koniec misji - okresla kolejnosc etapow na poziomie
 	Labirynt* labirynty;//tablica dynamiczna etapow "labirynt"
 
