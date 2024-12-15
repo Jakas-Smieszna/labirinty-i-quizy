@@ -3,6 +3,8 @@
 #include "Grafika.h"
 #include <iostream>
 
+#define ODLEGLOSC_MIEDZY_POLAMI 50.0f
+
 /*WIELKA KSIEGA CHAROW:
 
 ROZDZIAL I - typ (do typ_tab):
@@ -124,11 +126,24 @@ public:
 	int* ID_tab;//ID w tablicach charakterow
 	float x;//pozycja x
 	float y;//pozycja y
-	Element(char* typ_tab0, int* ID_tab0, float x0, float y0) {//jedyny konstruktor
+
+	Element(char* typ_tab0, int* ID_tab0, float x0, float y0) {//jedyny konstruktor praktyczny
 		typ_tab = typ_tab0;
 		ID_tab = ID_tab0;
 		x = x0;
 		y = y0;
+	}
+
+	Element() {//konstruktor pod puste
+		typ_tab = NULL;
+		ID_tab = NULL;
+		x = 0;
+		y = 0;
+	}
+
+	void D_Element() {//zwalnianie pamieci
+		if (typ_tab != NULL) delete[] typ_tab;
+		if (ID_tab != NULL) delete[] ID_tab;
 	}
 
 };
@@ -159,12 +174,130 @@ public:
 	char* etapy_znikania;//zawiera informacje ktora seria znikniec i pojawien sie pola jest aktywna (przy polu znikajacym i pojawiajacym sie wielokrotnie)
 	char* widzialnosc;//zawiera etapy animcaji znikania i okresla czy pole/obiekt znikniety czy nie
 
+	Labirynt() {//konstruktor pusty
+		elementy = NULL;
+		pola = NULL;
+		zmienne_pomocnicze = NULL;
+		zapadnie_czas = NULL;
+		pojawiajace_czas = NULL;
+		odblokuj_aktywacje = NULL;
+		odbiorniki = NULL;
+		etapy_znikania = NULL;
+		widzialnosc = NULL;
+	}
+
+	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, double* odblokuj_aktywacje0, char** odbiorniki0, char* etapy_znikania0, char* widzialnosc0) {//konstruktor glowny
+		elementy = elementy0;
+		pola = pola0;
+		zmienne_pomocnicze = zmienne_pomocnicze0;
+		zapadnie_czas = zapadnie_czas0;
+		pojawiajace_czas = pojawiajace_czas0;
+		odblokuj_aktywacje = odblokuj_aktywacje0;
+		odbiorniki = odbiorniki0;
+		etapy_znikania = etapy_znikania0;
+		widzialnosc = widzialnosc0;
+
+	}
+
+	void D_Labirynt() {//zwalnianie pamieci
+		if (elementy != NULL) {
+			int licznik = 0;
+			while (elementy[licznik].typ_tab[0] != '=') {
+				elementy[licznik].D_Element();
+				licznik = licznik + 1;
+			}
+			elementy[licznik].D_Element();
+			delete[] elementy;
+		}
+		if (pola != NULL) delete[] pola;
+		if (zmienne_pomocnicze != NULL) delete[] zmienne_pomocnicze;
+		if (zapadnie_czas != NULL) delete[] zapadnie_czas;
+		if (pojawiajace_czas != NULL) delete[] pojawiajace_czas;
+		if (odblokuj_aktywacje != NULL) delete[] odblokuj_aktywacje;
+		if (odbiorniki != NULL) delete[] odbiorniki;
+		if (etapy_znikania != NULL) delete[] etapy_znikania;
+		if (widzialnosc != NULL) delete[] widzialnosc;
+	}
+
+};
+
+class Quiz {
+public:
+
+	int* Q_zakres_pytan;//zawsze zawiera parzysta ilosc numerow indeksow pytan  (parami - pierwszy z pary to min, drugi to max tak wiec {5, 7, 9, 9, 12, 60} to suma zbiorow pytan od 5 do 7, jednoelementowego 9 oraz od 12 do 60 (wszystko wlacznie)
+	char Q_wyzwanie;//jakie wyzwanie (do wyzwania w gamestate)
+	int Q_fabula_ID;//ktory zestaw tekstow fabularnych z bazy
+	int Q_proby;//ile przysluguje prob w quizie
+	double Q_prog_punktowy;//ile punktow wymaganych do zaliczenia
+	double Q_prog_bezpieczenstwa;//ile punktow wymaganych do unikniecia zbicia przez straznika
+
+	//Quiz() {//konstruktor testowy
+	//	Q_zakres_pytan = new int[2];
+	//	Q_zakres_pytan[0] = 1;
+	//	Q_zakres_pytan[0] = 100;
+	//	Q_fabula_ID = rand() % 4;
+	//	Q_wyzwanie = 'b';
+	//	Q_proby = 5;
+	//	Q_prog_punktowy = 10.0;
+	//	Q_prog_bezpieczenstwa = 5.0;
+	//}
+
+	Quiz() {//konstruktor pusty
+		Q_zakres_pytan = NULL;
+		Q_fabula_ID = rand() % 4;
+		Q_wyzwanie = 'b';
+		Q_proby = 5;
+		Q_prog_punktowy = 10.0;
+		Q_prog_bezpieczenstwa = 5.0;
+	}
+
+	Quiz(int* zakresy, char wyzwanie, int fabula, int proby, double punkty, double straznik) {//konstruktor praktyczy
+		Q_zakres_pytan = zakresy;
+		Q_wyzwanie = wyzwanie;
+		Q_fabula_ID = fabula;
+		Q_proby = proby;
+		Q_prog_punktowy = punkty;
+		Q_prog_bezpieczenstwa = straznik;
+	}
+
+	void D_Quiz() {//do zwalniania pamieci
+		if(Q_zakres_pytan != NULL) delete[] Q_zakres_pytan;
+	}
+
 };
 
 class Poziom {
 public:
 
-	char* etapy;// np. [l,q,l,l,q] - uruchom poziom >> labirynt1 >> quiz1 >> labirynt2 >> labirynt3 >> quiz2 >> koniec misji - okresla kolejnosc etapow na poziomie
+	char* etapy;// np. [l,q,l,l,q,=] - uruchom poziom >> labirynt1 >> quiz1 >> labirynt2 >> labirynt3 >> quiz2 >> koniec misji - okresla kolejnosc etapow na poziomie. '=' oznacza koniec tablicy
 	Labirynt* labirynty;//tablica dynamiczna etapow "labirynt"
+	Quiz* quizy;//tablica dynamiczna etapow "Quiz"
 
+	Poziom() {//konstruktor pusty
+		etapy = NULL;
+		labirynty = NULL;
+		quizy = NULL;
+	}
+
+	void D_Poziom(){//zwalnianie pamieci
+		if (etapy != NULL) {
+			int Q_licznik = 0;
+			int L_licznik = 0;
+			int licznik = 0;
+			while (etapy[licznik] != '=') {
+				if (etapy[licznik] == 'q' && quizy != NULL) {
+					quizy[Q_licznik].D_Quiz();
+					Q_licznik = Q_licznik + 1;
+				}
+				else if (etapy[licznik] == 'l' && labirynty != NULL) {
+					labirynty[L_licznik].D_Labirynt();
+					L_licznik = L_licznik + 1;
+				}
+				licznik = licznik + 1;
+			}
+			delete[] etapy;
+		}
+		if (labirynty != NULL) delete[] labirynty;
+		if (quizy != NULL) delete[] quizy;
+	}
 };

@@ -55,9 +55,9 @@ namespace quiz {
 		float wys_pom = wys - 240.0f * Skala_liter;
 
 		if (!zmienne->pauza) {
-			int linia_dlugosc = (int)(szer_pom / (8.0f * Skala_liter));
-			if (Skala_liter < 0.60f) linia_dlugosc = (int)(szer_pom / (11.0f * Skala_liter));
-			else if (Skala_liter < 0.67f) linia_dlugosc = (int)(szer_pom / (9.0f * Skala_liter));
+			int linia_dlugosc = (int)((szer_pom - 25.0f * Skala_liter) / (8.0f * Skala_liter));
+			if (Skala_liter < 0.60f) linia_dlugosc = (int)((szer_pom - 25.0f * Skala_liter) / (11.0f * Skala_liter));
+			else if (Skala_liter < 0.67f) linia_dlugosc = (int)((szer_pom - 25.0f * Skala_liter) / (9.0f * Skala_liter));
 			int j = 0;
 			int i = 0;
 			int odp_fab = 0;//JG:odpowiada za wybor tekstu z fabuly zaleznie od poprawnosci odpowiedzi (tylko do ministanu 'd' lub 'u')
@@ -71,13 +71,28 @@ namespace quiz {
 			DrawRectangle(59.0f * Skala_liter, 79.0f * Skala_liter, szer_pom + 2.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
 
 			if (zmienne->ministan == 'q') {
+
+				switch (zmienne->fabula_quizu_ID) {
+				case 1:
+					napis_pom = "Tajemnicze drzwi";
+					break;
+				default:
+					napis_pom = "Poczucie humoru autorow";
+					break;
+				}
+				helper::DrawTextCentered(napis_pom, 60.0f * Skala_liter + szer_pom * 0.5f + 5.0f * Skala_liter, 100.0f * Skala_liter, 60.0f * Skala_liter, BLACK);//JG 'cien'
+				helper::DrawTextCentered(napis_pom, 60.0f * Skala_liter + szer_pom * 0.5f, 95.0f * Skala_liter, 60.0f * Skala_liter, EpisodeTheme.textColor);
+				nowa_linia = nowa_linia + 75.0f * Skala_liter;
+
+
 				while (sekcja_tekstu) {
 					i = 0;
-					char* linia = new char[linia_dlugosc + 1];
-					for (i; i < linia_dlugosc && zmienne->pytanie_opis[j] != '\n' && zmienne->pytanie_opis[j] != '\0'; i++) {
+					char* linia = new char[linia_dlugosc + 1]{};
+					while (MeasureTextEx(EpisodeTheme.textFont, linia, (int)(16.0f * Skala_liter), 0.0f).x < szer_pom - 25.0f * Skala_liter - TOL && i < linia_dlugosc && zmienne->pytanie_opis[j] != '\n' && zmienne->pytanie_opis[j] != '\0') {
 						if (!(i == 0 && zmienne->pytanie_opis[j] == ' ')) linia[i] = zmienne->pytanie_opis[j];
 						else i--;
 						j++;
+						i++;
 					}
 					linia[i] = '\0';
 					if (zmienne->pytanie_opis[j] == '\0') sekcja_tekstu = false;
@@ -122,13 +137,13 @@ namespace quiz {
 			else if (zmienne->ministan == 'd' || zmienne->ministan == 'u') {
 				
 				if (zmienne->ministan == 'u') {
-					if (zmienne->proba >= zmienne->proba_max) {
-						odp_fab = 4;
-						napis_pom = "Porazka!";
+					if (zmienne->punkty >= zmienne->punkty_wymagane - TOL) {
+						odp_fab = 0;
+						napis_pom = "Droga wolna!"; 
 					}
 					else {
-						odp_fab = 0;
-						napis_pom = "Droga wolna!";
+						odp_fab = 4;
+						napis_pom = "Porazka!";
 					}
 				}
 				else {
@@ -625,19 +640,32 @@ namespace quiz {
 				zmienne->LAB_czulosc_przycisku[8] = 0;
 			}
 			else if (((IsKeyDown(KEY_R) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x > 350.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 416.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom)))) {
-				if (zmienne->ministan == 'q' && zmienne->proba < zmienne->proba_max && zmienne->punkty < zmienne->punkty_wymagane) { 
+				if (zmienne->ministan == 'q' && zmienne->proba <= zmienne->proba_max && zmienne->punkty < zmienne->punkty_wymagane) { 
 					zmienne->punkty = zmienne->punkty + zmienne->punkty_odpowiedzi[int(zmienne->odp_zaznaczona - 'A')];
-					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) zmienne->ministan = 'u';
+					if (zmienne->punkty > zmienne->punkty_wymagane - TOL || zmienne->proba >= zmienne->proba_max) zmienne->ministan = 'u';
 					else zmienne->ministan = 'd';
 				}
 				else if (zmienne->ministan == 'd') {
 					zmienne->ministan = 'q';
-					zmienne->proba = zmienne->proba + 1;
+					if (zmienne->proba < zmienne->proba_max) zmienne->proba = zmienne->proba + 1;
+					else {
+						switch (zmienne->wyzwanie) {
+						default:
+						case 'b':
+							break;
+						case 's':
+							if (zmienne->punkty > zmienne->punkty_straznik - TOL) break;
+						case 'p':
+							zmienne->cofniecia = zmienne->cofniecia + 1;
+							zmienne->wynik = zmienne->kontrola_wynik;
+							zmienne->czas = zmienne->kontrola_czas;
+							break;
+						}
+						stanGry = GRA_LABIRYNT;
+						zmienne->pauza = true;
+					}
 				}
-				else if (zmienne->ministan != 'u' && zmienne->proba >= zmienne->proba_max) {
-					zmienne->ministan = 'u';
-				}
-				else {
+				else {//jak ministan rowny 'u'
 					switch (zmienne->wyzwanie) {
 					default:
 					case 'b':
