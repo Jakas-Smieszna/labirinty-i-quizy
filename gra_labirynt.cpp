@@ -260,7 +260,9 @@ namespace labirynt {
 
 		//LABIRYNT - ELEMENTY:
 
-		
+		//float X_ZERO = 0.0f;
+		//float Y_ZERO = 0.0f;
+		//
 		//int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
 		//while (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[0] != '=') {
 		//	int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
@@ -278,6 +280,7 @@ namespace labirynt {
 		//		charakter = charakter + 1;
 		//	}
 
+		//	element = element + 1;
 
 		//}
 

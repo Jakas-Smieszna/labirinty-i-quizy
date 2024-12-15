@@ -92,6 +92,9 @@ public:
     */
     int proba;//JG:numer pytania w biezacym quizie - wsn, ktore to pytanie w serii
     int proba_max;//JG:maksymalna liczba pytan w serii - po wyczerpaniu przegrywasz quiz i ponosisz konsekwencje zalezne od wyzwania; na koncu znak '\0'
+    int fabula_quizu_ID;/*JG:ktory typ fabuly do pytania, od tego zalezy min naglowek oraz pozniej przy wczytywaniu z bazy tekst fabularny quizu
+        1 - zamkniete drzwi (wyzwanie: 'b')
+    */
     char* pytanie_opis;//JG:caly tekst opisu fabularnego pytania
     char* pytanie;//JG:caly tekst pytania z odpowiedziami; dzielony na 5 segmentow - w tym 4 z odpowiedziami i 1 z pytaniem; segmenty oddzielone znakie '\n'; na koncu znak '\0'
     char* odp_opis[5];/*JG: 5 tekstow uzaleznionych od poprawnosci obranej odpowiedzi - fabula
@@ -116,6 +119,107 @@ public:
     
 
     PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
+
+
+
+
+        poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
+        //LABIRYNT 1
+        Element* l1_elementy = new Element[18];
+        int licznik = 0;
+        int NOWY_ID_pole = 0;
+        float obecny_x = 0.0f;
+        float obecny_y = 0.0f;
+        for (licznik; licznik < 1; licznik++) {
+            l1_elementy[licznik].typ_tab = new char[3] {'p', 's', '-'};
+            l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            l1_elementy[licznik].x = obecny_x;
+            l1_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 16; licznik++) {
+            l1_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+            l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            if (licznik == 1
+                || (licznik >= 4 && licznik <= 5)
+                || (licznik >= 8 && licznik <= 9)
+                || (licznik >= 12 && licznik <= 13)) {
+                obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+            }
+            else if ((licznik >= 2 && licznik <= 3)
+                || (licznik >= 14 && licznik <= 15)) {
+                obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+            }
+            else if ((licznik >= 6 && licznik <= 7)
+                || (licznik >= 10 && licznik <= 11)) {
+                obecny_y = obecny_y - ODLEGLOSC_MIEDZY_POLAMI;
+            }
+            l1_elementy[licznik].x = obecny_x;
+            l1_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 17; licznik++) {
+            l1_elementy[licznik].typ_tab = new char[3] {'p', '>', '-'};
+            l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+            l1_elementy[licznik].x = obecny_x;
+            l1_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 18; licznik++) {
+            l1_elementy[licznik].typ_tab = new char[1] {'='};
+        }
+        Pole* l1_pola = new Pole[17];
+        //LABIRYNT 2
+        Element* l2_elementy = new Element[6];
+        licznik = 0;
+        NOWY_ID_pole = 0;
+        obecny_x = 0.0f;
+        obecny_y = 0.0f;
+        for (licznik; licznik < 1; licznik++) {
+            l2_elementy[licznik].typ_tab = new char[3] {'p', 's', '-'};
+            l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            l2_elementy[licznik].x = obecny_x;
+            l2_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 4; licznik++) {
+            l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+            l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+            l2_elementy[licznik].x = obecny_x;
+            l2_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 5; licznik++) {
+            l2_elementy[licznik].typ_tab = new char[3] {'p', '>', '-'};
+            l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            NOWY_ID_pole = NOWY_ID_pole + 1;
+            obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+            l2_elementy[licznik].x = obecny_x;
+            l2_elementy[licznik].y = obecny_y;
+        }
+        for (licznik; licznik < 6; licznik++) {
+            l2_elementy[licznik].typ_tab = new char[1] {'='};
+        }
+        Pole* l2_pola = new Pole[5];
+
+
+        poziomik.labirynty = new Labirynt[2]{
+            Labirynt(l1_elementy, l1_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+            Labirynt(l2_elementy, l2_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL) };
+
+        int* q1_zakresyID = new int[2] {1, 7};
+        int* q2_zakresyID = new int[2] {3, 10};
+        poziomik.quizy = new Quiz[2]{ 
+            Quiz(q1_zakresyID, 'b', 1, 5, 10.0, 0.0), 
+            Quiz(q2_zakresyID, 's', 1, 6, 12.0, 6.0) };
+
+
+
+
+
+
 
         biezacy_etap = 0;
 
@@ -158,6 +262,7 @@ public:
         ministan = 'q';
         proba = 1;
         proba_max = 5;
+        fabula_quizu_ID = 1;
         pytanie_opis = "Bladzac w tajemniczym labiryncie w koncu udaje Ci sie odnalezc wyjscie. Czy to juz koniec wedrowki? Czy wreszcie uda Ci sie wydostac i wrocic do swojego swiata? Podchodzisz do drzwi i naciskasz klamke. Zamkniete. Dostrzegasz jednak tajemnicze, wydrazone inskrypcje na drzwiach. Moze to zagadka?\0";
         pytanie = "Ile to 2 * 5 - 7?\nA - 8,\nB - 4,\nC - 3,\nD - 7\0";
         odp_pop = 'C';
