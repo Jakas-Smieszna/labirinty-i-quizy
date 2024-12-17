@@ -6,6 +6,8 @@
 #include <vector>
 #include "Poziom.h"
 
+
+//Zdjecia kotka nie jest nasze :D
 #define TOL (double)(1e-12)
 
 enum StanEkranu {
@@ -41,6 +43,10 @@ public:
     float mysz_y;//JG:pozycja Y myszy w tej klatce
     float mysz_pop_x;//JG:pozycja X myszy w poprzedniej klatce
     float mysz_pop_y;//JG:pozycja Y myszy w poprzedniej klatce
+
+    float plansza_x;//JG:przesuniecie planszy wzdluz x
+    float plansza_y;//JG:przesuniecie planszy wzdluz y
+
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
     char epizod_doc;//JG:Sluzy do zmiany epizodu w ustawieniach i z losowania (specjalna funkcja sprawdza czy ep docelowy jest biezacym ep, a jak nie to ustawia biezacy ep i powiazane parametry (w tym grafiki) na docelowy ep.
@@ -234,6 +240,10 @@ public:
         mysz_y = GetMouseY();
         mysz_pop_x = GetMouseX();
         mysz_pop_y = GetMouseY();
+
+        plansza_x = 0.0f;
+        plansza_y = 0.0f;
+
         kurosr_czulosc = 0;
         srand(time(NULL));
         epizod_doc = (char)(rand() % 4 + 1);//JG:losuje epizod pod tlo po uruchomieniu, dotyczy szaty graficznej, poziomy z dalszych epizodow beda zablokowane w wyborze poziomow
@@ -274,8 +284,8 @@ public:
         for (int i = 0; i < 4; i++) {
             punkty_odpowiedzi[i] = 0.0;
         }
-        punkty_odpowiedzi[int(odp_pop -'A')] = 5.0;
-        punkty_odpowiedzi[1] = 1.0;//JG:Odpowiedz B, bo najblizsza poprawnej
+        //punkty_odpowiedzi[int(odp_pop -'A')] = 5.0;
+        //punkty_odpowiedzi[1] = 1.0;//JG:Odpowiedz B, bo najblizsza poprawnej
         odp_opis[0] = "Udało Ci się w pełni rozpracować szyfr! Wypowiadasz magiczne słowa i drzwi otwierają się na tyle, że możesz przejść. Z wielka niecierpliwoscia przechodzisz na drugą stronę...";
         odp_opis[1] = "Wypowiadasz magiczne słowa i drzwi się otwieraja, jednak tylko przez parę sekund.Szpara jest za mała by się prześlizgnąć, więc trzeba próbować dalej.";
         odp_opis[2] = "Wypowiadasz magiczne słowa i naciskasz klamke. Drzwi się otwieraja. Ale tylko przez ułamek sekundy.Trzeba będzie spróbować ponownie.";
@@ -290,6 +300,13 @@ public:
             LAB_czulosc_przycisku[i] = 0;
         }
     }
+
+    void D_Zmienne(){
+        
+        if (pytanie != NULL) delete pytanie;
+
+    }
+
 };
 
 extern PakietZmiennych* zmienne;

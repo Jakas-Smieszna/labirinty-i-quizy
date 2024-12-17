@@ -48,6 +48,80 @@ namespace labirynt {
 			napis_epizodu = WHITE;
 			break;
 		}
+
+
+
+		//LABIRYNT - ELEMENTY:
+
+		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
+		float Y_GRANICA = 40.0f * Skala_liter;//Gorna optycznie granica planszy
+
+		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
+		while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[0] != '=') {
+			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
+			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
+			while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter] != '-') {
+				float x = zmienne->plansza_x + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x);
+				float y = zmienne->plansza_y + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y);
+				switch (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter]) {
+
+					//JG:POLE
+				case 'p':
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
+						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+					}
+					break;
+
+					//JG:START
+				case 's':
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+						helper::DrawTextCentered("START", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'
+						helper::DrawTextCentered("START", x, y - 10.0f * Skala_liter, 26.0f * Skala_liter, EpisodeTheme.textColor);
+					}
+					break;
+
+					//JG:META
+				case 'm':
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+						helper::DrawTextCentered("META", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'
+						helper::DrawTextCentered("META", x, y - 10.0f * Skala_liter, 26.0f * Skala_liter, EpisodeTheme.textColor);
+					}
+					break;
+
+					//JG:WEJSCIE
+				case '>':
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+						helper::DrawTextCentered("DRZWI", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'
+						helper::DrawTextCentered("DRZWI", x, y - 10.0f * Skala_liter, 26.0f * Skala_liter, EpisodeTheme.textColor);
+					}
+					break;
+
+					//JG:WYJSCIE
+				case '<':
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+						helper::DrawTextCentered("WEJSCIE", x + 3.0f * Skala_liter, y - 2.0f * Skala_liter, 16.0f * Skala_liter, BLACK);//JG 'cien'
+						helper::DrawTextCentered("WEJSCIE", x, y - 5.0f * Skala_liter, 16.0f * Skala_liter, EpisodeTheme.textColor);
+					}
+					break;
+
+				default:
+					break;
+
+				}
+				charakter = charakter + 1;
+			}
+
+			element = element + 1;
+
+		}
+
+		DrawTexturePro(grafiki->awatar.text, { 0.0f, 0.0f, grafiki->awatar.szer, grafiki->awatar.wys }, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 13.0f * Skala_liter, 13.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+
+
+
+		//JG:Interfejs
+
 		DrawRectangle(szer - 272.0f * Skala_liter, 0.0f, 280.0f * Skala_liter, wys, Fade(szata_epizodu, 0.75f));
 		DrawRectangle(0.0f, 0.0f, szer - 272.0f * Skala_liter, 40.0f * Skala_liter, Fade(szata_epizodu, 0.75f));
 		DrawRectangle(szer - 274.0f * Skala_liter, 0.0f, 3.0f * Skala_liter, wys, BLACK);
@@ -154,7 +228,7 @@ namespace labirynt {
 		DrawText(TextFormat("Cofniecia: %d/%d", zmienne->cofniecia, zmienne->limit_cofniecia), szer - 258.0f * Skala_liter, 334.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
 		DrawText(TextFormat("Czas PK: %0.2lf", zmienne->kontrola_czas), szer - 258.0f * Skala_liter, 356.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
 		DrawText(TextFormat("Wynik PK: %0.2lf", zmienne->kontrola_wynik), szer - 258.0f * Skala_liter, 378.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
-		
+
 		//JG:PRZYCISK PAUZA
 		DrawRectangle(szer - 248.0f * Skala_liter, 410.0f * Skala_liter, 70.0f * Skala_liter, 70.0f * Skala_liter, napis_epizodu);
 		float jasnosc_pom = 0.0f;
@@ -164,7 +238,7 @@ namespace labirynt {
 			zmienne->kurosr_czulosc = 1;
 			DrawText("Wlacz/wylacz ruch", szer - 258.0f * Skala_liter, 490.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);
 		}
-		DrawTexturePro(grafiki->pole1.text, {zmienne->LAB_zaczep_dec_przycisku[0], zmienne->LAB_zaczep_dec_przycisku[1], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f}, {szer - 246.0f * Skala_liter, 412.0f * Skala_liter, 66.0f * Skala_liter, 66.0f * Skala_liter}, {0.0f, 0.0f}, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
+		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[0], zmienne->LAB_zaczep_dec_przycisku[1], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { szer - 246.0f * Skala_liter, 412.0f * Skala_liter, 66.0f * Skala_liter, 66.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
 		if (!zmienne->pauza) {
 			DrawRectangle(szer - 231.0f * Skala_liter, 422.0f * Skala_liter, 15.0f * Skala_liter, 46.0f * Skala_liter, napis_epizodu);
 			DrawRectangle(szer - 210.0f * Skala_liter, 422.0f * Skala_liter, 15.0f * Skala_liter, 46.0f * Skala_liter, napis_epizodu);
@@ -226,7 +300,7 @@ namespace labirynt {
 		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[8], zmienne->LAB_zaczep_dec_przycisku[9], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { szer - 255.0f * Skala_liter, 517.0f * Skala_liter, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
 		DrawRectangle(szer - 251.0f * Skala_liter, 527.0f * Skala_liter, 6.0f * Skala_liter, 6.0f * Skala_liter, napis_epizodu);
 		DrawTriangle({ szer - 251.0f * Skala_liter, 530.0f * Skala_liter }, { szer - 233.0f * Skala_liter, 538.0f * Skala_liter }, { szer - 233.0f * Skala_liter, 522.0f * Skala_liter }, napis_epizodu);
-		DrawLineEx({szer - 257.0f * Skala_liter, 516.0f * Skala_liter}, { szer - 229.0f * Skala_liter, 544.0f * Skala_liter}, 1.5f * Skala_liter, ColorBrightness(napis_epizodu, -0.3f));
+		DrawLineEx({ szer - 257.0f * Skala_liter, 516.0f * Skala_liter }, { szer - 229.0f * Skala_liter, 544.0f * Skala_liter }, 1.5f * Skala_liter, ColorBrightness(napis_epizodu, -0.3f));
 		//JG:PRZYCISK MAKS GLOSNOSC SUWAKA
 		DrawRectangle(szer - 39.0f * Skala_liter, 515.0f * Skala_liter, 30.0f * Skala_liter, 30.0f * Skala_liter, napis_epizodu);
 		if (zmienne->LAB_czulosc_przycisku[3] == 0 && zmienne->mysz_x > szer - 37.0f * Skala_liter && zmienne->mysz_x < szer - 11.0f * Skala_liter && zmienne->mysz_y > 517.0f * Skala_liter && zmienne->mysz_y < 543.0f * Skala_liter) {
@@ -250,47 +324,12 @@ namespace labirynt {
 		}
 		else jasnosc_pom = 0.0f;
 		DrawTexturePro(grafiki->pole1.text, { zmienne->LAB_zaczep_dec_przycisku[12], zmienne->LAB_zaczep_dec_przycisku[13], grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { pozX_pom + 2.0f * Skala_liter, 517.0f * Skala_liter, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, jasnosc_pom));
-	
 
 
 
-
-
-
-
-		//LABIRYNT - ELEMENTY:
-
-		float X_ZERO = 0.0f;
-		float Y_ZERO = 0.0f;
-		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
-		float Y_GRANICA = 40.0f * Skala_liter;//Gorna optycznie granica planszy
-		
-		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
-		while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[0] != '=') {
-			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
-			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
-			while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter] != '-') {
-				switch (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter]) {
-
-				case 'p':
-					DrawRectangle(X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x), (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y), 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
-					DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f}, {X_GRANICA * 0.5f + Skala_liter * zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x , (wys - Y_GRANICA) * 0.5f + Skala_liter * zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y, 96.0f * Skala_liter, 96.0f * Skala_liter}, {-2.0f * Skala_liter, -2.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
-					break;
-
-				default:
-					break;
-
-				}
-				charakter = charakter + 1;
-			}
-
-			element = element + 1;
-
-		}
 
 
 	}
-
 
 	void updateLabirynt(grafika* tlo) {
 		
@@ -310,6 +349,11 @@ namespace labirynt {
 			zmienne->mysz_pop_y = zmienne->mysz_y;
 			zmienne->mysz_x = GetMouseX();
 			zmienne->mysz_y = GetMouseY();
+		}
+		//JG:PRZESUNIECIE PLANSZY
+		if (IsCursorOnScreen() && !zmienne->pauza) {
+			zmienne->plansza_x = zmienne->plansza_x - zmienne->mysz_x + zmienne->mysz_pop_x;
+			zmienne->plansza_y = zmienne->plansza_y - zmienne->mysz_y + zmienne->mysz_pop_y;
 		}
 		//JG:PRZYCISK PAUZA
 		if (!zmienne->pauza) {
