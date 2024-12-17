@@ -41,6 +41,7 @@ public:
 	grafika tlo;
 	grafika puchar;
 	grafika pole1;
+	grafika awatar;
 
 	void aktualizuj_tlo(char epizod) {
 		switch (epizod) {
@@ -90,6 +91,7 @@ public:
 		tlo.wys = 1080.0f;*/
 		puchar = grafika(LoadTexture("Grafika1/Puchar1.png"), 293.0f, 471.0f);
 		pole1 = grafika(LoadTexture("Grafika1/Pole1.png"), 1000.0f, 1000.0f);
+		awatar = grafika(LoadTexture("Grafika1/Kotel1.png"), 334.0f, 433.0f);
 	}
 
 	void D_GRAFIKI() {//JG:destruktor to ZLO
@@ -98,6 +100,7 @@ public:
 		tlo.D_grafika();
 		puchar.D_grafika();
 		pole1.D_grafika();
+		awatar.D_grafika();
 	}
 
 };
