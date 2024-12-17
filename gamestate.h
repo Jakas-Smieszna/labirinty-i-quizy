@@ -31,6 +31,8 @@ public:
 
     Poziom poziomik;//JG:Nasz poziom przechowywany
     int biezacy_etap;//JG:Biezacy etap przechodzonego poziomu (miejsce w tablicy etapow poziomu)
+    int biezacy_labirynt;//JG:Indeks biezacego/ostatniego labiryntu w tablicy labiryntow
+    int biezacy_quiz;//JG:Indeks biezacego/ostatniego quizu w tablicy quizow
 
     std::string nazwa_uzytkownika;//MF: Aktualna nazwa uzytkownika
     std::vector<std::string> users;//MF: lista wszystkich uzytkownikow - w przyszlosci mozliwa do edytowania
@@ -222,6 +224,8 @@ public:
 
 
         biezacy_etap = 0;
+        biezacy_labirynt = 0;
+        biezacy_quiz = 0;
 
         nazwa_uzytkownika = "Uzytkownik1";
         users = { "Uzytkownik1", "Uzytkownik2", "Uzytkownik3", "Uzytkownik4", "Uzytkownik5" };

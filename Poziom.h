@@ -3,7 +3,7 @@
 #include "Grafika.h"
 #include <iostream>
 
-#define ODLEGLOSC_MIEDZY_POLAMI 50.0f
+#define ODLEGLOSC_MIEDZY_POLAMI 100.0f
 
 /*WIELKA KSIEGA CHAROW:
 

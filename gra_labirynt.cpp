@@ -260,29 +260,33 @@ namespace labirynt {
 
 		//LABIRYNT - ELEMENTY:
 
-		//float X_ZERO = 0.0f;
-		//float Y_ZERO = 0.0f;
-		//
-		//int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
-		//while (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[0] != '=') {
-		//	int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
-		//	int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
-		//	while (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[charakter] != '-') {
-		//		switch (zmienne->poziomik.labirynty[zmienne->biezacy_etap].elementy[element].typ_tab[charakter]) {
+		float X_ZERO = 0.0f;
+		float Y_ZERO = 0.0f;
+		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
+		float Y_GRANICA = 40.0f * Skala_liter;//Gorna optycznie granica planszy
+		
+		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
+		while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[0] != '=') {
+			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
+			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
+			while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter] != '-') {
+				switch (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter]) {
 
-		//		case 'p':
+				case 'p':
+					DrawRectangle(X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x), (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y), 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
+					DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f}, {X_GRANICA * 0.5f + Skala_liter * zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x , (wys - Y_GRANICA) * 0.5f + Skala_liter * zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y, 96.0f * Skala_liter, 96.0f * Skala_liter}, {-2.0f * Skala_liter, -2.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+					break;
 
+				default:
+					break;
 
-		//		default:
-		//			break;
+				}
+				charakter = charakter + 1;
+			}
 
-		//		}
-		//		charakter = charakter + 1;
-		//	}
+			element = element + 1;
 
-		//	element = element + 1;
-
-		//}
+		}
 
 
 	}
