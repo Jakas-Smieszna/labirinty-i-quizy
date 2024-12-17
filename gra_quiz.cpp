@@ -4,11 +4,12 @@
 #include "gamestate.h"
 #include "przycisk.h"
 #include <string>
-
+#include "Baza.h"
 namespace quiz {
 
 	// Rysowanie
 	void drawQuiz() {
+		if (zmienne->pytanie == NULL)getdata();
 		if (zmienne->kurosr_czulosc == 0) SetMouseCursor(1);
 		else if (zmienne->kurosr_czulosc > 0) zmienne->kurosr_czulosc = zmienne->kurosr_czulosc - 1;
 		else zmienne->kurosr_czulosc = 0;
@@ -24,7 +25,6 @@ namespace quiz {
 			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
 			Skala_liter = szer / OknoSzerBaz;
 		}
-
 		Color szata_epizodu = BLACK;
 		Color napis_epizodu = BLACK;
 		switch (zmienne->epizod) {
@@ -71,7 +71,6 @@ namespace quiz {
 			DrawRectangle(59.0f * Skala_liter, 79.0f * Skala_liter, szer_pom + 2.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
 
 			if (zmienne->ministan == 'q') {
-
 				switch (zmienne->fabula_quizu_ID) {
 				case 1:
 					napis_pom = "Tajemnicze drzwi";
@@ -542,7 +541,6 @@ namespace quiz {
 
 
 	void updateQuiz(grafika* tlo) {
-
 		//JG:USTAWIANIE ZMIENNYCH ZWIAZANYCH Z WYMIARAMI OKNA
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
@@ -647,7 +645,11 @@ namespace quiz {
 				}
 				else if (zmienne->ministan == 'd') {
 					zmienne->ministan = 'q';
-					if (zmienne->proba < zmienne->proba_max) zmienne->proba = zmienne->proba + 1;
+					if (zmienne->proba < zmienne->proba_max)
+					{
+						zmienne->proba = zmienne->proba + 1;
+						getdata();
+					}
 					else {
 						switch (zmienne->wyzwanie) {
 						default:

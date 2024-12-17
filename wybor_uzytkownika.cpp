@@ -6,6 +6,7 @@
 #include "wybor_uzytkownika.h"
 #include <string>
 #include <vector>
+#include "sqlite3.h"
 
 namespace wybor_uzytkownika {
 		_Przycisk* Buttons[] = {

@@ -264,7 +264,8 @@ public:
         proba_max = 5;
         fabula_quizu_ID = 1;
         pytanie_opis = "Bladzac w tajemniczym labiryncie w koncu udaje Ci sie odnalezc wyjscie. Czy to juz koniec wedrowki? Czy wreszcie uda Ci sie wydostac i wrocic do swojego swiata? Podchodzisz do drzwi i naciskasz klamke. Zamkniete. Dostrzegasz jednak tajemnicze, wydrazone inskrypcje na drzwiach. Moze to zagadka?\0";
-        pytanie = "Ile to 2 * 5 - 7?\nA - 8,\nB - 4,\nC - 3,\nD - 7\0";
+        pytanie = NULL;
+        //pytanie = "Ile to 2 * 5 - 7 ? \nA - 8,\nB - 4,\nC - 3,\nD - 7\0";
         odp_pop = 'C';
         for (int i = 0; i < 4; i++) {
             punkty_odpowiedzi[i] = 0.0;
