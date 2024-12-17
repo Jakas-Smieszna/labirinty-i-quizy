@@ -13,8 +13,8 @@ static int callback1(void* NotUsed, int argc, char** argv, char** azColName)
    {
       ind++;
    }
-   if (zmienne->pytanie != NULL)delete zmienne->pytanie;
-   //zmienne->pytanie = new char[ind];
+   if (zmienne->pytanie != NULL) delete zmienne->pytanie;
+   zmienne->pytanie = new char[ind + 1];
    for (int i = 0; i < ind+1; i++)
    {
       if (argv[0][i] != '@')
@@ -31,16 +31,28 @@ static int callback1(void* NotUsed, int argc, char** argv, char** azColName)
 }
 
 
-int strtoint(std::string s)
+double strtoint(char* s)
 {
-   int result=0;
-   for (int i = 0; i < s.size(); i++)
+   double result=0;
+   int i = 0;
+   if (!(s[0] > '0' && s[0] <= '9')){
+       return 0;
+   }
+   else {
+       while(s[i] >= '0' && s[i] <= '9'){
+           result = 10 * result + (double)(s[i] - '0');
+           i++;
+       }
+   }
+   /*for (int i = 0; i < s.size(); i++)
    {
       result *= 10;
       result += s[i];
-   }
+   }*/
    return result;
 }
+
+int jarjar = 0;//JG: wyglada na to, ze i w for 2 zawsze bedzie rowne 0, nawet jak zostanie zdefiniowane poza for (zeruje sie przy kazdym kolejnym wykonaniu). Zmienna globalna nieelegancko rozwiazuje problem.
 
 static int callback2(void* NotUsed, int argc, char** argv, char** azColName)
 {
@@ -52,7 +64,8 @@ static int callback2(void* NotUsed, int argc, char** argv, char** azColName)
    }
    for (int i = 0; i < argc; i++)
    {
-      zmienne->punkty_odpowiedzi[i] = strtoint(argv[i]);
+      zmienne->punkty_odpowiedzi[jarjar] = (strtoint(argv[i]));
+      jarjar = jarjar + 1;
    }
    return 0;
 }
@@ -90,19 +103,20 @@ void getdata()
    std::string points = "SELECT POINTS FROM ANSWERS WHERE QUESTION_ID = ";
    query = query + ID;
    points = points + ID;
+   jarjar = 0;
    sqlite3_exec(database, query.c_str(), callback1, NULL, NULL);
    sqlite3_exec(database, points.c_str(), callback2, NULL, NULL);
-   int maxi = zmienne->punkty_odpowiedzi[0];
-   int maxiind = 0;
+   double maxi = zmienne->punkty_odpowiedzi[0];
+   double maxiind = 0;
    for (int i = 1; i < 4; i++)
    {
       if (zmienne->punkty_odpowiedzi[i] > maxi)
       {
-         int maxi = zmienne->punkty_odpowiedzi[i];
-         int maxiind = i;
+         //maxi = zmienne->punkty_odpowiedzi[i];
+         maxiind = i;
       }
    }
-   zmienne->odp_pop = 'A' + maxiind;
+   zmienne->odp_pop = 'A' + (char)maxiind;
    int ind = 0;
    std::cout << zmienne->pytanie;
 }

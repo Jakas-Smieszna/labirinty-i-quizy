@@ -131,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Desktop\sqlite3.c" />
     <ClCompile Include="credits.cpp" />
     <ClCompile Include="gra_labirynt.cpp" />
     <ClCompile Include="gra_quiz.cpp" />
@@ -140,6 +139,7 @@
     <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="przycisk.cpp" />
     <ClCompile Include="slider.cpp" />
+    <ClCompile Include="sqlite3.c" />
     <ClCompile Include="ustawienia.cpp" />
     <ClCompile Include="wybor_poziomu.cpp" />
     <ClCompile Include="wybor_uzytkownika.cpp" />
@@ -159,12 +159,14 @@
     <ClInclude Include="Poziom.h" />
     <ClInclude Include="przycisk.h" />
     <ClInclude Include="slider.h" />
+    <ClInclude Include="sqlite3.h" />
     <ClInclude Include="ustawienia.h" />
     <ClInclude Include="wybor_poziomu.h" />
     <ClInclude Include="wybor_uzytkownika.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Ikona1.png" />
+    <Image Include="Grafika1\Kotel1.png" />
     <Image Include="Grafika1\Puchar1.png" />
     <Image Include="Grafika1\Puchar2.png" />
     <Image Include="Grafika1\Tlo1.png" />
@@ -173,6 +175,7 @@
     <Image Include="Grafika1\Tlo4.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="baza.db" />
     <None Include="Kursor.cur" />
     <None Include="packages.config" />
   </ItemGroup>

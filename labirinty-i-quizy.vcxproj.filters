@@ -48,6 +48,9 @@
     <ClCompile Include="wybor_poziomu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -95,6 +98,12 @@
     <ClInclude Include="Poziom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Baza.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Tlo1.png">
@@ -118,6 +127,9 @@
     <Image Include="Grafika1\Puchar2.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Grafika1\Kotel1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Kursor.cur">
@@ -126,5 +138,7 @@
     <ClInclude Include="DivideText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <None Include="baza.db" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

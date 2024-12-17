@@ -36,6 +36,7 @@ int main() {
     }
     grafiki->D_GRAFIKI();
     zmienne->poziomik.D_Poziom();
+    zmienne->D_Zmienne();
     CloseWindow();
     return 0;
 }
