@@ -54,15 +54,18 @@ namespace labirynt {
 		//LABIRYNT - ELEMENTY:
 
 		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
-		float Y_GRANICA = 40.0f * Skala_liter;//Gorna optycznie granica planszy
+		float Y_GRANICA = 40.0f * Skala_liter;//JG:Gorna optycznie granica planszy
+
+		bool Gracza_na_planszy = false;//JG:przechodzac po elementach od razu sprawdza czy gracz znajduje sie na planszy (jak nie to spada)
+		bool Gracza_skluty = false;//JG:przechodzac po elementach od razu sprawdza czy gracz dotyka wiatraka lub kolczatki lub innego klujacego elementu (jak tak to zbity)
 
 		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
 		while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[0] != '=') {
 			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
 			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
 			while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter] != '-') {
-				float x = zmienne->plansza_x + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x);
-				float y = zmienne->plansza_y + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y);
+				float x = zmienne->plansza_x * Skala_liter + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x);
+				float y = zmienne->plansza_y * Skala_liter + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y);
 				switch (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter]) {
 
 					//JG:POLE
@@ -70,6 +73,9 @@ namespace labirynt {
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
 						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+					}
+					if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+						Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 					}
 					break;
 
@@ -116,6 +122,18 @@ namespace labirynt {
 
 		}
 
+		//SPRAWDZANIE CZY GRACZ NA MAPIE I ROZPATRYWANIE EFEKTOW JAK NIE
+		if (!Gracza_na_planszy || Gracza_skluty) {
+			zmienne->cofniecia = zmienne->cofniecia + 1;
+			zmienne->wynik = zmienne->kontrola_wynik;
+			zmienne->czas = zmienne->kontrola_czas;
+			zmienne->pauza = true;
+			zmienne->LAB_czulosc_przycisku[1] = 25;
+			zmienne->plansza_x = 0.0f;
+			zmienne->plansza_y = 0.0f;
+		}
+
+		//RYSOWANIE GRACZA (AWATAR)
 		DrawTexturePro(grafiki->awatar.text, { 0.0f, 0.0f, grafiki->awatar.szer, grafiki->awatar.wys }, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 13.0f * Skala_liter, 13.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
 
 
@@ -352,8 +370,12 @@ namespace labirynt {
 		}
 		//JG:PRZESUNIECIE PLANSZY
 		if (IsCursorOnScreen() && !zmienne->pauza) {
-			zmienne->plansza_x = zmienne->plansza_x - zmienne->mysz_x + zmienne->mysz_pop_x;
-			zmienne->plansza_y = zmienne->plansza_y - zmienne->mysz_y + zmienne->mysz_pop_y;
+			float zmiana_x = ((-1) * zmienne->mysz_x + zmienne->mysz_pop_x);
+			float zmiana_y = ((-1) * zmienne->mysz_y + zmienne->mysz_pop_y);
+			if (zmiana_x > ODLEGLOSC_MIEDZY_POLAMI + TOL) zmiana_x = ODLEGLOSC_MIEDZY_POLAMI;//JG:zabezpieczenie przed teleportacja na skutek blyskawicznego ruchu myszka
+			if (zmiana_y > ODLEGLOSC_MIEDZY_POLAMI + TOL) zmiana_y = ODLEGLOSC_MIEDZY_POLAMI;
+			zmienne->plansza_x = zmienne->plansza_x + zmiana_x;
+			zmienne->plansza_y = zmienne->plansza_y + zmiana_y;
 		}
 		//JG:PRZYCISK PAUZA
 		if (!zmienne->pauza) {
@@ -398,6 +420,8 @@ namespace labirynt {
 			zmienne->LAB_czulosc_przycisku[1] = 25;
 			SetMouseCursor(1);
 			zmienne->kurosr_czulosc = 0;
+			zmienne->plansza_x = 0.0f;
+			zmienne->plansza_y = 0.0f;
 		}
 
 		//JG:PRZYCISK WYCISZ (MUTE)
