@@ -673,20 +673,82 @@ namespace quiz {
 					}
 				}
 				else {//jak ministan rowny 'u'
-					switch (zmienne->wyzwanie) {
-					default:
-					case 'b':
-						break;
-					case 's':
-						if (zmienne->punkty > zmienne->punkty_straznik - TOL) break;
-					case 'p':
-						zmienne->cofniecia = zmienne->cofniecia + 1;
-						zmienne->wynik = zmienne->kontrola_wynik;
-						zmienne->czas = zmienne->kontrola_czas;
-						break;
+
+
+					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) {//JG:ZWYCIESTW W QUIZIE
+
+						if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+							zmienne->biezacy_labirynt = zmienne->biezacy_labirynt + 1;
+						}
+						else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:Przy nastepnym quizie wezmie jego parametry z tablicy quizow zamiast obecnuch
+							zmienne->biezacy_quiz = zmienne->biezacy_quiz + 1;
+						}
+
+						zmienne->biezacy_etap = zmienne->biezacy_etap + 1;
+
+						if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {//JG:NASTEPNY ETAP - LABIRYNT
+
+							zmienne->plansza_x = 0.0f;
+							zmienne->plansza_y = 0.0f;
+							zmienne->kontrola_czas = zmienne->czas;//JG:zapis danych do punktu kontrolnego
+							zmienne->kontrola_wynik = zmienne->wynik;
+							stanGry = GRA_LABIRYNT;
+							zmienne->pauza = true;
+
+						}
+						else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:NASTEPNY ETAP - QUIZ
+
+							zmienne->punkty = 0.0;
+							zmienne->proba = 1;
+							zmienne->odp_zaznaczona = 'A';
+							zmienne->ministan = 'q';
+							zmienne->proba_max = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_proby;
+							zmienne->punkty_wymagane = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_punktowy;
+							zmienne->punkty_straznik = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_bezpieczenstwa;
+							zmienne->wyzwanie = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_wyzwanie;
+
+						}
+						else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == '=') {//JG:KONIEC POZIOMU
+							
+							stanGry = MAIN_MENU;
+							zmienne->LAB_czulosc_przycisku[0] = 25;
+							SetMouseCursor(1);
+							zmienne->kurosr_czulosc = 0;
+
+						}
+
 					}
-					stanGry = GRA_LABIRYNT;
-					zmienne->pauza = true;
+					else {//PORAZKA
+					
+						switch (zmienne->wyzwanie) {
+						default:
+						case 'b'://JG:WYZWANIE:BEZPIECZNY:COFA NA POCZATEK QUIZU
+							zmienne->punkty = 0.0;
+							zmienne->proba = 1;
+							getdata();
+							zmienne->ministan = 'q';
+							break;
+						case 's'://JG:WYZWANIE:STRAZNIK:COFA NA POCZATEK QUIZU PRZY ZEBRANIU WYSTARCZAJACEJ LICZBY PUNKTOW. INACZEJ COFA DO PUNKTU KONTROLNEGO W OSTATNIM LABIRYNCIE
+							if (zmienne->punkty > zmienne->punkty_straznik - TOL){
+								zmienne->punkty = 0.0;
+								zmienne->proba = 1;
+								getdata();
+								zmienne->ministan = 'q';
+								break;
+							}
+						case 'p'://JG:WYZWANIE:PULAPKA:COFA DO PUNKTU KONTROLNEGO W OSTATNIM LABIRYNCIE
+							zmienne->plansza_x = 0.0f;
+							zmienne->plansza_y = 0.0f;
+							zmienne->cofniecia = zmienne->cofniecia + 1;
+							zmienne->wynik = zmienne->kontrola_wynik;
+							zmienne->czas = zmienne->kontrola_czas;
+							stanGry = GRA_LABIRYNT;
+							zmienne->pauza = true;
+							break;
+						}
+					
+					}
+
 				}
 				zmienne->LAB_czulosc_przycisku[8] = 50;
 				SetMouseCursor(1);
@@ -733,17 +795,29 @@ namespace quiz {
 			switch (zmienne->wyzwanie) {
 			default:
 			case 'b':
+				zmienne->punkty = 0.0;
+				zmienne->proba = 1;
+				getdata();
+				zmienne->ministan = 'q';
 				break;
 			case 's':
-				if (zmienne->punkty > zmienne->punkty_straznik - TOL) break;
+				if (zmienne->punkty > zmienne->punkty_straznik - TOL) {
+					zmienne->punkty = 0.0;
+					zmienne->proba = 1;
+					getdata();
+					zmienne->ministan = 'q';
+					break;
+				}
 			case 'p':
+				zmienne->plansza_x = 0.0f;
+				zmienne->plansza_y = 0.0f;
 				zmienne->cofniecia = zmienne->cofniecia + 1;
 				zmienne->wynik = zmienne->kontrola_wynik;
 				zmienne->czas = zmienne->kontrola_czas;
+				stanGry = GRA_LABIRYNT;
+				zmienne->pauza = true;
 				break;
 			}
-			zmienne->pauza = true;
-			stanGry = GRA_LABIRYNT;
 			zmienne->LAB_czulosc_przycisku[1] = 25;
 			SetMouseCursor(1);
 			zmienne->kurosr_czulosc = 0;

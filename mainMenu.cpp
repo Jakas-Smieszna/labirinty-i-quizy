@@ -14,10 +14,10 @@ namespace menu {
 		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::WYBOR_UZYTKOWNIKA; }}),
 		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA; ustawienia::initSettings();}),
 		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
-		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] {stanGry = StanEkranu::EXIT;}),
+		new PrzyciskTekst("Wyjdź", {0.5, 0.8, -0.5, 0}, 20, [&] { if(zmienne->LAB_czulosc_przycisku[0] == 0) stanGry = StanEkranu::EXIT;}),//JG mod
 #ifdef _DEBUG // tego w Release nie będzie
-		new PrzyciskTekst("QUIZ", {0.2, 0.2, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
-		new PrzyciskTekst("LABIRYNT", {0.2, 0.3, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
+		//new PrzyciskTekst("QUIZ", {0.2, 0.2, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
+		//new PrzyciskTekst("LABIRYNT", {0.2, 0.3, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
 #endif // _DEBUG // tego w Release nie będzie
 
 	};
@@ -60,6 +60,8 @@ namespace menu {
 		}
 	}
 	void updateMainMenu() {
+		if (zmienne->LAB_czulosc_przycisku[0] > 0) zmienne->LAB_czulosc_przycisku[0] = zmienne->LAB_czulosc_przycisku[0] - 1;//JG+
+		else zmienne->LAB_czulosc_przycisku[0] = 0;//JG+
 		for (auto& B : Buttons) {
 			B->update();
 		}
