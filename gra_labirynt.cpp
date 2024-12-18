@@ -55,6 +55,7 @@ namespace labirynt {
 
 		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
 		float Y_GRANICA = 40.0f * Skala_liter;//JG:Gorna optycznie granica planszy
+		float duch = 1.0f;//JG:Glownie do epizodu 4 - labiryntt cieni. Okresla przezrozczystosc elementu.
 
 		bool Gracza_na_planszy = false;//JG:przechodzac po elementach od razu sprawdza czy gracz znajduje sie na planszy (jak nie to spada)
 		bool Gracza_skluty = false;//JG:przechodzac po elementach od razu sprawdza czy gracz dotyka wiatraka lub kolczatki lub innego klujacego elementu (jak tak to zbity)
@@ -62,18 +63,22 @@ namespace labirynt {
 		int obecny_labirynt = zmienne->biezacy_labirynt;
 		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
 		while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] != '=') {
+			
 			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
 			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
 			float x = zmienne->plansza_x * Skala_liter + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].x);
 			float y = zmienne->plansza_y * Skala_liter + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].y);
+			duch = 1.0;
+			
 			while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] != '-') {
 				switch (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter]) {
 
 					//JG:POLE
 				case 'p':
+					if (zmienne->epizod == 4) duch = 0.5f;
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
-						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
-						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, Fade(ColorBrightness(WHITE, 1.0f), duch));
 					}
 					if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 						Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
@@ -170,13 +175,21 @@ namespace labirynt {
 
 		//SPRAWDZANIE CZY GRACZ NA MAPIE I ROZPATRYWANIE EFEKTOW JAK NIE
 		if (!Gracza_na_planszy || Gracza_skluty) {
-			zmienne->cofniecia = zmienne->cofniecia + 1;
-			zmienne->wynik = zmienne->kontrola_wynik;
-			zmienne->czas = zmienne->kontrola_czas;
-			zmienne->pauza = true;
-			zmienne->LAB_czulosc_przycisku[1] = 25;
-			zmienne->plansza_x = 0.0f;
-			zmienne->plansza_y = 0.0f;
+			if (zmienne->cofniecia < zmienne->limit_cofniecia) {//JG:Powrot do punktu kontrolnego
+				zmienne->cofniecia = zmienne->cofniecia + 1;
+				zmienne->wynik = zmienne->kontrola_wynik;
+				zmienne->czas = zmienne->kontrola_czas;
+				zmienne->pauza = true;
+				zmienne->LAB_czulosc_przycisku[1] = 25;
+				zmienne->plansza_x = 0.0f;
+				zmienne->plansza_y = 0.0f;
+			}
+			else {//JG:Porazka (wyczerpanie cofniec)
+				stanGry = MAIN_MENU;
+				zmienne->LAB_czulosc_przycisku[0] = 25;
+				SetMouseCursor(1);
+				zmienne->kurosr_czulosc = 0;
+			}
 		}
 
 		//RYSOWANIE GRACZA (AWATAR)

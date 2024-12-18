@@ -675,7 +675,7 @@ namespace quiz {
 				else {//jak ministan rowny 'u'
 
 
-					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) {//JG:ZWYCIESTW W QUIZIE
+					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) {//JG:ZWYCIESTWO W QUIZIE
 
 						if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
 							zmienne->biezacy_labirynt = zmienne->biezacy_labirynt + 1;
@@ -737,13 +737,31 @@ namespace quiz {
 								break;
 							}
 						case 'p'://JG:WYZWANIE:PULAPKA:COFA DO PUNKTU KONTROLNEGO W OSTATNIM LABIRYNCIE
-							zmienne->plansza_x = 0.0f;
-							zmienne->plansza_y = 0.0f;
-							zmienne->cofniecia = zmienne->cofniecia + 1;
-							zmienne->wynik = zmienne->kontrola_wynik;
-							zmienne->czas = zmienne->kontrola_czas;
-							stanGry = GRA_LABIRYNT;
-							zmienne->pauza = true;
+							if (zmienne->cofniecia < zmienne->limit_cofniecia) {//JG:Powrot do punktu kontrolnego
+								zmienne->cofniecia = zmienne->cofniecia + 1;
+								zmienne->wynik = zmienne->kontrola_wynik;
+								zmienne->czas = zmienne->kontrola_czas;
+								zmienne->pauza = true;
+								zmienne->LAB_czulosc_przycisku[1] = 25;
+								zmienne->plansza_x = 0.0f;
+								zmienne->plansza_y = 0.0f;
+								while (zmienne->poziomik.etapy[zmienne->biezacy_etap] != 'l') {
+									zmienne->biezacy_etap = zmienne->biezacy_etap - 1;
+									if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+										zmienne->biezacy_labirynt = zmienne->biezacy_labirynt - 1;
+									}
+									else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
+										zmienne->biezacy_quiz = zmienne->biezacy_quiz - 1;
+									}
+								}
+								stanGry = GRA_LABIRYNT;
+							}
+							else {//JG:Porazka (wyczerpanie cofniec)
+								stanGry = MAIN_MENU;
+								zmienne->LAB_czulosc_przycisku[0] = 25;
+								SetMouseCursor(1);
+								zmienne->kurosr_czulosc = 0;
+							}
 							break;
 						}
 					
@@ -814,6 +832,15 @@ namespace quiz {
 				zmienne->cofniecia = zmienne->cofniecia + 1;
 				zmienne->wynik = zmienne->kontrola_wynik;
 				zmienne->czas = zmienne->kontrola_czas;
+				while (zmienne->poziomik.etapy[zmienne->biezacy_etap] != 'l') {
+					zmienne->biezacy_etap = zmienne->biezacy_etap - 1;
+					if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+						zmienne->biezacy_labirynt = zmienne->biezacy_labirynt - 1;
+					}
+					else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
+						zmienne->biezacy_quiz = zmienne->biezacy_quiz - 1;
+					}
+				}
 				stanGry = GRA_LABIRYNT;
 				zmienne->pauza = true;
 				break;
