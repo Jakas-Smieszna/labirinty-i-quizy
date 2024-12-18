@@ -36,7 +36,28 @@ namespace wybor_poziomu {
         new PrzyciskTekst("Powrot",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; }),
 
         new PrzyciskTekst("QUIZ", {0.37, 0.85, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_QUIZ; }),
-        new PrzyciskTekst("LABIRYNT", {0.54, 0.85, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; })
+        new PrzyciskTekst("LABIRYNT", {0.54, 0.85, 0, 0}, 20, [&] {stanGry = StanEkranu::GRA_LABIRYNT; }),
+        
+        new PrzyciskTekst("GRAJ!", {0.80, 0.85, 0, 0}, 40, [&] {//JG:iprowizorka do testu, potem pewnie trzeba bedzie przemodyfikowac lokalizacje kody i czesc graficzna (kod obslugi powinien byc juz OK)
+            zmienne->plansza_x = 0.0f;//JG:zerowanie zmiennych pod rozegranie poziomu
+            zmienne->plansza_y = 0.0f;
+            zmienne->biezacy_etap = 0;
+            zmienne->cofniecia = 0;
+            zmienne->czas = 0.0;
+            zmienne->biezacy_labirynt = 0;
+            zmienne->biezacy_quiz = 0;
+            zmienne->kontrola_czas = 0.0;
+            zmienne->kontrola_wynik = 0.0;
+            zmienne->proba = 0;
+            zmienne->pauza = true;
+            if (zmienne->poziomik.etapy[0] == 'l') {//JG:ustawia stan gry zaleznie od pierwszego etapu poziomu
+                stanGry = StanEkranu::GRA_LABIRYNT;
+
+            }
+            else if (zmienne->poziomik.etapy[0] == 'q') {
+                stanGry = StanEkranu::GRA_QUIZ;
+            }
+            })
 
     };
 

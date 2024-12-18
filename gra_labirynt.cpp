@@ -59,20 +59,21 @@ namespace labirynt {
 		bool Gracza_na_planszy = false;//JG:przechodzac po elementach od razu sprawdza czy gracz znajduje sie na planszy (jak nie to spada)
 		bool Gracza_skluty = false;//JG:przechodzac po elementach od razu sprawdza czy gracz dotyka wiatraka lub kolczatki lub innego klujacego elementu (jak tak to zbity)
 
+		int obecny_labirynt = zmienne->biezacy_labirynt;
 		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
-		while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[0] != '=') {
+		while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] != '=') {
 			int charakter = 0;//JG: int do przechodzenia po tablicy charakterow
 			int identyfikator = 0;//JG: int do przechodzenia po tablicy ID-kow
-			while (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter] != '-') {
-				float x = zmienne->plansza_x * Skala_liter + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].x);
-				float y = zmienne->plansza_y * Skala_liter + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].y);
-				switch (zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].typ_tab[charakter]) {
+			float x = zmienne->plansza_x * Skala_liter + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].x);
+			float y = zmienne->plansza_y * Skala_liter + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].y);
+			while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] != '-') {
+				switch (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter]) {
 
 					//JG:POLE
 				case 'p':
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, ColorBrightness(napis_epizodu, -0.8f));
-						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].pola[zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
 					}
 					if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 						Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
@@ -100,6 +101,42 @@ namespace labirynt {
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						helper::DrawTextCentered("DRZWI", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'
 						helper::DrawTextCentered("DRZWI", x, y - 10.0f * Skala_liter, 26.0f * Skala_liter, EpisodeTheme.textColor);
+						if (abs(X_GRANICA * 0.5f - x) < 44.0f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 44.0f * Skala_liter + TOL) {//JG:Jak gracz na drzwiach (w centralnej czesci)
+							
+							if ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) {
+								
+								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+									zmienne->biezacy_labirynt = zmienne->biezacy_labirynt + 1;
+								} 
+								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
+									zmienne->biezacy_quiz = zmienne->biezacy_quiz + 1;
+								}
+								
+								zmienne->biezacy_etap = zmienne->biezacy_etap + 1;
+								
+								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+
+									zmienne->plansza_x = 0.0f;
+									zmienne->plansza_y = 0.0f;
+									zmienne->kontrola_czas = zmienne->czas;//JG:zapis danych do punktu kontrolnego
+									zmienne->kontrola_wynik = zmienne->wynik;
+
+								}
+								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
+									
+									zmienne->proba = 1;
+									zmienne->odp_zaznaczona = 'A';
+									zmienne->ministan = 'q';
+									zmienne->proba_max = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_proby;
+									zmienne->punkty_wymagane = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_punktowy;
+									zmienne->punkty_straznik = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_bezpieczenstwa;
+									zmienne->wyzwanie = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_wyzwanie;
+									stanGry = StanEkranu::GRA_QUIZ;
+
+								}
+
+							}
+						}
 					}
 					break;
 
