@@ -704,6 +704,7 @@ namespace quiz {
 		else if (IsKeyDown(KEY_Q) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 248.0f * Skala_liter && zmienne->mysz_x < szer - 178.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter)) {
 			zmienne->pauza = !zmienne->pauza;
 			if (zmienne->pauza) zmienne->ministan = 'q';
+			else getdata();
 			zmienne->pauza_czulosc = 25;
 		}
 

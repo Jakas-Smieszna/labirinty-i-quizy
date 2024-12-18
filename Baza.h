@@ -112,7 +112,7 @@ void getdata()
    {
       if (zmienne->punkty_odpowiedzi[i] > maxi)
       {
-         //maxi = zmienne->punkty_odpowiedzi[i];
+         maxi = zmienne->punkty_odpowiedzi[i];
          maxiind = i;
       }
    }
