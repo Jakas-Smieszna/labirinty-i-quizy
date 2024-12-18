@@ -105,7 +105,7 @@ namespace labirynt {
 							
 							if ((IsMouseButtonPressed(MOUSE_LEFT_BUTTON))) {
 								
-								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {//JG:Przy nastepnym labiryncie wezmie jego parametry z tablicy quizow zamiast obecnuch
 									zmienne->biezacy_labirynt = zmienne->biezacy_labirynt + 1;
 								} 
 								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
@@ -114,7 +114,7 @@ namespace labirynt {
 								
 								zmienne->biezacy_etap = zmienne->biezacy_etap + 1;
 								
-								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
+								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {//JG:NASTEPNY ETAP - LABIRYNT
 
 									zmienne->plansza_x = 0.0f;
 									zmienne->plansza_y = 0.0f;
@@ -122,8 +122,9 @@ namespace labirynt {
 									zmienne->kontrola_wynik = zmienne->wynik;
 
 								}
-								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {
+								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:NASTEPNY ETAP - QUIZ
 									
+									zmienne->punkty = 0.0;
 									zmienne->proba = 1;
 									zmienne->odp_zaznaczona = 'A';
 									zmienne->ministan = 'q';
@@ -132,6 +133,14 @@ namespace labirynt {
 									zmienne->punkty_straznik = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_bezpieczenstwa;
 									zmienne->wyzwanie = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_wyzwanie;
 									stanGry = StanEkranu::GRA_QUIZ;
+
+								}
+								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == '=') {//JG:KONIEC POZIOMU
+
+									stanGry = MAIN_MENU;
+									zmienne->LAB_czulosc_przycisku[0] = 25;
+									SetMouseCursor(1);
+									zmienne->kurosr_czulosc = 0;
 
 								}
 
