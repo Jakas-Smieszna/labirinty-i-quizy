@@ -130,7 +130,8 @@ public:
 
 
 
-
+        limit_cofniecia = 25;
+        limit_czas = 600.0;
         poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
         //LABIRYNT 1
         Element* l1_elementy = new Element[18];
@@ -253,7 +254,6 @@ public:
         poziom_doc = 1;
         czas = 0.0;
         kontrola_czas = 0.0;
-        limit_czas = 3600.0;
         kontrola_wynik = 0.0;
         wynik = 0.0;
         rekord_wlasny = 100.0;
@@ -262,13 +262,12 @@ public:
         pauza = false;
         pauza_czulosc = 0;
         cofniecia = 0;
-        limit_cofniecia = 20;
         trudnosc_labirynt = '0';
         trudnosc_pytania = '6';
         glosnosc = 50.0f;
 
         wyzwanie = 's';
-       
+
         punkty = 0.0;
         punkty_wymagane = 10.0;
         punkty_straznik = 5.0;

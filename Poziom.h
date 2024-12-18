@@ -273,6 +273,7 @@ public:
 	Labirynt* labirynty;//tablica dynamiczna etapow "labirynt"
 	Quiz* quizy;//tablica dynamiczna etapow "Quiz"
 
+
 	Poziom() {//konstruktor pusty
 		etapy = NULL;
 		labirynty = NULL;
