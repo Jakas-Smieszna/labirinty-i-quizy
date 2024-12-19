@@ -141,4 +141,9 @@
     <None Include="baza.db" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Archiwum poziomów.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

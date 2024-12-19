@@ -47,6 +47,9 @@ public:
     float plansza_x;//JG:przesuniecie planszy wzdluz x
     float plansza_y;//JG:przesuniecie planszy wzdluz y
 
+    int* L_widzialnosc;//JG:istnieje potrzeba by dane w obiekcie Labirynt byly nienaruszone, wiec modyfikacji podczas rozgrywki musza podlegac ich kopie.
+    int* L_widzialnosc_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
+
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
     char epizod_doc;//JG:Sluzy do zmiany epizodu w ustawieniach i z losowania (specjalna funkcja sprawdza czy ep docelowy jest biezacym ep, a jak nie to ustawia biezacy ep i powiazane parametry (w tym grafiki) na docelowy ep.
@@ -179,23 +182,29 @@ public:
             l1_elementy[licznik].typ_tab = new char[1] {'='};
         }
         Pole* l1_pola = new Pole[17];
+
         //LABIRYNT 2
         Element* l2_elementy = new Element[6];
         licznik = 0;
         NOWY_ID_pole = 0;
+        int NOWY_ID_widzialnosc = 0;
+        int NOWY_ID_znikanie_czas = 0;
         obecny_x = 0.0f;
         obecny_y = 0.0f;
+
         for (licznik; licznik < 1; licznik++) {
-            l2_elementy[licznik].typ_tab = new char[3] {'p', 's', '-'};
+            l2_elementy[licznik].typ_tab = new char[3] {'p', '<', '-'};
             l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
             NOWY_ID_pole = NOWY_ID_pole + 1;
             l2_elementy[licznik].x = obecny_x;
             l2_elementy[licznik].y = obecny_y;
         }
         for (licznik; licznik < 4; licznik++) {
-            l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
-            l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+            l2_elementy[licznik].typ_tab = new char[4] {'q', 'z', 'p', '-'};
+            l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
             NOWY_ID_pole = NOWY_ID_pole + 1;
+            NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+            NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
             obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
             l2_elementy[licznik].x = obecny_x;
             l2_elementy[licznik].y = obecny_y;
@@ -211,12 +220,18 @@ public:
         for (licznik; licznik < 6; licznik++) {
             l2_elementy[licznik].typ_tab = new char[1] {'='};
         }
+
         Pole* l2_pola = new Pole[5];
 
+        int* l2_widzialnosc = new int[3] {-1,-1,-1};
+        L_widzialnosc = NULL;
+        L_widzialnosc_N = new int[2] {0,3};
+
+        double* l2_zapadnie_czas = new double[3] {0.7, 1.4, 2.1};
 
         poziomik.labirynty = new Labirynt[2]{
             Labirynt(l1_elementy, l1_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-            Labirynt(l2_elementy, l2_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL) };
+            Labirynt(l2_elementy, l2_pola, NULL, l2_zapadnie_czas, NULL, NULL, NULL, NULL, l2_widzialnosc) };
 
         int* q1_zakresyID = new int[2] {1, 7};
         int* q2_zakresyID = new int[2] {3, 10};
@@ -303,6 +318,8 @@ public:
     void D_Zmienne(){
         
         if (pytanie != NULL) delete pytanie;
+        if (L_widzialnosc != NULL) delete[] L_widzialnosc;
+        if (L_widzialnosc_N != NULL) delete[] L_widzialnosc_N;
 
     }
 
