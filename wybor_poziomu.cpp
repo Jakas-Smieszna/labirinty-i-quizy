@@ -50,6 +50,13 @@ namespace wybor_poziomu {
             zmienne->kontrola_czas = 0.0;
             zmienne->kontrola_wynik = 0.0;
             zmienne->proba = 1;
+
+            if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+            zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+            for (int i = 0; i < zmienne->L_widzialnosc_N[0]; i++) {
+                zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[0].widzialnosc[i];
+            }
+
             zmienne->pauza = true;
             if (zmienne->poziomik.etapy[0] == 'l') {//JG:ustawia stan gry zaleznie od pierwszego etapu poziomu
                 stanGry = StanEkranu::GRA_LABIRYNT;

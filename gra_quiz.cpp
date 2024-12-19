@@ -692,6 +692,13 @@ namespace quiz {
 							zmienne->plansza_y = 0.0f;
 							zmienne->kontrola_czas = zmienne->czas;//JG:zapis danych do punktu kontrolnego
 							zmienne->kontrola_wynik = zmienne->wynik;
+
+							if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+							zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+							for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+							}
+
 							stanGry = GRA_LABIRYNT;
 							zmienne->pauza = true;
 
@@ -754,6 +761,13 @@ namespace quiz {
 										zmienne->biezacy_quiz = zmienne->biezacy_quiz - 1;
 									}
 								}
+
+								if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+								zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+								for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+								}
+
 								stanGry = GRA_LABIRYNT;
 							}
 							else {//JG:Porazka (wyczerpanie cofniec)
@@ -841,6 +855,13 @@ namespace quiz {
 						zmienne->biezacy_quiz = zmienne->biezacy_quiz - 1;
 					}
 				}
+
+				if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+				zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+				for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+				}
+
 				stanGry = GRA_LABIRYNT;
 				zmienne->pauza = true;
 				break;

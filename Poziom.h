@@ -41,7 +41,7 @@ s - start:
 q - zmienne widocznoscia raz lub 1 seria:
 	okresla, ze pole moze byc aktywne lub nie
 	wymagane raz do dzialania magicznych ogni i systemu pojawiania sie/znikania
-	ma ID do tablicy {char* widzialnosc} aktywnosci pol (czy sa czy nie sa widoczne, na jakim etapie jest animacja)
+	ma ID do tablicy {int* widzialnosc} aktywnosci pol (czy sa czy nie sa widoczne, na jakim etapie jest animacja)
 	(wymaga: p LUB i LUB t LUB y; wyklucza: w)
 
 z - zapadnia:
@@ -62,7 +62,7 @@ w - zmienne widoczne i znikajace wielokrotnie:
 	okresla, ze pole moze byc aktywne lub nie
 	wymagane raz do dzialania systemu pojawiania sie/znikania
 	ma ID do tablicy {char* etapy_znikania} zawierajacej liczbe okreslajaca ktora serie znikniec i pojawien aktualnie wykorzystuje
-	ma ID do tablicy {char* widzialnosc} aktywnosci pol (czy sa czy nie sa widoczne, na jakim etapie jest animacja)
+	ma ID do tablicy {int* widzialnosc} aktywnosci pol (czy sa czy nie sa widoczne, na jakim etapie jest animacja)
 	(wymaga: p LUB i LUB t LUB y; wyklucza: q)
 
 x - zapadnia aktywowana przyciskiem
@@ -172,7 +172,7 @@ public:
 	//int* animacja;//przechowuje liczby calkowite okreslajace etap animacji elementu z animacjami
 	char** odbiorniki;//wskazniki do zmiennych labiryntu dla odbirocow ich stanu
 	char* etapy_znikania;//zawiera informacje ktora seria znikniec i pojawien sie pola jest aktywna (przy polu znikajacym i pojawiajacym sie wielokrotnie)
-	char* widzialnosc;//zawiera etapy animcaji znikania i okresla czy pole/obiekt znikniety czy nie
+	int* widzialnosc;//zawiera etapy animcaji znikania i okresla czy pole/obiekt znikniety czy nie
 
 	Labirynt() {//konstruktor pusty
 		elementy = NULL;
@@ -186,7 +186,7 @@ public:
 		widzialnosc = NULL;
 	}
 
-	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, double* odblokuj_aktywacje0, char** odbiorniki0, char* etapy_znikania0, char* widzialnosc0) {//konstruktor glowny
+	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, double* odblokuj_aktywacje0, char** odbiorniki0, char* etapy_znikania0, int* widzialnosc0) {//konstruktor glowny
 		elementy = elementy0;
 		pola = pola0;
 		zmienne_pomocnicze = zmienne_pomocnicze0;

@@ -59,6 +59,14 @@ namespace labirynt {
 
 		bool Gracza_na_planszy = false;//JG:przechodzac po elementach od razu sprawdza czy gracz znajduje sie na planszy (jak nie to spada)
 		bool Gracza_skluty = false;//JG:przechodzac po elementach od razu sprawdza czy gracz dotyka wiatraka lub kolczatki lub innego klujacego elementu (jak tak to zbity)
+		int Widzialnosc = -1;//JG:ustawienie na wartosc ID do widzialnosci prze odpowiedni podtyp gwrantuje rozpatrzenie w kolejnych podtypach
+		char Typ_animacji = '0';/*JG:okresla np czy ma znikac czy sie pojawiac :
+			'0' - brak;
+			'z' - zapadanie sie;
+			'o' - spalanie;
+			'a' - pojawianie sie;
+		*/
+		char Wskazik_do_etapu_znikania_pojawiania = 0;//JG:uzywane przy wielokrotnie zmiennych widocznoscia, by okreslic, na jakim etapie znikania/pojawiania sie (za ile typow bedzie bierzacy typ znikanie/pojawianie); w trybie jednorazowego znikania/pojawiania wynosi 1.
 
 		int obecny_labirynt = zmienne->biezacy_labirynt;
 		int element = 0;//JG: int do przechodzenia po kolei wszytskich elementow w labiryncie
@@ -69,21 +77,104 @@ namespace labirynt {
 			float x = zmienne->plansza_x * Skala_liter + X_GRANICA * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].x);
 			float y = zmienne->plansza_y * Skala_liter + (wys - Y_GRANICA) * 0.5f + Skala_liter * (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].y);
 			duch = 1.0;
-			
+			Widzialnosc = -1;
+			Typ_animacji = '0';
+			Wskazik_do_etapu_znikania_pojawiania = 0;
+
 			while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] != '-') {
+				int pom = 0;
+				
 				switch (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter]) {
 
 					//JG:POLE
 				case 'p':
 					if (zmienne->epizod == 4) duch = 0.5f;
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
-						DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
-						DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, Fade(ColorBrightness(WHITE, 1.0f), duch));
-					}
-					if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
-						Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+						
+						if (Widzialnosc == -1) {//JG:Widoczne i aktywne
+							DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+							DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0f, Fade(ColorBrightness(WHITE, 1.0f), duch));
+							if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+								Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+							}
+							break;
+						
+						}
+						else if (Widzialnosc > 0) {//JG:W animacji if(TAK) lub niewidoczny (nieaktywny) if(NIE)
+
+							float mnoznik = 0.0f;
+							Color barwnik = WHITE;
+							switch ((Widzialnosc / 100)) {
+							
+							case 0://JG:Typ animacji 1 (od/dosrodkowe 4 kwadraty)
+								mnoznik = (float)((double)Widzialnosc * 0.01);
+								if (Typ_animacji == 'o') { 
+									duch = duch * (float)((double)Widzialnosc / 100.0);
+									switch (zmienne->epizod) {
+									default:
+									case 1:
+									case 2:
+										barwnik = ORANGE;
+										break;
+									case 3:
+									case 4:
+										barwnik = BLUE;
+										break;
+									}
+								}
+								
+								DrawRectangle(x - 50.0f * Skala_liter, y - 50.0f * Skala_liter, 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter * mnoznik, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+								DrawRectangle(x + (50.0f - 50.0f * mnoznik) * Skala_liter, y - 50.0f * Skala_liter, 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter * mnoznik, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+								DrawRectangle(x - 50.0f * Skala_liter, y + (50.0f - 50.0f * mnoznik) * Skala_liter, 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter * mnoznik, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+								DrawRectangle(x + (50.0f - 50.0f * mnoznik) * Skala_liter, y + (50.0f - 50.0f * mnoznik) * Skala_liter, 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter * mnoznik, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { 49.0f * Skala_liter, 49.0f * Skala_liter }, 0.0f, Fade(ColorBrightness(barwnik, 1.0f), duch));
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla + grafiki->pole1.szer * 0.25f * (1.0f -mnoznik), zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { -49.0f * Skala_liter * (1.0f - mnoznik), 49.0f * Skala_liter}, 0.0f, Fade(ColorBrightness(barwnik, 1.0f), duch));
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla + grafiki->pole1.wys * 0.25f * (1.0f - mnoznik), grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { 49.0f * Skala_liter, -49.0f * Skala_liter * (1.0f - mnoznik) }, 0.0f, Fade(ColorBrightness(barwnik, 1.0f), duch));
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla + grafiki->pole1.szer * 0.25f * (1.0f - mnoznik), zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla + grafiki->pole1.wys * 0.25f * (1.0f - mnoznik), grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { -49.0f * Skala_liter * (1.0f - mnoznik), -49.0f * Skala_liter * (1.0f - mnoznik) }, 0.0f, Fade(ColorBrightness(barwnik, 1.0f), duch));
+
+								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if(Typ_animacji == 'z') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if (Typ_animacji == 'z') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if (Typ_animacji == 'z') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if (Typ_animacji == 'z') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+
+								if (!zmienne->pauza) {
+									if (Typ_animacji == 'z' || Typ_animacji == 'o') {//JG:Spadek widzialnosci
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] - 1;
+										if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < 1) zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = 0;
+									}
+									else if (Typ_animacji == 'a') {//JG:Wzrost widzialnosci
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+										if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] > 99) zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+									}
+									else {//JG:Nigdy nie powinno miec miejsca
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+									}
+								}
+
+								break;
+
+							default:
+								break;
+							
+							}
+						}
+					
 					}
 					break;
+					
 
 					//JG:START
 				case 's':
@@ -126,6 +217,12 @@ namespace labirynt {
 									zmienne->kontrola_czas = zmienne->czas;//JG:zapis danych do punktu kontrolnego
 									zmienne->kontrola_wynik = zmienne->wynik;
 
+									if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+									zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+									for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+										zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+									}
+
 								}
 								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:NASTEPNY ETAP - QUIZ
 									
@@ -157,8 +254,42 @@ namespace labirynt {
 					//JG:WYJSCIE
 				case '<':
 					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
-						helper::DrawTextCentered("WEJSCIE", x + 3.0f * Skala_liter, y - 2.0f * Skala_liter, 16.0f * Skala_liter, BLACK);//JG 'cien'
-						helper::DrawTextCentered("WEJSCIE", x, y - 5.0f * Skala_liter, 16.0f * Skala_liter, EpisodeTheme.textColor);
+						helper::DrawTextCentered("WEJSCIE", x + 3.0f * Skala_liter, y - 5.0f * Skala_liter, 20.0f * Skala_liter, BLACK);//JG 'cien'
+						helper::DrawTextCentered("WEJSCIE", x, y - 8.0f * Skala_liter, 20.0f * Skala_liter, EpisodeTheme.textColor);
+					}
+					break;
+
+					//JG:JEDNORAZOWO ZMIENNA WIDZIALNOSC
+				case 'q':
+					Widzialnosc = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]];
+					Wskazik_do_etapu_znikania_pojawiania = 1;
+					Typ_animacji = zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + Wskazik_do_etapu_znikania_pojawiania];
+					if (Typ_animacji == 'c') Typ_animacji == 'a';
+					else if (Typ_animacji == 'x') Typ_animacji == 'z';
+					break;
+
+					//JG:ZAPADNIA/POZAR
+				case 'o':
+				case 'z':
+					identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
+					if (Widzialnosc == -1 &&
+						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < zmienne->czas - zmienne->kontrola_czas &&
+						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 2.0 > zmienne->czas - zmienne->kontrola_czas) {
+						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
+						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 1 + 1) * 100 - 1;
+					}
+					else identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
+					pom = identyfikator;
+					//JG:opuszczenie strefy identyfikatorow dla znikania/pojawiania sie (do tablic czasow, widzialnosci, zmiennych aktywacji, czasu odblokowan
+					while (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'q' ||
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'w' || 
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'z' || 
+					   	   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'o' || 
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'x' || 
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'a' || 
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'c' ||
+						   zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + identyfikator - pom] == 'd') {
+						identyfikator = identyfikator + 1;
 					}
 					break;
 
@@ -183,6 +314,9 @@ namespace labirynt {
 				zmienne->LAB_czulosc_przycisku[1] = 25;
 				zmienne->plansza_x = 0.0f;
 				zmienne->plansza_y = 0.0f;
+				for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+				}
 			}
 			else {//JG:Porazka (wyczerpanie cofniec)
 				stanGry = MAIN_MENU;
@@ -477,6 +611,13 @@ namespace labirynt {
 			zmienne->czas = zmienne->kontrola_czas;
 			zmienne->pauza = true;
 			zmienne->LAB_czulosc_przycisku[1] = 25;
+
+			if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+			zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+			for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+				zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+			}
+
 			SetMouseCursor(1);
 			zmienne->kurosr_czulosc = 0;
 			zmienne->plansza_x = 0.0f;
