@@ -126,6 +126,7 @@ namespace labirynt {
 
 							switch ((Widzialnosc / 100)) {//JG:wybor wariantu animacji
 							
+							default:
 							case 0://JG:Typ animacji 1 (od/dosrodkowe 4 kwadraty)
 								mnoznik = (float)((double)Widzialnosc * 0.01);
 								
@@ -141,73 +142,186 @@ namespace labirynt {
 								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla + grafiki->pole1.wys * 0.25f * (2.0f - mnoznik), grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { 49.0f * Skala_liter, -49.0f * Skala_liter * (1.0f - mnoznik) }, 0.0f, Fade(ColorBrightness(barwnik, 0.0f), duch));
 								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla + grafiki->pole1.szer * 0.25f * (2.0f - mnoznik), zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla + grafiki->pole1.wys * 0.25f * (2.0f - mnoznik), grafiki->pole1.szer * 0.25f * mnoznik, grafiki->pole1.wys * 0.25f * mnoznik }, { x, y, 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, { -49.0f * Skala_liter * (1.0f - mnoznik), -49.0f * Skala_liter * (1.0f - mnoznik) }, 0.0f, Fade(ColorBrightness(barwnik, 0.0f), duch));
 
-								if (Typ_animacji == 'o') {//JG:rysowanie iskierek i plomieni
-								
-									if (Widzialnosc % 100 > 89) {//JG:zaplon
-										DrawCircle(x, y, 5.0f * (float)(10 - (Widzialnosc % 100 - 89)) * Skala_liter, Fade(ColorBrightness(barwnik, 0.09f * (float)(10 - (Widzialnosc % 100 - 89))), 0.1f * (float)(10 - (Widzialnosc % 100 - 89))));
-										DrawCircle(x, y, 3.0f * (float)(10 - (Widzialnosc % 100 - 89)) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.09f * (float)(10 - (Widzialnosc % 100 - 89))), 0.1f * (float)(10 - (Widzialnosc % 100 - 89))));
-									}
-									else {//JG:Plomien
-										DrawCircle(x, y, 5.0f * (float)(10 - ((Widzialnosc % 100) % 10)) * (1.0f - 0.01f * (float)(100 - ((Widzialnosc % 100) % 89))) * Skala_liter, Fade(ColorBrightness(barwnik, 0.06f * (float)(5 - (Widzialnosc % 100) % 5)), 0.1f * (float)(5 - (Widzialnosc % 100 - 89) % 5)));
-										DrawCircle(x, y, 3.0f * (float)(10 - ((Widzialnosc % 100) % 10)) * (1.0f - 0.01f * (float)(100 - ((Widzialnosc % 100) % 89))) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.06f * (float)(5 - (Widzialnosc % 100) % 5)), 0.3f * (float)(5 - (Widzialnosc % 100 - 89) % 5)));
-									}
-									//JG:Iskry
-									pom = (rand() % 3 + 1) * rand() % (((Widzialnosc % 100) / 9) + 1) + 3 * ((Widzialnosc % 100) / 10);//JG:losowanie liczby iskierek
-									for (int i = 0; i < pom; i++) {
-
-										switch (rand() % 2 + 1) {
-										default:
-										case 1:
-											DrawCircle(x + (-50.0f + (float)(rand() % 101)) * Skala_liter, y + (-50.0f + (float)(rand() % 101)) * Skala_liter, 0.25f * (float)(rand() % 10 + 1) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.06f * (float)(rand() % 5 + 1)), 0.3f * (float)(rand() % 5 + 1)));
-											break;
-										case 2:
-											DrawCircle(x + (-50.0f + (float)(rand() % 101)) * Skala_liter, y + (-50.0f + (float)(rand() % 101)) * Skala_liter, 0.25f * (float)(rand() % 10 + 1) * Skala_liter, Fade(ColorBrightness(barwnik, 0.06f * (float)(rand() % 5 + 1)), 0.3f * (float)(rand() % 5 + 1)));
-											break;
-										}
-									}
-								
-								}
-
-								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+								if (abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 									if (Typ_animacji == 'z' || Typ_animacji == 'a') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
 								}
-								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+								if (abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 									if (Typ_animacji == 'z' || Typ_animacji == 'a') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
 								}
-								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+								if (abs(X_GRANICA * 0.5f - (x - (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 									if (Typ_animacji == 'z' || Typ_animacji == 'a') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
 								}
-								if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+								if (abs(X_GRANICA * 0.5f - (x + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + (50.0f - 25.0f * mnoznik) * Skala_liter)) < 31.25f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 									if (Typ_animacji == 'z' || Typ_animacji == 'a') Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
 								}
 
 								break;
 
-							default:
+							case 1://JG:Typ animacji 2 (spadanie)
+								mnoznik = (float)((double)(Widzialnosc - 100) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y, 100.0f * Skala_liter * mnoznik, 100.0f * Skala_liter * mnoznik }, { 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter * mnoznik}, 360.0 * mnoznik, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+								
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter * mnoznik, 96.0f * Skala_liter * mnoznik }, { 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter * mnoznik }, 360.0 * mnoznik, Fade(ColorBrightness(barwnik, 0.0f), duch));
+								
+								
+								if (abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if (mnoznik > 0.75 && (Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 2://JG:Typ animacji 3 (wsuwany od/do srodka gora-dol)
+								mnoznik = (float)((double)(Widzialnosc - 200) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y, 100.0f * Skala_liter, 100.0f * Skala_liter * mnoznik }, { 50.0f * Skala_liter, 50.0f * Skala_liter * mnoznik }, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f * mnoznik }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter * mnoznik }, { 48.0f * Skala_liter, 48.0f * Skala_liter * mnoznik }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter * mnoznik + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 3://JG:Typ animacji 4 (wsuwany od/do srodka lewo-prawo)
+								mnoznik = (float)((double)(Widzialnosc - 300) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y, 100.0f * Skala_liter * mnoznik, 100.0f * Skala_liter }, { 50.0f * Skala_liter * mnoznik, 50.0f * Skala_liter }, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f * mnoznik, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter * mnoznik, 96.0f * Skala_liter }, { 48.0f * Skala_liter * mnoznik, 48.0f * Skala_liter }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter * mnoznik + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 4://JG:Typ animacji 5 (wsuwany do gory)
+								mnoznik = (float)((double)(Widzialnosc - 400) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y, 100.0f * Skala_liter, 100.0f * Skala_liter * mnoznik }, { 50.0f * Skala_liter, 50.0f * Skala_liter }, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f * mnoznik }, { x, y, 96.0f * Skala_liter, 96.0f * Skala_liter * mnoznik }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y - 50.0f * Skala_liter * (1.0f - mnoznik))) < 62.5f * Skala_liter * mnoznik + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 5://JG:Typ animacji 6 (wsuwany w lewo)
+								mnoznik = (float)((double)(Widzialnosc - 500) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y, 100.0f * Skala_liter * mnoznik, 100.0f * Skala_liter }, { 50.0f * Skala_liter, 50.0f * Skala_liter }, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f * mnoznik, grafiki->pole1.wys * 0.5f }, { x, y, 96.0f * Skala_liter * mnoznik, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - (x - 50.0f * Skala_liter * (1.0f - mnoznik))) < 62.5f * Skala_liter * mnoznik + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 6://JG:Typ animacji 7 (wsuwany do dolu)
+								mnoznik = (float)((double)(Widzialnosc - 600) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x, y + 100.0f * Skala_liter * (float)(1.0 - mnoznik), 100.0f * Skala_liter, 100.0f * Skala_liter * mnoznik}, {50.0f * Skala_liter, 50.0f * Skala_liter}, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla, zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla + grafiki->pole1.wys * 0.5f * (float)(1.0 - mnoznik), grafiki->pole1.szer * 0.5f, grafiki->pole1.wys * 0.5f * mnoznik }, { x, y + 100.0f * Skala_liter * (float)(1.0 - mnoznik), 96.0f * Skala_liter, 96.0f * Skala_liter * mnoznik }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - (y + 50.0f * Skala_liter * (1.0f - mnoznik))) < 62.5f * Skala_liter * mnoznik + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
+								break;
+
+							case 7://JG:Typ animacji 8 (wsuwany w prawo)
+								mnoznik = (float)((double)(Widzialnosc - 700) * 0.01);
+
+								//JG:rysowanie obrysow
+								DrawRectanglePro({ x + 100.0f * Skala_liter * (float)(1.0 - mnoznik), y, 100.0f * Skala_liter * mnoznik, 100.0f * Skala_liter }, { 50.0f * Skala_liter, 50.0f * Skala_liter }, 0.0, Fade(ColorBrightness(napis_epizodu, -0.8f), 1.5f * duch));
+
+								//JG:rysowanie tekstur
+								DrawTexturePro(grafiki->pole1.text, { zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x_zrodla + grafiki->pole1.szer * 0.5f * (float)(1.0 - mnoznik), zmienne->poziomik.labirynty[obecny_labirynt].pola[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y_zrodla, grafiki->pole1.szer * 0.5f * mnoznik, grafiki->pole1.wys * 0.5f }, { x + 100.0f * Skala_liter * (float)(1.0 - mnoznik), y, 96.0f * Skala_liter * mnoznik, 96.0f * Skala_liter }, { 48.0f * Skala_liter, 48.0f * Skala_liter }, 0.0, Fade(ColorBrightness(barwnik, 0.0f), duch));
+
+
+								if (abs(X_GRANICA * 0.5f - (x + 50.0f * Skala_liter * (1.0f - mnoznik))) < 62.5f * Skala_liter * mnoznik + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									if ((Typ_animacji == 'z' || Typ_animacji == 'a')) Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
+									else if (Typ_animacji == 'o') Gracza_skluty = true;//JG:to zaznacz, ze jest na ogniu i sie pali
+								}
 								break;
 							
 							}
 
 							//JG:niezalezne od typu animacji
+
+							if (Typ_animacji == 'o') {//JG:rysowanie iskierek i plomieni
+
+								if (Widzialnosc % 100 > 89) {//JG:zaplon
+									DrawCircle(x, y, 5.0f * (float)(10 - (Widzialnosc % 100 - 89)) * Skala_liter, Fade(ColorBrightness(barwnik, 0.09f * (float)(10 - (Widzialnosc % 100 - 89))), 0.1f * (float)(10 - (Widzialnosc % 100 - 89))));
+									DrawCircle(x, y, 3.0f * (float)(10 - (Widzialnosc % 100 - 89)) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.09f * (float)(10 - (Widzialnosc % 100 - 89))), 0.1f * (float)(10 - (Widzialnosc % 100 - 89))));
+								}
+								else {//JG:Plomien
+									DrawCircle(x, y, 5.0f * (float)(10 - ((Widzialnosc % 100) % 10)) * (1.0f - 0.01f * (float)(100 - ((Widzialnosc % 100) % 89))) * Skala_liter, Fade(ColorBrightness(barwnik, 0.06f * (float)(5 - (Widzialnosc % 100) % 5)), 0.1f * (float)(5 - (Widzialnosc % 100 - 89) % 5)));
+									DrawCircle(x, y, 3.0f * (float)(10 - ((Widzialnosc % 100) % 10)) * (1.0f - 0.01f * (float)(100 - ((Widzialnosc % 100) % 89))) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.06f * (float)(5 - (Widzialnosc % 100) % 5)), 0.3f * (float)(5 - (Widzialnosc % 100 - 89) % 5)));
+								}
+								//JG:Iskry
+								pom = (rand() % 3 + 1) * rand() % (((Widzialnosc % 100) / 9) + 1) + 3 * ((Widzialnosc % 100) / 10);//JG:losowanie liczby iskierek
+								for (int i = 0; i < pom; i++) {
+
+									switch (rand() % 2 + 1) {
+									default:
+									case 1:
+										DrawCircle(x + (-50.0f + (float)(rand() % 101)) * Skala_liter, y + (-50.0f + (float)(rand() % 101)) * Skala_liter, 0.25f * (float)(rand() % 10 + 1) * Skala_liter, Fade(ColorBrightness(barwnik2, 0.06f * (float)(rand() % 5 + 1)), 0.3f * (float)(rand() % 5 + 1)));
+										break;
+									case 2:
+										DrawCircle(x + (-50.0f + (float)(rand() % 101)) * Skala_liter, y + (-50.0f + (float)(rand() % 101)) * Skala_liter, 0.25f * (float)(rand() % 10 + 1) * Skala_liter, Fade(ColorBrightness(barwnik, 0.06f * (float)(rand() % 5 + 1)), 0.3f * (float)(rand() % 5 + 1)));
+										break;
+									}
+								}
+
+							}
+
+							//JG:Postep animacji
 							identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 							if (!zmienne->pauza) {
 								if (Typ_animacji == 'z' || Typ_animacji == 'o') {//JG:Spadek widzialnosci
 									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] - 1;
-									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < 1) {
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < 1 + 100 * (Widzialnosc / 100)) {
 										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = 0;
 										if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
 									}
+
 								}
 								else if (Typ_animacji == 'a') {//JG:Wzrost widzialnosci
 									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
-									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] > 99) {
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] > 99 + 100 * (Widzialnosc / 100)) {
 										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
 										if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
 									}
+
 								}
 								else {//JG:Nigdy nie powinno miec miejsca
 									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
@@ -346,7 +460,7 @@ namespace labirynt {
 						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < zmienne->czas - zmienne->kontrola_czas &&
 						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
-						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 1 + 1) * 100 - 1;
+						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 1) * 100 - 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
 					}
 					pom = identyfikator;
@@ -373,7 +487,7 @@ namespace labirynt {
 						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < zmienne->czas - zmienne->kontrola_czas &&
 						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
-						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 1 + 0) * 100 + 1;
+						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 0) * 100 + 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
 					}
 					pom = identyfikator;
