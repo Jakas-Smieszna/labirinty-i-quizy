@@ -48,13 +48,20 @@ namespace wybor_poziomu {
             zmienne->biezacy_labirynt = 0;
             zmienne->biezacy_quiz = 0;
             zmienne->kontrola_czas = 0.0;
-            zmienne->kontrola_wynik = 0.0;
             zmienne->proba = 1;
+            zmienne->wynik = 100.0;//JG:STARTOWY WYNIK NA POZIOMIE (balansuje dodatkowe punkty zdobyte w trakcie i premie na koniec
+            zmienne->kontrola_wynik = zmienne->wynik;
 
             if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
-            zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+            zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[0]];
             for (int i = 0; i < zmienne->L_widzialnosc_N[0]; i++) {
                 zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[0].widzialnosc[i];
+            }
+
+            if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
+            zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[0]];
+            for (int i = 0; i < zmienne->L_etapy_znikania_N[0]; i++) {
+                zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[0].etapy_znikania[i];
             }
 
             zmienne->pauza = true;
