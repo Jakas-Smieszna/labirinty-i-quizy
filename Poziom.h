@@ -148,6 +148,22 @@ public:
 
 };
 
+class Wiatrak {//charakter - pole CHAR = 't'
+public:
+
+	float x_zrodla;//x zrodlowe cwiartki grafiki
+	float y_zrodla;//y zrodlowe cwiartki grafiki
+	float rotacja;//odchylenie od domyslnego kierunku w stopniach
+
+	Wiatrak() {//jedyny konstruktor
+		x_zrodla = (float)(rand() % 51) * 0.01f * 1000.0f;//analogicznie do grafik przycisków
+		y_zrodla = (float)(rand() % 51) * 0.01f * 1000.0f;
+		rotacja = 0.0;
+	}
+
+
+};
+
 class Pole {//charakter - pole CHAR = 'p'
 public:
 
@@ -165,6 +181,7 @@ public:
 
 	Element* elementy;//wszystkie pola i przeciwnicy
 	Pole* pola;//wszystkie dane zrodlowe wycinku grafiki pol
+	Wiatrak* wiatraki;//wszystkie dane zrodlowe wycinku grafiki wiatrakow oraz o ich rotacji
 	char* zmienne_pomocnicze;//przechowuje np 2 zmienne ktore trwale ustawiaj sie na TAK po jednorazowym wcisnieciu przycisku
 	double* zapadnie_czas;//dane momentu czasu znikniecia niektorych pol
 	double* pojawiajace_czas;//dane momentu czasu pojawienia sie niektorych pol
@@ -177,6 +194,7 @@ public:
 	Labirynt() {//konstruktor pusty
 		elementy = NULL;
 		pola = NULL;
+		wiatraki = NULL;
 		zmienne_pomocnicze = NULL;
 		zapadnie_czas = NULL;
 		pojawiajace_czas = NULL;
@@ -189,6 +207,7 @@ public:
 	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, double* odblokuj_aktywacje0, char** odbiorniki0, char* etapy_znikania0, int* widzialnosc0) {//konstruktor glowny
 		elementy = elementy0;
 		pola = pola0;
+		wiatraki = NULL;
 		zmienne_pomocnicze = zmienne_pomocnicze0;
 		zapadnie_czas = zapadnie_czas0;
 		pojawiajace_czas = pojawiajace_czas0;
@@ -210,6 +229,7 @@ public:
 			delete[] elementy;
 		}
 		if (pola != NULL) delete[] pola;
+		if (wiatraki != NULL) delete[] wiatraki;
 		if (zmienne_pomocnicze != NULL) delete[] zmienne_pomocnicze;
 		if (zapadnie_czas != NULL) delete[] zapadnie_czas;
 		if (pojawiajace_czas != NULL) delete[] pojawiajace_czas;

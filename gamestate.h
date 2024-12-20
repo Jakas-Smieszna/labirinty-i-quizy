@@ -239,8 +239,8 @@ public:
         L_etapy_znikania = NULL;
         L_etapy_znikania_N = new int[2] {0, 3};//new int[2] {0, 0};
 
-        double* l2_zapadnie_czas = new double[6] {2.1, 6.0, 2.8, 6.2, 3.5, 6.5};
-        double* l2_pojawiajace_czas = new double[6] {0.7, 3.8, 1.4, 4.1, 2.1, 4.4};
+        double* l2_zapadnie_czas = new double[6] {4.1, 8.0, 4.8, 8.2, 5.5, 8.5};
+        double* l2_pojawiajace_czas = new double[6] {0.7, 5.8, 1.4, 6.1, 2.1, 6.4};
 
         poziomik.labirynty = new Labirynt[2]{
             Labirynt(l1_elementy, l1_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
