@@ -300,7 +300,10 @@ namespace quiz {
 		DrawTexturePro(grafiki->puchar.text, { 0.0f, 0.0f, grafiki->puchar.szer, grafiki->puchar.wys }, { szer - 75.0f * Skala_liter, 60.0f * Skala_liter, 65.0f * Skala_liter * grafiki->puchar.szer / grafiki->puchar.wys, 65.0f * Skala_liter }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, 0.0f));
 		DrawText("WYNIKI", szer - 205.0f * Skala_liter, 81.0f * Skala_liter, (int)(33.0f * Skala_liter), napis_epizodu);//JG:wyswietla naglowek
 		//JG: poszczegolne wyniki:
-		DrawText(TextFormat("Biezacy: %0.2lf", zmienne->wynik), szer - 258.0f * Skala_liter, 140.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla obecny wynik biezacego gracza
+		DrawText(TextFormat("Biezacy: %0.2lf (%0.2lf)", zmienne->wynik, zmienne->wynik
+			* (1.0 + (zmienne->limit_czas - zmienne->czas) / (zmienne->limit_czas + zmienne->czas))
+			* (1.0 + (((double)zmienne->limit_cofniecia - (double)zmienne->cofniecia) / (double)zmienne->limit_cofniecia))
+		), szer - 258.0f * Skala_liter, 140.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla obecny wynik biezacego gracza
 		DrawText(TextFormat("Rekord gracza: %0.2lf", zmienne->rekord_wlasny), szer - 258.0f * Skala_liter, 162.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik biezacego gracza
 		DrawText(TextFormat("Rekord lokalny: %0.2lf", zmienne->rekord_lokalny), szer - 258.0f * Skala_liter, 184.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik w tej aplikacji
 		DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), szer - 258.0f * Skala_liter, 206.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
@@ -641,6 +644,7 @@ namespace quiz {
 			else if (((IsKeyDown(KEY_R) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 278.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x > 350.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_x < 416.0f * Skala_liter + (szer_pom - 358.0f * Skala_liter) * 0.5f && zmienne->mysz_y > 84.0f * Skala_liter + wys_pom && zmienne->mysz_y < 150.0f * Skala_liter + wys_pom)))) {
 				if (zmienne->ministan == 'q' && zmienne->proba <= zmienne->proba_max && zmienne->punkty < zmienne->punkty_wymagane) { 
 					zmienne->punkty = zmienne->punkty + zmienne->punkty_odpowiedzi[int(zmienne->odp_zaznaczona - 'A')];
+					zmienne->wynik = zmienne->wynik - 0.75 + zmienne->punkty_odpowiedzi[int(zmienne->odp_zaznaczona - 'A')];//JG:PREMIA DO WYNIKU ZA POPRAWNE ODPOWIEDZI (I MALA KARA ZA NIEPOPRAWNE)
 					if (zmienne->punkty > zmienne->punkty_wymagane - TOL || zmienne->proba >= zmienne->proba_max) zmienne->ministan = 'u';
 					else zmienne->ministan = 'd';
 				}
@@ -674,7 +678,6 @@ namespace quiz {
 				}
 				else {//jak ministan rowny 'u'
 
-
 					if (zmienne->punkty > zmienne->punkty_wymagane - TOL) {//JG:ZWYCIESTWO W QUIZIE
 
 						if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {
@@ -699,6 +702,12 @@ namespace quiz {
 								zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
 							}
 
+							if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
+							zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
+							for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
+							}
+
 							stanGry = GRA_LABIRYNT;
 							zmienne->pauza = true;
 
@@ -717,6 +726,9 @@ namespace quiz {
 						}
 						else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == '=') {//JG:KONIEC POZIOMU
 							
+							zmienne->wynik = zmienne->wynik 
+								* (1.0 + (zmienne->limit_czas - zmienne->czas) / (zmienne->limit_czas + zmienne->czas)) 
+								* (1.0 + (((double)zmienne->limit_cofniecia - (double)zmienne->cofniecia) / (double)zmienne->limit_cofniecia));
 							stanGry = MAIN_MENU;
 							zmienne->LAB_czulosc_przycisku[0] = 25;
 							SetMouseCursor(1);
@@ -726,7 +738,8 @@ namespace quiz {
 
 					}
 					else {//PORAZKA
-					
+						
+						zmienne->wynik = zmienne->wynik - zmienne->punkty;//JG:zapobiega "farmieniu" punktow na bezpiecznych quizach
 						switch (zmienne->wyzwanie) {
 						default:
 						case 'b'://JG:WYZWANIE:BEZPIECZNY:COFA NA POCZATEK QUIZU
@@ -766,6 +779,12 @@ namespace quiz {
 								zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
 								for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
 									zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+								}
+
+								if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
+								zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
+								for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
 								}
 
 								stanGry = GRA_LABIRYNT;
@@ -824,6 +843,9 @@ namespace quiz {
 			zmienne->LAB_czulosc_przycisku[1] = 0;
 		}
 		else if (!(zmienne->cofniecia >= zmienne->limit_cofniecia) && ((IsKeyDown(KEY_K) && (IsKeyDown(KEY_L))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 76.0f * Skala_liter && zmienne->mysz_x < szer - 10.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter))) {
+			
+			zmienne->wynik = zmienne->wynik - zmienne->punkty;//JG:zapobiega "farmieniu" punktow na bezpiecznych quizach
+
 			switch (zmienne->wyzwanie) {
 			default:
 			case 'b':
@@ -860,6 +882,12 @@ namespace quiz {
 				zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
 				for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
 					zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+				}
+
+				if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
+				zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
+				for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
 				}
 
 				stanGry = GRA_LABIRYNT;

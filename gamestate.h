@@ -49,6 +49,8 @@ public:
 
     int* L_widzialnosc;//JG:istnieje potrzeba by dane w obiekcie Labirynt byly nienaruszone, wiec modyfikacji podczas rozgrywki musza podlegac ich kopie.
     int* L_widzialnosc_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
+    char* L_etapy_znikania;//JG:istnieje potrzeba by dane w obiekcie Labirynt byly nienaruszone, wiec modyfikacji podczas rozgrywki musza podlegac ich kopie.
+    int* L_etapy_znikania_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
 
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
@@ -187,8 +189,10 @@ public:
         Element* l2_elementy = new Element[6];
         licznik = 0;
         NOWY_ID_pole = 0;
+        int NOWY_ID_etapy_znikania = 0;
         int NOWY_ID_widzialnosc = 0;
         int NOWY_ID_znikanie_czas = 0;
+        int NOWY_ID_pojawiajace_czas = 0;
         obecny_x = 0.0f;
         obecny_y = 0.0f;
 
@@ -200,11 +204,15 @@ public:
             l2_elementy[licznik].y = obecny_y;
         }
         for (licznik; licznik < 4; licznik++) {
-            l2_elementy[licznik].typ_tab = new char[4] {'q', 'z', 'p', '-'};
-            l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+            //l2_elementy[licznik].typ_tab = new char[4] {'q', 'a', 'p', '-'};
+            //l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_pole};
+            l2_elementy[licznik].typ_tab = new char[7] {'w', 'a', 'o', 'a', 'z', 'p', '-'};
+            l2_elementy[licznik].ID_tab = new int[7] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pojawiajace_czas + 1, NOWY_ID_znikanie_czas + 1, NOWY_ID_pole};
             NOWY_ID_pole = NOWY_ID_pole + 1;
+            NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
             NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
-            NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+            NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 2;
+            NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 2;
             obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
             l2_elementy[licznik].x = obecny_x;
             l2_elementy[licznik].y = obecny_y;
@@ -223,15 +231,20 @@ public:
 
         Pole* l2_pola = new Pole[5];
 
-        int* l2_widzialnosc = new int[3] {-1,-1,-1};
+        int* l2_widzialnosc = new int[3] {0,0,0};
         L_widzialnosc = NULL;
         L_widzialnosc_N = new int[2] {0,3};
 
-        double* l2_zapadnie_czas = new double[3] {0.7, 1.4, 2.1};
+        char* l2_etapy_znikania = new char[3] {1, 1, 1};
+        L_etapy_znikania = NULL;
+        L_etapy_znikania_N = new int[2] {0, 3};//new int[2] {0, 0};
+
+        double* l2_zapadnie_czas = new double[6] {2.1, 6.0, 2.8, 6.2, 3.5, 6.5};
+        double* l2_pojawiajace_czas = new double[6] {0.7, 3.8, 1.4, 4.1, 2.1, 4.4};
 
         poziomik.labirynty = new Labirynt[2]{
             Labirynt(l1_elementy, l1_pola, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-            Labirynt(l2_elementy, l2_pola, NULL, l2_zapadnie_czas, NULL, NULL, NULL, NULL, l2_widzialnosc) };
+            Labirynt(l2_elementy, l2_pola, NULL, l2_zapadnie_czas, l2_pojawiajace_czas, NULL, NULL, l2_etapy_znikania, l2_widzialnosc) };
 
         int* q1_zakresyID = new int[2] {1, 7};
         int* q2_zakresyID = new int[2] {3, 10};
@@ -320,6 +333,8 @@ public:
         if (pytanie != NULL) delete pytanie;
         if (L_widzialnosc != NULL) delete[] L_widzialnosc;
         if (L_widzialnosc_N != NULL) delete[] L_widzialnosc_N;
+        if (L_etapy_znikania != NULL) delete[] L_etapy_znikania;
+        if (L_etapy_znikania_N != NULL) delete[] L_etapy_znikania_N;
 
     }
 
