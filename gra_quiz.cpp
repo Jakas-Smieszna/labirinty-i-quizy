@@ -729,7 +729,9 @@ namespace quiz {
 							zmienne->wynik = zmienne->wynik 
 								* (1.0 + (zmienne->limit_czas - zmienne->czas) / (zmienne->limit_czas + zmienne->czas)) 
 								* (1.0 + (((double)zmienne->limit_cofniecia - (double)zmienne->cofniecia) / (double)zmienne->limit_cofniecia));
-							stanGry = MAIN_MENU;
+							
+							zmienne->ministan = 'z';
+							stanGry = PODSUMOWANIE;
 							zmienne->LAB_czulosc_przycisku[0] = 25;
 							SetMouseCursor(1);
 							zmienne->kurosr_czulosc = 0;
@@ -790,7 +792,8 @@ namespace quiz {
 								stanGry = GRA_LABIRYNT;
 							}
 							else {//JG:Porazka (wyczerpanie cofniec)
-								stanGry = MAIN_MENU;
+								zmienne->ministan = 'p';
+								stanGry = PODSUMOWANIE;
 								zmienne->LAB_czulosc_przycisku[0] = 25;
 								SetMouseCursor(1);
 								zmienne->kurosr_czulosc = 0;
@@ -844,7 +847,10 @@ namespace quiz {
 		}
 		else if (!(zmienne->cofniecia >= zmienne->limit_cofniecia) && ((IsKeyDown(KEY_K) && (IsKeyDown(KEY_L))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 76.0f * Skala_liter && zmienne->mysz_x < szer - 10.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter))) {
 			
+
+			zmienne->opoznienie = 0;
 			zmienne->wynik = zmienne->wynik - zmienne->punkty;//JG:zapobiega "farmieniu" punktow na bezpiecznych quizach
+			zmienne->wynik = zmienne->wynik - 1.0;//JG:zapobiega wybieraniu pierwszego pytania w bezpiecznym quizie 
 
 			switch (zmienne->wyzwanie) {
 			default:
