@@ -23,6 +23,7 @@ enum StanEkranu {
     // potem dodać do switcha w Rysowanie() i Update(), na dole pod mainem,
     GRA_LABIRYNT = 7,//JG:labirynt
     GRA_QUIZ = 8,//JG:quiz
+    PODSUMOWANIE = 9,//JG:podsumowanie porazki/zwyciestwa poziomu
     EXIT // Na koniec - wyjście.
 };
 extern StanEkranu stanGry;
@@ -67,6 +68,7 @@ public:
     double rekord_swiata;//JG:najlepszy wynik w chmurze (najlepszy na podlaczonym do sieci swiecie) na tym poziomie przy biezacych ustawieniach trudnosci
     bool pauza;//JG:czy pauza aktywna / ruch nieaktywny
     char pauza_czulosc;//JG:odlicza klatki nim mozna bedzie zmienic ustawienie / uzyc przycisku ponownie
+    int opoznienie;//JG:zmienna do odliczania klatek po zbiciu gracza
     int cofniecia;//JG:liczba cofniec do punktow kontrolnych podczas biezacej rozgrywki
     int limit_cofniecia;//JG:limit cofniec na poziomie, ktorego wyczzerpanie oznacza porazke
     char trudnosc_labirynt;//JG:trudnosc labiryntow
@@ -127,8 +129,8 @@ public:
     char odp_pop;//JG:poprawna odpowiedz
     
     //JG:TABLICE POD PRZYCISKI TRYBU GRY
-    float LAB_zaczep_dec_przycisku[24];//JG:obszary poboru tekstur (po 2 na przycisk, 1 dla x, 1 dla y)
-    char LAB_czulosc_przycisku[9];//JG:liczniki odliczajace do 0 przed mozliwoscia ponownego klikniecia (po 1 na prycisk, nie wszystkie uzywaja)
+    float LAB_zaczep_dec_przycisku[30];//JG:obszary poboru tekstur (po 2 na przycisk, 1 dla x, 1 dla y)
+    char LAB_czulosc_przycisku[12];//JG:liczniki odliczajace do 0 przed mozliwoscia ponownego klikniecia (po 1 na prycisk, nie wszystkie uzywaja)
     
 
     PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
@@ -239,7 +241,7 @@ public:
         L_etapy_znikania = NULL;
         L_etapy_znikania_N = new int[2] {0, 3};//new int[2] {0, 0};
 
-        double* l2_zapadnie_czas = new double[6] {4.1, 8.0, 4.8, 8.2, 5.5, 8.5};
+        double* l2_zapadnie_czas = new double[6] {2.7, 7.8, 3.4, 8.1, 4.1, 8.4};
         double* l2_pojawiajace_czas = new double[6] {0.7, 5.8, 1.4, 6.1, 2.1, 6.4};
 
         poziomik.labirynty = new Labirynt[2]{
@@ -289,6 +291,7 @@ public:
         rekord_swiata = 100.0;
         pauza = false;
         pauza_czulosc = 0;
+        opoznienie = 0;
         cofniecia = 0;
         trudnosc_labirynt = '0';
         trudnosc_pytania = '6';
@@ -320,10 +323,10 @@ public:
         odp_opis[4] = "Dość!Kopiesz drzwi z całej siły, jednak ten argument do nich nie przemawia.Za to do komórek nerwowych twojej stopy już tak...";
         odp_wytlumaczenie = "Poniewaz dwie kupki po 5 jablek to 10 jablek a jak zjemy z tego 7 jablek to zostanie nam ich 3.\nA - niepoprawna (0pkt)\nB - niepoprawna, ale rozni sie tylko o 1 od poprawnej (1pkt)\nC - poprawna (5pkt)\nD - niepoprawna (0pkt)\0";
         //JG:inicjuje losowe bazy grafik przyciskow po rozpoczeciu gry oraz zeruje ich czulosc
-        for (int i = 0; i <24; i++) {
+        for (int i = 0; i <30; i++) {
             LAB_zaczep_dec_przycisku[i] = (float)(rand() % 51) * 0.01f * 1000.0f;
         }
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 12; i++) {
             LAB_czulosc_przycisku[i] = 0;
         }
     }

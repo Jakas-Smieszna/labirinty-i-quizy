@@ -137,6 +137,7 @@
     <ClCompile Include="instrukcja.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="Podsumowanie.cpp" />
     <ClCompile Include="przycisk.cpp" />
     <ClCompile Include="slider.cpp" />
     <ClCompile Include="sqlite3.c" />
@@ -154,6 +155,7 @@
     <ClInclude Include="gra_quiz.h" />
     <ClInclude Include="instrukcja.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="Podsumowanie.h" />
     <ClInclude Include="positioning.h" />
     <ClInclude Include="Grafika.h" />
     <ClInclude Include="Poziom.h" />

@@ -53,6 +53,33 @@ namespace labirynt {
 
 		//LABIRYNT - ELEMENTY:
 
+		double tempo = 1.0;
+		/*JG:TRUDNOSCI:
+			a)labirynty:
+				'0' - poczatkujacy
+				'l' - latwy
+				'n' - normalny
+				't' - trudny
+				'm' - mistrzowski*/
+		switch (zmienne->trudnosc_labirynt) {
+		case '0':
+			tempo = 1.3;
+			break;
+		case 'l':
+			tempo = 1.15;
+			break;
+		default:
+		case 'n':
+			tempo = 1.0;
+			break;
+		case 't':
+			tempo = 0.95;
+			break;
+		case 'm':
+			tempo = 0.9;
+			break;
+		}
+
 		float X_GRANICA = szer - 272.0f * Skala_liter;//JG:Prawa optycznie granica planszy
 		float Y_GRANICA = 40.0f * Skala_liter;//JG:Gorna optycznie granica planszy
 		float duch = 1.0f;//JG:Glownie do epizodu 4 - labiryntt cieni. Okresla przezrozczystosc elementu.
@@ -410,7 +437,8 @@ namespace labirynt {
 										* (1.0 + (zmienne->limit_czas - zmienne->czas) / (zmienne->limit_czas + zmienne->czas))
 										* (1.0 + (((double)zmienne->limit_cofniecia - (double)zmienne->cofniecia) / (double)zmienne->limit_cofniecia));
 
-									stanGry = MAIN_MENU;
+									zmienne->ministan = 'z';
+									stanGry = PODSUMOWANIE;
 									zmienne->LAB_czulosc_przycisku[0] = 25;
 									SetMouseCursor(1);
 									zmienne->kurosr_czulosc = 0;
@@ -457,8 +485,8 @@ namespace labirynt {
 				case 'z':
 					identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
 					if (Widzialnosc == -1 &&
-						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < zmienne->czas - zmienne->kontrola_czas &&
-						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
+						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas &&
+						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 1) * 100 - 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
@@ -484,8 +512,8 @@ namespace labirynt {
 				case 'a':
 					identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
 					if (Widzialnosc == 0 &&
-						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < zmienne->czas - zmienne->kontrola_czas &&
-						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
+						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas &&
+						zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 0) * 100 + 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
@@ -520,40 +548,95 @@ namespace labirynt {
 		}
 
 		//SPRAWDZANIE CZY GRACZ NA MAPIE I ROZPATRYWANIE EFEKTOW JAK NIE
-		if (!Gracza_na_planszy || Gracza_skluty) {
-			if (zmienne->cofniecia < zmienne->limit_cofniecia) {//JG:Powrot do punktu kontrolnego
-				zmienne->cofniecia = zmienne->cofniecia + 1;
-				zmienne->wynik = zmienne->kontrola_wynik;
-				zmienne->czas = zmienne->kontrola_czas;
-				zmienne->pauza = true;
-				zmienne->LAB_czulosc_przycisku[1] = 25;
-				zmienne->plansza_x = 0.0f;
-				zmienne->plansza_y = 0.0f;
+		if (zmienne->opoznienie > 0 || !Gracza_na_planszy || Gracza_skluty) {
+			
+			if (zmienne->opoznienie % 100 == 1) {
+				
+				zmienne->opoznienie = 0;
+				
+				if (zmienne->cofniecia < zmienne->limit_cofniecia) {//JG:Powrot do punktu kontrolnego
+					zmienne->cofniecia = zmienne->cofniecia + 1;
+					zmienne->wynik = zmienne->kontrola_wynik;
+					zmienne->czas = zmienne->kontrola_czas;
+					zmienne->pauza = true;
+					zmienne->LAB_czulosc_przycisku[1] = 25;
+					zmienne->plansza_x = 0.0f;
+					zmienne->plansza_y = 0.0f;
 
-				if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
-				zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
-				for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
-					zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+					if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
+					zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
+					for (int i = 0; i < zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->L_widzialnosc[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].widzialnosc[i];
+					}
+
+					if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
+					zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
+					for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
+					}
+
 				}
-
-				if (zmienne->L_etapy_znikania != NULL) delete[] zmienne->L_etapy_znikania;
-				zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
-				for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
-					zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
+				else {//JG:Porazka (wyczerpanie cofniec)
+					zmienne->ministan = 'p';
+					stanGry = PODSUMOWANIE;
+					zmienne->LAB_czulosc_przycisku[0] = 25;
+					SetMouseCursor(1);
+					zmienne->kurosr_czulosc = 0;
 				}
-
 			}
-			else {//JG:Porazka (wyczerpanie cofniec)
-				stanGry = MAIN_MENU;
-				zmienne->LAB_czulosc_przycisku[0] = 25;
-				SetMouseCursor(1);
-				zmienne->kurosr_czulosc = 0;
+			else if (zmienne->opoznienie > 1){
+				zmienne->opoznienie = zmienne->opoznienie - 1;
+			}
+			else {
+				zmienne->opoznienie = 100 * (rand()%9 + 1) - 1;
 			}
 		}
 
 		//RYSOWANIE GRACZA (AWATAR)
-		DrawTexturePro(grafiki->awatar.text, { 0.0f, 0.0f, grafiki->awatar.szer, grafiki->awatar.wys }, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 13.0f * Skala_liter, 13.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 1.0f));
+		if (zmienne->opoznienie == 0) {
+			DrawTexturePro(grafiki->awatar.text, { 0.0f, 0.0f, grafiki->awatar.szer, grafiki->awatar.wys }, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 13.0f * Skala_liter, 13.0f * Skala_liter }, 0.0f, ColorBrightness(WHITE, 0.0f));
+		}
+		else {
+			DrawTexturePro(grafiki->awatar.text, { 0.0f, 0.0f, grafiki->awatar.szer, grafiki->awatar.wys }, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 26.0f * Skala_liter, 26.0f * Skala_liter }, { 13.0f * Skala_liter, 13.0f * Skala_liter }, 0.0f, Fade(ColorBrightness(BLACK, 0.0f), 0.5f));
+			
+			char* napis_pom = NULL;
+			switch (zmienne->opoznienie / 100) {//JG:losowy tekst niepowodzenia
+			default:
+			case 0:
+				napis_pom = "Cos poszlo nie tak...";
+				break;
+			case 1:
+				napis_pom = "Upss";
+				break;
+			case 2:
+				napis_pom = "Nastepnym razem bedzie lepiej!";
+				break;
+			case 3:
+				napis_pom = "To nie takie proste!";
+				break;
+			case 4:
+				napis_pom = "No i znow to samo...";
+				break;
+			case 5:
+				napis_pom = "Czuje sie jak krolik doswiadczalny";
+				break;
+			case 6:
+				napis_pom = "Chyba zabraklo nam ostroznosci";
+				break;
+			case 7:
+				napis_pom = "Ten labirynt nie jest jednak taki latwy";
+				break;
+			case 8:
+				napis_pom = "Czas na nastepna probe!";
+				break;
+			}
 
+			DrawRectangle(0.0f, 40.0f * Skala_liter, szer - 272.0f * Skala_liter, 50.0f * Skala_liter, Fade(szata_epizodu, 0.75f));
+			DrawRectangle(0.0f, 90.0f * Skala_liter, szer - 272.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
+
+			helper::DrawTextCentered(napis_pom, 0.5f * X_GRANICA + 3.0f * Skala_liter, 53.0f * Skala_liter, 36.0f * Skala_liter, BLACK);//JG 'cien'
+			helper::DrawTextCentered(napis_pom, 0.5f * X_GRANICA, 50.0f * Skala_liter, 36.0f * Skala_liter, EpisodeTheme.textColor);
+		}
 
 
 		//JG:Interfejs
@@ -800,7 +883,7 @@ namespace labirynt {
 			zmienne->mysz_y = GetMouseY();
 		}
 		//JG:PRZESUNIECIE PLANSZY
-		if (IsCursorOnScreen() && !zmienne->pauza) {
+		if (IsCursorOnScreen() && !zmienne->pauza && zmienne->opoznienie == 0) {
 			float zmiana_x = ((-1) * zmienne->mysz_x + zmienne->mysz_pop_x);
 			float zmiana_y = ((-1) * zmienne->mysz_y + zmienne->mysz_pop_y);
 			if (zmiana_x > ODLEGLOSC_MIEDZY_POLAMI + TOL) zmiana_x = ODLEGLOSC_MIEDZY_POLAMI;//JG:zabezpieczenie przed teleportacja na skutek blyskawicznego ruchu myszka
@@ -844,6 +927,8 @@ namespace labirynt {
 			zmienne->LAB_czulosc_przycisku[1] = 0;
 		}
 		else if (!(zmienne->cofniecia >= zmienne->limit_cofniecia) && ((IsKeyDown(KEY_K) && (IsKeyDown(KEY_L))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 76.0f * Skala_liter && zmienne->mysz_x < szer - 10.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter))) {
+			
+			zmienne->opoznienie = 0;
 			zmienne->cofniecia = zmienne->cofniecia + 1;
 			zmienne->wynik = zmienne->kontrola_wynik;
 			zmienne->czas = zmienne->kontrola_czas;

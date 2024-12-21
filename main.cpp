@@ -9,6 +9,7 @@
 #include "wybor_uzytkownika.h"
 #include <stdlib.h>
 #include "wybor_poziomu.h"
+#include "Podsumowanie.h"
 
 // !!
 // Gdzie dodać nowy "stan gry"?
@@ -80,6 +81,10 @@ void Update() {
             // JJJ
             quiz::updateQuiz(&(grafiki->tlo));
             break;
+        case PODSUMOWANIE:
+            // JJJ
+            podsumowanie::updatePodsumowanie(&(grafiki->tlo));
+            break;
     }
 }
 
@@ -112,6 +117,10 @@ void Rysowanie() {
         case GRA_QUIZ:
             // JJJ
             quiz::drawQuiz();
+            break;
+        case PODSUMOWANIE:
+            // JJJ
+            podsumowanie::drawPodsumowanie();
             break;
         case INSTRUKCJA:
            instrukcja::drawInstruction();
