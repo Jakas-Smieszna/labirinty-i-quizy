@@ -177,9 +177,11 @@
     <Image Include="Grafika1\Tlo4.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="baza.db" />
     <None Include="Kursor.cur" />
+    <None Include="latwe.db" />
     <None Include="packages.config" />
+    <None Include="srednie.db" />
+    <None Include="trudne.db" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Archiwum poziomów.txt" />
