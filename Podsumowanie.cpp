@@ -273,9 +273,11 @@ namespace podsumowanie {
 			zmienne->LAB_czulosc_przycisku[9] = 0;
 		}
 		else if ((IsKeyDown(KEY_P) && (IsKeyDown(KEY_O))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 20.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_x < 299.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_y > -30.0f * Skala_liter + 0.5f * (wys + wys_pom) && zmienne->mysz_y < 30.0f * Skala_liter + 0.5f * (wys + wys_pom))) {
+			
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+
 			stanGry = MAIN_MENU;
 			zmienne->LAB_czulosc_przycisku[9] = 25;
 			SetMouseCursor(1);
@@ -290,6 +292,10 @@ namespace podsumowanie {
 			zmienne->LAB_czulosc_przycisku[10] = 0;
 		}
 		else if ((IsKeyDown(KEY_L) && (IsKeyDown(KEY_K))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 301.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_x < 579.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_y > -30.0f * Skala_liter + 0.5f * (wys + wys_pom) && zmienne->mysz_y < 30.0f * Skala_liter + 0.5f * (wys + wys_pom))) {
+
+			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
+			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
+			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
 
 			zmienne->plansza_x = 0.0f;//JG:zerowanie zmiennych pod rozegranie poziomu
 			zmienne->plansza_y = 0.0f;
@@ -315,6 +321,12 @@ namespace podsumowanie {
 			zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[0]];
 			for (int i = 0; i < zmienne->L_etapy_znikania_N[0]; i++) {
 				zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[0].etapy_znikania[i];
+			}
+
+			if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+			zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[0]];
+			for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[0]; i++) {
+				zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[0].zmienne_pomocnicze[i];
 			}
 
 			zmienne->pauza = true;
@@ -347,6 +359,10 @@ namespace podsumowanie {
 			zmienne->LAB_czulosc_przycisku[11] = 0;
 		}
 		else if ( !(zmienne->poziom == 5 && zmienne->epizod == 4) && zmienne->ministan != 'p' && ((IsKeyDown(KEY_M) && (IsKeyDown(KEY_N))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > 581.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_x < 860.0f * Skala_liter + 0.5f * (szer - szer_pom) && zmienne->mysz_y > -30.0f * Skala_liter + 0.5f * (wys + wys_pom) && zmienne->mysz_y < 30.0f * Skala_liter + 0.5f * (wys + wys_pom)))) {
+
+			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
+			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
+			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
 
 			if (zmienne->poziom < 5) {
 				zmienne->poziom = zmienne->poziom + 1;
@@ -395,6 +411,12 @@ namespace podsumowanie {
 			zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[0]];
 			for (int i = 0; i < zmienne->L_etapy_znikania_N[0]; i++) {
 				zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[0].etapy_znikania[i];
+			}
+
+			if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+			zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[0]];
+			for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[0]; i++) {
+				zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[0].zmienne_pomocnicze[i];
 			}
 
 			zmienne->pauza = true;
