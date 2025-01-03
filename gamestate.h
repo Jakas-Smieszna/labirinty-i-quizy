@@ -373,8 +373,9 @@ public:
         odp_opis[2] = "Wypowiadasz magiczne słowa i naciskasz klamke. Drzwi się otwieraja. Ale tylko przez ułamek sekundy.Trzeba będzie spróbować ponownie.";
         odp_opis[3] = "Wypowiadasz magiczne słowa - rozwiązanie zagadki i naciskasz klamkę, ale drzwi się nie otwierają...";
         odp_opis[4] = "Dość!Kopiesz drzwi z całej siły, jednak ten argument do nich nie przemawia.Za to do komórek nerwowych twojej stopy już tak...";
-        odp_wytlumaczenie = "Poniewaz dwie kupki po 5 jablek to 10 jablek a jak zjemy z tego 7 jablek to zostanie nam ich 3.\nA - niepoprawna (0pkt)\nB - niepoprawna, ale rozni sie tylko o 1 od poprawnej (1pkt)\nC - poprawna (5pkt)\nD - niepoprawna (0pkt)\0";
-        //JG:inicjuje losowe bazy grafik przyciskow po rozpoczeciu gry oraz zeruje ich czulosc
+        odp_wytlumaczenie = NULL;
+        //odp_wytlumaczenie = "Poniewaz dwie kupki po 5 jablek to 10 jablek a jak zjemy z tego 7 jablek to zostanie nam ich 3.\nA - niepoprawna (0pkt)\nB - niepoprawna, ale rozni sie tylko o 1 od poprawnej (1pkt)\nC - poprawna (5pkt)\nD - niepoprawna (0pkt)\0";
+        //JG:inicjuje losowe bazy grafik przyciskow po rozpoczeciu gry oraz zeruje ich czulosc  
         for (int i = 0; i <30; i++) {
             LAB_zaczep_dec_przycisku[i] = (float)(rand() % 51) * 0.01f * 1000.0f;
         }
