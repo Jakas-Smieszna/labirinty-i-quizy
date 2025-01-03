@@ -81,14 +81,18 @@ c - pojawiajacy aktywowany przyciskiem
 	uzupelnia o funkcje pojawienia sie, gdy aktywowano
 	(wymaga: p LUB i LUB y LUB t, q LUB w; wyklucza s, <)
 	
-d - nie morze byc przywrocony przyciskiem lub nim usuniety dopoki nie minie czas do pojawienia sie/znikniecia
+(?)d - nie morze byc przywrocony przyciskiem lub nim usuniety dopoki nie minie czas do pojawienia sie/znikniecia
 	sprawdzenia do 'x' oraz 'c' moga byc przeprowadzane dopiero gdy minie czas wskazany ID
 	ma ID do tablicy {double* odblokuj_aktywacje} zawierajaca czas po ktorym mozliwe jest rozpatrywanie aktywacji przypisanych zmiennych
 	(wymaga: p LUB y LUB t LUB i; wyklucza: ---)
 
+v - zapadnia aktywowana przyciskiem ale od okreslonego czasu (dziala jak 'z' i 'x' ale ma wymagania obu w warunku i zajumuje 2 identyfikatry (do czasu i zmiennej)).
+
+b - analogicznie jak 'v' ale dla pojawiania sie (nie znikania).
+
 o - magiczny ogien, dziala jak zapadnia z dodatkowa animacja i biciem przy kontakcie w czasie palenia
-	gdy ustawiony bije przy znikaniu z dodatkowa animacja
-	(wymaga: x lub z; wyklucza: ---)
+	gdy ustawiony bije przy znikaniu z dodatkowa animacja, dziala i fuunkcjonuje jak 'z' z dodatkowa informacja o powyzszym
+	(wymaga: p LUB i LUB t LUB y, q LUB w; wyklucza: PRZYNAJMNIEJ_1 m)
 
 t - wiatrak, obraca sie klujac przy kontakcie
 	ma ID do wiatraka do tablicy {Wiatrak* wiatraki} z danymi wycinka tekstury z grafiki wiatrakow oraz biezaca rotacja
@@ -187,7 +191,7 @@ public:
 	double* pojawiajace_czas;//dane momentu czasu pojawienia sie niektorych pol
 	double* odblokuj_aktywacje;//dane momentu czasu po ktorym aktywacja jest mozliwa
 	//int* animacja;//przechowuje liczby calkowite okreslajace etap animacji elementu z animacjami
-	char** odbiorniki;//wskazniki do zmiennych labiryntu dla odbirocow ich stanu
+	char** odbiorniki;//wskazniki do zmiennych labiryntu dla odbirocow ich stanu //JG: OBECNIE W DRODZE DO KASACJI - PRAWDOPODOBNIE NIEUZYWANE
 	char* etapy_znikania;//zawiera informacje ktora seria znikniec i pojawien sie pola jest aktywna (przy polu znikajacym i pojawiajacym sie wielokrotnie)
 	int* widzialnosc;//zawiera etapy animcaji znikania i okresla czy pole/obiekt znikniety czy nie
 

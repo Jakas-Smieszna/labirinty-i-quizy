@@ -708,6 +708,12 @@ namespace quiz {
 								zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
 							}
 
+							if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+							zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]];
+							for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
+							}
+
 							stanGry = GRA_LABIRYNT;
 							zmienne->pauza = true;
 
@@ -787,6 +793,12 @@ namespace quiz {
 								zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
 								for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
 									zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
+								}
+
+								if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+								zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]];
+								for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 								}
 
 								stanGry = GRA_LABIRYNT;
@@ -894,6 +906,12 @@ namespace quiz {
 				zmienne->L_etapy_znikania = new char[zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]];
 				for (int i = 0; i < zmienne->L_etapy_znikania_N[zmienne->biezacy_labirynt]; i++) {
 					zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_znikania[i];
+				}
+
+				if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+				zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]];
+				for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 				}
 
 				stanGry = GRA_LABIRYNT;

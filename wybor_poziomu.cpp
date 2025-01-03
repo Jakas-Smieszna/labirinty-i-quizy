@@ -65,6 +65,12 @@ namespace wybor_poziomu {
                 zmienne->L_etapy_znikania[i] = zmienne->poziomik.labirynty[0].etapy_znikania[i];
             }
 
+            if (zmienne->L_zmienne_pomocnicze != NULL) delete[] zmienne->L_zmienne_pomocnicze;
+            zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[0]];
+            for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[0]; i++) {
+                zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[0].zmienne_pomocnicze[i];
+            }
+
             zmienne->pauza = true;
             if (zmienne->poziomik.etapy[0] == 'l') {//JG:ustawia stan gry zaleznie od pierwszego etapu poziomu
                 stanGry = StanEkranu::GRA_LABIRYNT;
