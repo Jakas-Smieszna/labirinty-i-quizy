@@ -2,7 +2,7 @@
 #include <iostream>
 #include <sqlite3.h>
 #include "gamestate.h"
-const int Number_Of_Questions = 10;
+const int Number_Of_Questions = 96;
 
 static int callback1(void* NotUsed, int argc, char** argv, char** azColName)
 {
@@ -30,6 +30,31 @@ static int callback1(void* NotUsed, int argc, char** argv, char** azColName)
    return 0;
 }
 
+static int callback3(void* NotUsed, int argc, char** argv, char** azColName)
+{
+   //std::cout << argv[0] << "\n";
+   //zmienne->odp_wytlumaczenie = argv[0];
+   int ind = 1;
+   while (argv[0][ind] != '@')
+   {
+      ind++;
+   }
+   if (zmienne->odp_wytlumaczenie != NULL) delete zmienne->odp_wytlumaczenie;
+   zmienne->odp_wytlumaczenie = new char[ind + 1];
+   for (int i = 0; i < ind + 1; i++)
+   {
+      if (argv[0][i] != '@')
+      {
+         zmienne->odp_wytlumaczenie[i] = argv[0][i];
+      }
+      else
+      {
+         zmienne->odp_wytlumaczenie[i] = '\0';
+      }
+
+   }
+   return 0;
+}
 
 double strtoint(char* s)
 {
@@ -86,7 +111,19 @@ void getdata()
 {
    srand(time(0));
    sqlite3* database;
-   const char* dir = "baza.db";
+   const char* dir;
+   if (zmienne->trudnosc_pytania == '2')
+   {
+      dir = "latwe.db";
+   }
+   else if (zmienne->trudnosc_pytania == '6')
+   {
+      dir = "srednie.db";
+   }
+   else if (zmienne->trudnosc_pytania == 's')
+   {
+      dir = "trudne.db";
+   }
    int exit = sqlite3_open(dir, &database);
    if (exit != SQLITE_OK)
    {
@@ -100,12 +137,15 @@ void getdata()
    int random = rand() % Number_Of_Questions + 1;
    std::string ID = inttostr(random);
    std::string query = "SELECT CONTENT FROM QUESTION WHERE ID = ";
+   std::string explanation = "SELECT EXPLANATION FROM QUESTION WHERE ID = ";
    std::string points = "SELECT POINTS FROM ANSWERS WHERE QUESTION_ID = ";
    query = query + ID;
+   explanation = explanation + ID;
    points = points + ID;
    jarjar = 0;
    sqlite3_exec(database, query.c_str(), callback1, NULL, NULL);
    sqlite3_exec(database, points.c_str(), callback2, NULL, NULL);
+   sqlite3_exec(database, explanation.c_str(), callback3, NULL, NULL);
    double maxi = zmienne->punkty_odpowiedzi[0];
    double maxiind = 0;
    for (int i = 1; i < 4; i++)
