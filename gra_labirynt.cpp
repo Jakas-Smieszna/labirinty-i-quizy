@@ -5,9 +5,10 @@
 #include "przycisk.h"
 #include <string>
 #include "Poziom.h"
+#include "Generowanie punktow wspolnych okregu i lini o zadanym kacie przechodzacej przez jego srodek.h"
 
 namespace labirynt {
-	
+
 
 	// Rysowanie
 	void drawLabirynt() {
@@ -48,7 +49,7 @@ namespace labirynt {
 			napis_epizodu = WHITE;
 			break;
 		}
-
+		
 
 
 		//LABIRYNT - ELEMENTY:
@@ -119,9 +120,10 @@ namespace labirynt {
 				//std::cout << identyfikator;
 				switch (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter]) {//JG:wybiera instrukcje od charakteru podtypu
 
-					//JG:POLE/PRZYCISK
+					//JG:POLE/PRZYCISK/POLE Z WIATRAKIEM
 				case 'p':
 				case 'y':
+				case 't':
 					if (zmienne->epizod == 4) duch = 0.5f;
 					if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] == 'y') {//JG:PRZYCISK
 						
@@ -179,13 +181,13 @@ namespace labirynt {
 											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'c';
 											break;
 											//JG: przelacznik 3 trybow w petli zamknietej (... > g > f > e > g > ...)
-										case 'e':
+										case 'e'://wlaczony dla znikania/pojawiania
 											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'g';
 											break;
-										case 'f':
+										case 'f'://wlaczany dla wiatrakow
 											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'e';
 											break;
-										case 'g':
+										case 'g'://wlaczany dla kolczatek
 											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'f';
 											break;
 											//JG: przelacznik z jednorazowym wlaczeniem i wylaczeniem (j > i > h)
@@ -225,6 +227,167 @@ namespace labirynt {
 							if (!Gracza_na_planszy && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 								Gracza_na_planszy = true;//JG:to zaznacz, ze jest na planszy i nie spada
 							}
+
+							if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] == 't' && //JG:POLE Z WIATRAKIEM
+								(!Gracza_skluty && abs(X_GRANICA * 0.5f - x) < 62.5f * Skala_liter + TOL && abs((wys - Y_GRANICA) * 0.5f - y) < 62.5f * Skala_liter + TOL)//JG:Jak gracz przy wiatraku i nie wiadomo czy skluty
+								) {
+
+								float punkty_lini[4] = { 0.0f, 0.0f, 0.0f, 0.0f };//JG:tymczasowa tablica pod wspolrzedne punktow skrajnych lini skrzydla wiatraka otrzymywane funkcja {x1, y1, x2, y2}
+								Przeciecie_Okrag_Linia_Kat(punkty_lini, 48.0f * Skala_liter, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, x, y);
+								
+								//JG: sprawdzanie kolizji krawedzi kwadratu gracza o boku 2 * Promien_Gracza_Wiatrak (jako linia) z pierwszym skrzydlem wiatraka (jako linia), do skutku lub wykrycia
+								if (CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+									{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+									{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+									NULL)) {
+									Gracza_skluty = true;
+								} 
+								else if(CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+									{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+									{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+									NULL)) {
+									Gracza_skluty = true;
+								}
+								else if(CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+									{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+									{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+									NULL)) {
+									Gracza_skluty = true;
+								}
+								else if(CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+									{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+									{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+									NULL)) {
+									Gracza_skluty = true;
+								}
+								else {//JG: sprawdzanie czy gracz nie dotyka drugiego skrzydla wiatraka (jak nie dotyka pierwszego)
+
+									Przeciecie_Okrag_Linia_Kat(punkty_lini, 48.0f * Skala_liter, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja + 90.0f, x, y);
+
+									if (CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+										{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+										{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+										NULL)) {
+										Gracza_skluty = true;
+									}
+									else if (CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+										{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+										{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+										NULL)) {
+										Gracza_skluty = true;
+									}
+									else if (CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+										{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+										{ (X_GRANICA * 0.5f - Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+										NULL)) {
+										Gracza_skluty = true;
+									}
+									else if (CheckCollisionLines({ punkty_lini[0], punkty_lini[1] }, { punkty_lini[2], punkty_lini[3] },
+										{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f - Promien_Gracza_Wiatrak * Skala_liter },
+										{ (X_GRANICA * 0.5f + Promien_Gracza_Wiatrak * Skala_liter), (wys - Y_GRANICA) * 0.5f + Promien_Gracza_Wiatrak * Skala_liter },
+										NULL)) {
+										Gracza_skluty = true;
+									}
+
+
+								}
+								
+								//JG: po odchaczeniu pozwala zbadac gdzie wypadaja badane punkty
+								//DrawCircle(punkty_lini[0], punkty_lini[1], 25.0, RED);
+								//DrawCircle(punkty_lini[2], punkty_lini[3], 25.0, RED);
+
+							}
+
+
+							if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] == 't') {//JG:POLE Z WIATRAKIEM
+
+								DrawRectanglePro({x, y, 96.0f * Skala_liter, 12.0f * Skala_liter}, { 48.0f * Skala_liter, 6.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(BLACK, -0.8f), duch));
+								DrawTexturePro(grafiki->wiatrak1.text, { zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].x_zrodla + 30.0f, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].y_zrodla + 230.0f, grafiki->wiatrak1.szer * 0.5f * 0.92f, grafiki->wiatrak1.wys * 0.5f * 0.08f }, { x, y, 92.0f * Skala_liter, 8.0f * Skala_liter }, { 46.0f * Skala_liter, 4.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(barwnik2, jasnosc_pom), duch));
+
+								DrawRectanglePro({ x, y, 12.0f * Skala_liter, 96.0f * Skala_liter }, { 6.0f * Skala_liter, 48.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(BLACK, -0.8f), duch));
+								DrawTexturePro(grafiki->wiatrak1.text, { zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].x_zrodla + 230.0f, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].y_zrodla + 30.0f, grafiki->wiatrak1.szer * 0.5f * 0.08f, grafiki->wiatrak1.wys * 0.5f * 0.92f }, { x, y, 8.0f * Skala_liter, 92.0f * Skala_liter }, { 4.0f * Skala_liter, 46.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(barwnik2, jasnosc_pom), duch));
+
+								DrawRectanglePro({ x, y, 18.0f * Skala_liter, 18.0f * Skala_liter }, { 9.0f * Skala_liter, 9.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(BLACK, -0.8f), duch));
+								DrawTexturePro(grafiki->wiatrak1.text, { zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].x_zrodla + 210.0f, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].y_zrodla + 210.0f, grafiki->wiatrak1.szer * 0.5f * 0.12f, grafiki->wiatrak1.wys * 0.5f * 0.12f }, { x, y, 12.0f * Skala_liter, 12.0f * Skala_liter }, { 6.0f * Skala_liter, 6.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja, Fade(ColorBrightness(barwnik2, jasnosc_pom), duch));
+
+								if (!zmienne->pauza) {
+								
+									double tempo_pom = 1.0;
+									char charakter_pom = zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].okreslnik;
+
+									//JG: Ustawianie domyslnego kierunku
+									if ((charakter_pom - 'a') % 2) tempo_pom = tempo_pom * -1.0;
+
+									//JG: Relacja ze zmiennymi - zatrzymanie/zmiana kierunku
+									if (charakter_pom == 'c' || charakter_pom == 'd' || charakter_pom == 'g' || charakter_pom == 'h') {//zmiana kierunku
+										
+										if (!(zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'c' ||
+											  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'a' ||
+											  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'i' ||
+											  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'f')) {
+
+											tempo_pom = tempo_pom * -1;
+										}
+
+									} else if (charakter_pom == 'i' || charakter_pom == 'j' || charakter_pom == 'k' || charakter_pom == 'l') {//obrot/brak obrotu
+
+										if (!(zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'c' ||
+										  	  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'a' ||
+											  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'i' ||
+											  zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == 'f')) {
+
+											tempo_pom = 0;
+										}
+
+									}
+
+									//JG: Badanie przyspieszenia i aktualizacja odliczania
+									if (charakter_pom == 'e' || charakter_pom == 'f') {//bez odbioru zmiennej
+										
+										zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] = zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] - 1;
+										
+										if (zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] < 0) tempo_pom = tempo_pom * 3.33;
+										
+										if (zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] == -100 * (rand() % 3 + 1)
+											|| zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] < -300) {
+
+											zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 2]] = int(double(100 * (rand() % 6 + 5)) * tempo);
+										}
+
+									}
+									else if (charakter_pom == 'g' || charakter_pom == 'h' || charakter_pom == 'k' || charakter_pom == 'l') {//z odbiorem zmiennej
+
+										zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] = zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] - 1;
+
+										if (zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] < 0) tempo_pom = tempo_pom * 3.33;
+
+										if (zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] == -100 * (rand() % 3 + 1)
+											|| zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] < -300) {
+
+											zmienne->poziomik.labirynty[obecny_labirynt].etapy_wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 3]] = int(double(100 * (rand() % 6 + 5)) * tempo);
+										}
+
+									}
+
+
+									zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja = zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja + PREDKOSC_OBROTU * tempo_pom * (2.0 - tempo) * zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].tempo;
+									
+									
+									if (
+										zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja >
+										360.0 - TOL
+										)
+										zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja =
+										zmienne->poziomik.labirynty[obecny_labirynt].wiatraki[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]].rotacja -
+										360.0f;
+
+
+								}
+
+							}
+
+
+
 							break;
 						
 						}
@@ -579,6 +742,14 @@ namespace labirynt {
 										zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 									}
 
+									for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+									}
+
+									for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
+									}
+
 								}
 								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:NASTEPNY ETAP - QUIZ
 									
@@ -730,7 +901,8 @@ namespace labirynt {
 					if (Widzialnosc == -1 && (
 						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'c' ||
 						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'a' ||
-						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'i')) {
+						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'i' ||
+						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'e')) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 1) * 100 - 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
@@ -769,7 +941,8 @@ namespace labirynt {
 						
 						if ((zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'c' ||
 							zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'a' ||
-							zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'i')) {
+							zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'i' ||
+							zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'e')) {
 							if (Widzialnosc == -1) {
 								identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 								zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 1) * 100 - 1;
@@ -858,7 +1031,8 @@ namespace labirynt {
 					if (Widzialnosc == 0 && (
 						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'c' ||
 						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'a' ||
-						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'i')) {
+						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'i' ||
+						zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] == 'e')) {
 						identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 						zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 0) * 100 + 1;
 						identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
@@ -896,8 +1070,9 @@ namespace labirynt {
 						&& zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
 						
 						if ((zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'c' ||
-								zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'a' ||
-								zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'i')) {
+						     zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'a' ||
+							 zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'i' ||
+							 zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'e')) {
 							if (Widzialnosc == 0) {
 								identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
 								zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = (rand() % 8 + 0) * 100 + 1;
@@ -980,6 +1155,14 @@ namespace labirynt {
 					zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]];
 					for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]; i++) {
 						zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
+					}
+
+					for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+					}
+
+					for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 					}
 
 				}
@@ -1293,8 +1476,15 @@ namespace labirynt {
 		if (IsCursorOnScreen() && !zmienne->pauza && zmienne->opoznienie == 0) {
 			float zmiana_x = ((-1) * zmienne->mysz_x + zmienne->mysz_pop_x);
 			float zmiana_y = ((-1) * zmienne->mysz_y + zmienne->mysz_pop_y);
-			if (zmiana_x > ODLEGLOSC_MIEDZY_POLAMI + TOL) zmiana_x = ODLEGLOSC_MIEDZY_POLAMI;//JG:zabezpieczenie przed teleportacja na skutek blyskawicznego ruchu myszka
-			if (zmiana_y > ODLEGLOSC_MIEDZY_POLAMI + TOL) zmiana_y = ODLEGLOSC_MIEDZY_POLAMI;
+			//JG:zabezpieczenie przed teleportacja na skutek blyskawicznego ruchu myszka:
+			if (abs(zmiana_x) > 0.67 * ODLEGLOSC_MIEDZY_POLAMI - TOL) {
+				if (zmiana_x > 0.0) zmiana_x = 0.67 * ODLEGLOSC_MIEDZY_POLAMI;
+				else zmiana_x = -0.67 * ODLEGLOSC_MIEDZY_POLAMI;
+			}
+			if (abs(zmiana_y) > 0.67 * ODLEGLOSC_MIEDZY_POLAMI - TOL) { 
+				if (zmiana_y > 0.0) zmiana_y = 0.67 * ODLEGLOSC_MIEDZY_POLAMI;
+				else zmiana_y = -0.67 * ODLEGLOSC_MIEDZY_POLAMI;
+			}
 			zmienne->plansza_x = zmienne->plansza_x + zmiana_x;
 			zmienne->plansza_y = zmienne->plansza_y + zmiana_y;
 		}
@@ -1358,6 +1548,14 @@ namespace labirynt {
 			zmienne->L_zmienne_pomocnicze = new char[zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]];
 			for (int i = 0; i < zmienne->L_zmienne_pomocnicze_N[zmienne->biezacy_labirynt]; i++) {
 				zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
+			}
+
+			for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+			}
+
+			for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 			}
 
 			SetMouseCursor(1);

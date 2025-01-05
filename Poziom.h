@@ -4,6 +4,7 @@
 #include <iostream>
 
 #define ODLEGLOSC_MIEDZY_POLAMI 100.0f
+#define PREDKOSC_OBROTU 0.54f
 
 /*WIELKA KSIEGA CHAROW:
 
@@ -81,9 +82,8 @@ c - pojawiajacy aktywowany przyciskiem
 	uzupelnia o funkcje pojawienia sie, gdy aktywowano
 	(wymaga: p LUB i LUB y LUB t, q LUB w; wyklucza s, <)
 	
-(?)d - nie morze byc przywrocony przyciskiem lub nim usuniety dopoki nie minie czas do pojawienia sie/znikniecia
+d - pelni wazna funkcje nawigacyjna wystepujac po typach v i b, pozwala zachowac jednolitosc przesuniec charakterow i identyfikatorow bez wzgledu na rodzaje charakterow
 	sprawdzenia do 'x' oraz 'c' moga byc przeprowadzane dopiero gdy minie czas wskazany ID
-	ma ID do tablicy {double* odblokuj_aktywacje} zawierajaca czas po ktorym mozliwe jest rozpatrywanie aktywacji przypisanych zmiennych
 	(wymaga: p LUB y LUB t LUB i; wyklucza: ---)
 
 v - zapadnia aktywowana przyciskiem ale od okreslonego czasu (dziala jak 'z' i 'x' ale ma wymagania obu w warunku i zajumuje 2 identyfikatry (do czasu i zmiennej)).
@@ -158,11 +158,30 @@ public:
 	float x_zrodla;//x zrodlowe cwiartki grafiki
 	float y_zrodla;//y zrodlowe cwiartki grafiki
 	float rotacja;//odchylenie od domyslnego kierunku w stopniach
+	double tempo;//tempo obrotu obracaka (mnoznik)
+	char okreslnik;/*uniwersalna zmienna znakowa zawierajaca wszystkie dodatkowe informacje.
+	Znaczenia:
+	a - obrot w prawo
+	b - obrot w lewo
+	c - obrot w prawo gdy zmienna aktywna i lewo gdy nieaktywna (ID do zmiennych poziomu)
+	d - obrot w lewo gdy zmienna aktywna i prawo gdy nieaktywna (ID do zmiennych poziomu)
+	e - obrot w prawo, przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+	f - obrot w lewo, przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+	g - obrot w prawo gdy zmienna aktywna i lewo gdy nieaktywna (ID do zmiennych poziomu) + przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+	h - obrot w lewo gdy zmienna aktywna i prawo gdy nieaktywna (ID do zmiennych poziomu) + przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+	i - obrot w prawo gdy zmienna aktywna i brak obrotu gdy nieaktywna (ID do zmiennych poziomu)
+	j - obrot w lewo gdy zmienna aktywna i brak obrotu gdy nieaktywna (ID do zmiennych poziomu)
+	k - obrot w prawo gdy zmienna aktywna i brak obrotu gdy nieaktywna (ID do zmiennych poziomu) + przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+	l - obrot w lewo gdy zmienna aktywna i brak obrotu gdy nieaktywna (ID do zmiennych poziomu) + przyspieszenie (razy 3.33) co losowo od 5 do 10 sekund na losowo od 1 do 3 sekund (ID do etapow wiatraka)
+
+	*/
 
 	Wiatrak() {//jedyny konstruktor
 		x_zrodla = (float)(rand() % 51) * 0.01f * 1000.0f;//analogicznie do grafik przycisków
 		y_zrodla = (float)(rand() % 51) * 0.01f * 1000.0f;
 		rotacja = 0.0;
+		tempo = 1.0;
+		okreslnik = 'a';
 	}
 
 
@@ -189,9 +208,9 @@ public:
 	char* zmienne_pomocnicze;//przechowuje np 2 zmienne ktore trwale ustawiaj sie na TAK po jednorazowym wcisnieciu przycisku
 	double* zapadnie_czas;//dane momentu czasu znikniecia niektorych pol
 	double* pojawiajace_czas;//dane momentu czasu pojawienia sie niektorych pol
-	double* odblokuj_aktywacje;//dane momentu czasu po ktorym aktywacja jest mozliwa
+	double* odblokuj_aktywacje;//dane momentu czasu po ktorym aktywacja jest mozliwa //JG: OBECNIE W DRODZE DO KASACJI - PRAWDOPODOBNIE NIEUZYWANE
 	//int* animacja;//przechowuje liczby calkowite okreslajace etap animacji elementu z animacjami
-	char** odbiorniki;//wskazniki do zmiennych labiryntu dla odbirocow ich stanu //JG: OBECNIE W DRODZE DO KASACJI - PRAWDOPODOBNIE NIEUZYWANE
+	int* etapy_wiatraki;//odliczanie przerw i czasow wiarakow o zmiennej predkosci //JG: OBECNIE W DRODZE DO KASACJI - PRAWDOPODOBNIE NIEUZYWANE
 	char* etapy_znikania;//zawiera informacje ktora seria znikniec i pojawien sie pola jest aktywna (przy polu znikajacym i pojawiajacym sie wielokrotnie)
 	int* widzialnosc;//zawiera etapy animcaji znikania i okresla czy pole/obiekt znikniety czy nie
 
@@ -203,20 +222,20 @@ public:
 		zapadnie_czas = NULL;
 		pojawiajace_czas = NULL;
 		odblokuj_aktywacje = NULL;
-		odbiorniki = NULL;
+		etapy_wiatraki = NULL;
 		etapy_znikania = NULL;
 		widzialnosc = NULL;
 	}
 
-	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, double* odblokuj_aktywacje0, char** odbiorniki0, char* etapy_znikania0, int* widzialnosc0) {//konstruktor glowny
+	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, Wiatrak* wiatraki0, int* etapy_wiatraki0, char* etapy_znikania0, int* widzialnosc0) {//konstruktor glowny
 		elementy = elementy0;
 		pola = pola0;
-		wiatraki = NULL;
+		wiatraki = wiatraki0;
 		zmienne_pomocnicze = zmienne_pomocnicze0;
 		zapadnie_czas = zapadnie_czas0;
 		pojawiajace_czas = pojawiajace_czas0;
-		odblokuj_aktywacje = odblokuj_aktywacje0;
-		odbiorniki = odbiorniki0;
+		odblokuj_aktywacje = NULL;
+		etapy_wiatraki = etapy_wiatraki0;
 		etapy_znikania = etapy_znikania0;
 		widzialnosc = widzialnosc0;
 
@@ -238,7 +257,7 @@ public:
 		if (zapadnie_czas != NULL) delete[] zapadnie_czas;
 		if (pojawiajace_czas != NULL) delete[] pojawiajace_czas;
 		if (odblokuj_aktywacje != NULL) delete[] odblokuj_aktywacje;
-		if (odbiorniki != NULL) delete[] odbiorniki;
+		if (etapy_wiatraki != NULL) delete[] etapy_wiatraki;
 		if (etapy_znikania != NULL) delete[] etapy_znikania;
 		if (widzialnosc != NULL) delete[] widzialnosc;
 	}

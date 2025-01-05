@@ -71,6 +71,14 @@ namespace wybor_poziomu {
                 zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[0].zmienne_pomocnicze[i];
             }
 
+            for (int i = 0; i < zmienne->L_wiatraki_N[0]; i++) {
+                zmienne->poziomik.labirynty[0].wiatraki[i].rotacja = 0;
+            }
+
+            for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[0]; i++) {
+                zmienne->poziomik.labirynty[0].etapy_wiatraki[i] = -301;
+            }
+
             zmienne->pauza = true;
             if (zmienne->poziomik.etapy[0] == 'l') {//JG:ustawia stan gry zaleznie od pierwszego etapu poziomu
                 stanGry = StanEkranu::GRA_LABIRYNT;
