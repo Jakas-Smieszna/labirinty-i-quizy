@@ -672,6 +672,8 @@ namespace quiz {
 							zmienne->czas = zmienne->kontrola_czas;
 							break;
 						}
+						if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+						zmienne->pytanie = NULL;
 						stanGry = GRA_LABIRYNT;
 						zmienne->pauza = true;
 					}
@@ -714,6 +716,16 @@ namespace quiz {
 								zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 							}
 
+							for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+							}
+
+							for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
+							}
+
+							if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+							zmienne->pytanie = NULL;
 							stanGry = GRA_LABIRYNT;
 							zmienne->pauza = true;
 
@@ -737,6 +749,8 @@ namespace quiz {
 								* (1.0 + (((double)zmienne->limit_cofniecia - (double)zmienne->cofniecia) / (double)zmienne->limit_cofniecia));
 							
 							zmienne->ministan = 'z';
+							if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+							zmienne->pytanie = NULL;
 							stanGry = PODSUMOWANIE;
 							zmienne->LAB_czulosc_przycisku[0] = 25;
 							SetMouseCursor(1);
@@ -801,10 +815,22 @@ namespace quiz {
 									zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 								}
 
+								for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+								}
+
+								for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
+								}
+
+								if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+								zmienne->pytanie = NULL;
 								stanGry = GRA_LABIRYNT;
 							}
 							else {//JG:Porazka (wyczerpanie cofniec)
 								zmienne->ministan = 'p';
+								if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+								zmienne->pytanie = NULL;
 								stanGry = PODSUMOWANIE;
 								zmienne->LAB_czulosc_przycisku[0] = 25;
 								SetMouseCursor(1);
@@ -844,6 +870,8 @@ namespace quiz {
 			zmienne->LAB_czulosc_przycisku[0] = 0;
 		}
 		else if ((IsKeyDown(KEY_P) && (IsKeyDown(KEY_O))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 163.0f * Skala_liter && zmienne->mysz_x < szer - 93.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter)) {
+			if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+			zmienne->pytanie = NULL;
 			stanGry = MAIN_MENU;
 			zmienne->LAB_czulosc_przycisku[0] = 25;
 			SetMouseCursor(1);
@@ -914,6 +942,16 @@ namespace quiz {
 					zmienne->L_zmienne_pomocnicze[i] = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].zmienne_pomocnicze[i];
 				}
 
+				for (int i = 0; i < zmienne->L_wiatraki_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].wiatraki[i].rotacja = 0;
+				}
+
+				for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
+				}
+
+				if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+				zmienne->pytanie = NULL;
 				stanGry = GRA_LABIRYNT;
 				zmienne->pauza = true;
 				break;

@@ -35,6 +35,7 @@ namespace menu {
 			DrawTexturePro(grafiki->tlo.text, { 0.0f, 0.0f, grafiki->tlo.szer, grafiki->tlo.wys }, { 0.0f, 0.0f, wys * grafiki->tlo.szer / grafiki->tlo.wys, wys }, { 0.0f, 0.0f }, 0.0f, ColorBrightness(WHITE, -0.25f));
 			Skala_liter = szer / OknoSzerBaz;//JG+
 		}
+		if (700.0f * Skala_liter > wys) Skala_liter = Skala_liter = wys / OknoWysBaz;//JG: przy wyjatkowo wrednym skalowaniu okna bez tego zabezpieczenia zawartosc moze "rozszerzyc" sie poza okno. Dotyczy duzych paneli
 
 		//JG+poczatek - panelek
 		float szer_pom = 500.0 * Skala_liter;

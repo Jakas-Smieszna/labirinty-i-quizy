@@ -54,6 +54,8 @@ public:
     int* L_etapy_znikania_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
     char* L_zmienne_pomocnicze;//JG:istnieje potrzeba by dane w obiekcie Labirynt byly nienaruszone, wiec modyfikacji podczas rozgrywki musza podlegac ich kopie.
     int* L_zmienne_pomocnicze_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
+    int* L_wiatraki_N;//JG:dlugosci tablic wiatrakow w danym labiryncie
+    int* L_wiatraki_przyspieszane_N;//JG:dlugosci tablic etapow_wiatrakow w danym labiryncie
 
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
@@ -144,9 +146,12 @@ public:
         poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
         //LABIRYNT 1
         Element* l1_elementy = new Element[20];
+        //Wiatrak* l1_wiatraki = new Wiatrak[13];
         int licznik = 0;
         int NOWY_ID_pole = 0;
+        int NOWY_ID_wiatrak = 0;
         int NOWY_ID_odbiornik = 0;//JG: ta zmienna moze byc roznie ustawiana przy inicjalizacji poziomu by przypisywac ta sama komorke tablicy odbiornikow roznym elementom
+        int NOWY_ID_przyspieszane_wiatraki = 0;
         float obecny_x = 0.0f;
         float obecny_y = 0.0f;
         for (licznik; licznik < 1; licznik++) {
@@ -161,6 +166,10 @@ public:
             if (licznik != 1 && licznik != 9) {
                 l1_elementy[licznik].typ_tab = new char[2] {'p', '-'};
                 l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                //l1_elementy[licznik].ID_tab = new int[4] {NOWY_ID_pole, NOWY_ID_wiatrak, 0, NOWY_ID_przyspieszane_wiatraki};
+                //l1_wiatraki[NOWY_ID_wiatrak].okreslnik = 'h';
+                //NOWY_ID_wiatrak = NOWY_ID_wiatrak + 1;
+                //NOWY_ID_przyspieszane_wiatraki = NOWY_ID_przyspieszane_wiatraki + 1;
             }
             else {
                 l1_elementy[licznik].typ_tab = new char[2] {'y', '-'};
@@ -215,12 +224,19 @@ public:
         }
         Pole* l1_pola = new Pole[19];
 
+        L_wiatraki_N = new int[2] {0, 0};
+        L_wiatraki_przyspieszane_N = new int[2] {0, 0};
+
+        //int* l1_etapy_wiatraki = new int[13];
+
+
         int* l1_widzialnosc = new int[2] {0, 0};
 
         char* l1_zmienne_pomocnicze = new char[2] {'d', 'd'};
 
         //LABIRYNT 2
         Element* l2_elementy = new Element[6];
+        //Wiatrak* l2_wiatraki = new Wiatrak[2];
         licznik = 0;
         NOWY_ID_pole = 0;
         int NOWY_ID_etapy_znikania = 0;
@@ -257,6 +273,7 @@ public:
             l2_elementy[licznik].typ_tab = new char[11] {'w', 'a', 'o', 'b', 'd', 'v', 'd', 'a', 'z', 'p', '-'};
             l2_elementy[licznik].ID_tab = new int[11] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pojawiajace_czas + 1, NOWY_ID_odbiornik, NOWY_ID_znikanie_czas + 1, NOWY_ID_odbiornik, NOWY_ID_pojawiajace_czas + 2, NOWY_ID_znikanie_czas + 2, NOWY_ID_pole};
             NOWY_ID_pole = NOWY_ID_pole + 1;
+            //NOWY_ID_wiatrak = NOWY_ID_wiatrak + 1;
             NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
             NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
             NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 3;
@@ -391,8 +408,10 @@ public:
         if (L_widzialnosc_N != NULL) delete[] L_widzialnosc_N;
         if (L_etapy_znikania != NULL) delete[] L_etapy_znikania;
         if (L_etapy_znikania_N != NULL) delete[] L_etapy_znikania_N;
-        if (L_etapy_znikania != NULL) delete[] L_zmienne_pomocnicze;
-        if (L_etapy_znikania_N != NULL) delete[] L_zmienne_pomocnicze_N;
+        if (L_zmienne_pomocnicze != NULL) delete[] L_zmienne_pomocnicze;
+        if (L_zmienne_pomocnicze_N != NULL) delete[] L_zmienne_pomocnicze_N;
+        if (L_wiatraki_N != NULL) delete[] L_wiatraki_N;
+        if (L_wiatraki_przyspieszane_N != NULL) delete[] L_wiatraki_przyspieszane_N;
 
     }
 

@@ -110,6 +110,9 @@
     <ClInclude Include="Podsumowanie.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Generowanie punktow wspolnych okregu i lini o zadanym kacie przechodzacej przez jego srodek.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Tlo1.png">
@@ -136,6 +139,18 @@
     <Image Include="Grafika1\Kotel1.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Grafika1\Wiatrak11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Wiatrak21.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Wiatrak31.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Wiatrak41.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Kursor.cur">
@@ -144,8 +159,10 @@
     <ClInclude Include="DivideText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <None Include="baza.db" />
     <None Include="packages.config" />
+    <None Include="latwe.db" />
+    <None Include="srednie.db" />
+    <None Include="trudne.db" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Archiwum poziomów.txt">
