@@ -151,6 +151,18 @@
     <Image Include="Grafika1\Wiatrak41.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Grafika1\Jez1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Jez2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Jez3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Grafika1\Jez4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Kursor.cur">

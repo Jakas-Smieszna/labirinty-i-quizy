@@ -120,6 +120,96 @@ namespace labirynt {
 				//std::cout << identyfikator;
 				switch (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter]) {//JG:wybiera instrukcje od charakteru podtypu
 
+					//JG:KOLCZATKA (JEZYK)
+				case 'i':
+
+					if (zmienne->epizod == 4) duch = 0.5f;
+					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+
+						if (Widzialnosc == -1) {//JG:Widoczne i aktywne
+
+							DrawTexturePro(grafiki->jez1.text, { 0.0f, 0.0f, grafiki->jez1.szer, grafiki->jez1.wys }, { x + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x * Skala_liter, y + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y * Skala_liter, 100.0f * Skala_liter, 100.0f * Skala_liter }, { 50.0f * Skala_liter, 50.0f * Skala_liter }, zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja, Fade(ColorBrightness(barwnik, jasnosc_pom), duch));
+
+							if (!(zmienne->pauza)) {
+
+								//JG: obrot
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja = zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja + 2.0f;
+
+								if (!Gracza_skluty && CheckCollisionCircleRec({ x + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x * Skala_liter, y + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y * Skala_liter }, 50.0f * Skala_liter, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 12.5f * Skala_liter, 12.5f * Skala_liter })) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
+									Gracza_skluty = true;//JG:to zaznacz, ze jest na planszy i nie spada
+								}
+
+							}
+
+						}
+					
+					}
+
+					if (!(zmienne->pauza)) {
+						//JG: aktualizacja ruchu
+						switch (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].dyn_okreslnik) {
+
+						case 'a'://JG: ruch gora-dol na 5 pol
+
+							if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 0 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 100) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y + 4.0f;
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 99) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 201;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 100 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 200) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y - 4.0f;
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 199) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 301;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 200 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 300) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 299) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 300 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 400) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 399) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 1;
+								}
+
+							}
+							else {
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 50;
+							}
+
+							break;
+
+						default://JG: nigdy nie powinno miec miejsca
+							break;
+						}
+
+					}
+					identyfikator = identyfikator + 1;
+					break;
+
+
 					//JG:POLE/PRZYCISK/POLE Z WIATRAKIEM
 				case 'p':
 				case 'y':
@@ -750,6 +840,19 @@ namespace labirynt {
 										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 									}
 
+									for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+										zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+									}
+
+									if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+									zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+									for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+										zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+										zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+									}
+
 								}
 								else if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'q') {//JG:NASTEPNY ETAP - QUIZ
 									
@@ -1165,6 +1268,19 @@ namespace labirynt {
 						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 					}
 
+					for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+						zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+					}
+
+					if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+					zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+					for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+						zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+						zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+					}
+
 				}
 				else {//JG:Porazka (wyczerpanie cofniec)
 					zmienne->ministan = 'p';
@@ -1514,6 +1630,170 @@ namespace labirynt {
 			zmienne->LAB_czulosc_przycisku[0] = 25;
 			SetMouseCursor(1);
 			zmienne->kurosr_czulosc = 0;
+
+
+			//JG: generowanie grafiki Jezykow - NIE KASOWAC!!!!
+
+			/*Image obraz = GenImageColor(500, 500, BLANK);
+			float punkty1[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			float punkty2[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+			for (int i = 0; i < 18; i++) {
+
+				Przeciecie_Okrag_Linia_Kat(punkty1, 250, double(i) * 10.0, 250.0f, 250.0f);
+				Przeciecie_Okrag_Linia_Kat(punkty2, 20, double(i) * 10.0 + 90.0, 250.0f, 250.0f);
+
+				float x_pom = punkty2[0];
+				float y_pom = punkty2[1];
+				Color barwnik = ColorBrightness(GRAY, -0.20f);
+
+				if (x_pom > punkty2[2]) {
+					if (y_pom > punkty2[3]) {
+						while (x_pom > punkty2[2]) {
+							x_pom = x_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom > punkty2[3]) {
+							y_pom = y_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+					else {
+						while (x_pom > punkty2[2]) {
+							x_pom = x_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom < punkty2[3]) {
+							y_pom = y_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+				}
+				else {
+					if (y_pom > punkty2[3]) {
+						while (x_pom < punkty2[2]) {
+							x_pom = x_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom > punkty2[3]) {
+							y_pom = y_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+					else {
+						while (x_pom < punkty2[2]) {
+							x_pom = x_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom < punkty2[3]) {
+							y_pom = y_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+				}
+				ImageDrawLine(&obraz, punkty2[0], punkty2[1], punkty1[0], punkty1[1], BLACK);
+				ImageDrawLine(&obraz, punkty2[2], punkty2[3], punkty1[0], punkty1[1], BLACK);
+				ImageDrawLine(&obraz, punkty2[0], punkty2[1], punkty1[2], punkty1[3], BLACK);
+				ImageDrawLine(&obraz, punkty2[2], punkty2[3], punkty1[2], punkty1[3], BLACK);
+
+
+			}
+
+			for (int i = 0; i < 18; i++) {
+
+				Przeciecie_Okrag_Linia_Kat(punkty1, 200, double(i) * 10.0 + 5.0, 250.0f, 250.0f);
+				Przeciecie_Okrag_Linia_Kat(punkty2, 20, double(i) * 10.0 + 95.0, 250.0f, 250.0f);
+
+				float x_pom = punkty2[0];
+				float y_pom = punkty2[1];
+				Color barwnik = ColorBrightness(GRAY, -0.40f);
+
+				if (x_pom > punkty2[2]) {
+					if (y_pom > punkty2[3]) {
+						while (x_pom > punkty2[2]) {
+							x_pom = x_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom > punkty2[3]) {
+							y_pom = y_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+					else {
+						while (x_pom > punkty2[2]) {
+							x_pom = x_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom < punkty2[3]) {
+							y_pom = y_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+				}
+				else {
+					if (y_pom > punkty2[3]) {
+						while (x_pom < punkty2[2]) {
+							x_pom = x_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom > punkty2[3]) {
+							y_pom = y_pom - 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+					else {
+						while (x_pom < punkty2[2]) {
+							x_pom = x_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+						while (y_pom < punkty2[3]) {
+							y_pom = y_pom + 1.0;
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[0], punkty1[1], barwnik);
+							ImageDrawLine(&obraz, x_pom, y_pom, punkty1[2], punkty1[3], barwnik);
+						}
+					}
+				}
+				ImageDrawLine(&obraz, punkty2[0], punkty2[1], punkty1[0], punkty1[1], BLACK);
+				ImageDrawLine(&obraz, punkty2[2], punkty2[3], punkty1[0], punkty1[1], BLACK);
+				ImageDrawLine(&obraz, punkty2[0], punkty2[1], punkty1[2], punkty1[3], BLACK);
+				ImageDrawLine(&obraz, punkty2[2], punkty2[3], punkty1[2], punkty1[3], BLACK);
+
+
+			}
+
+			ImageDrawCircle(&obraz, 250, 250, 125, BLACK);
+			ImageDrawCircle(&obraz, 250, 250, 120, ColorBrightness(GRAY, -0.5f));
+			ImageDrawCircle(&obraz, 250, 250, 100, BLACK);
+			ImageDrawCircle(&obraz, 250, 250, 95, ORANGE);
+			ImageDrawCircle(&obraz, 250, 250, 75, BLACK);
+			ImageDrawCircle(&obraz, 250, 250, 70, ColorBrightness(GRAY, -0.5f));
+
+			ImageDrawRectangle(&obraz, 220, 220, 60, 60, BLACK);
+			ImageDrawRectangle(&obraz, 225, 225, 50, 50, ColorBrightness(ORANGE, 0.5f));
+
+			ExportImage(obraz, "JEZ.png");*/
+			
+			//JG: generowanie grafiki Jezykow - NIE KASOWAC!!!!
+
+
+
+
+
 		}
 
 		//JG:PRZYCISK >> PUNKT KONTROLNY (COFNIECIE)
@@ -1556,6 +1836,19 @@ namespace labirynt {
 
 			for (int i = 0; i < zmienne->L_wiatraki_przyspieszane_N[zmienne->biezacy_labirynt]; i++) {
 				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
+			}
+
+			for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+				zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+			}
+
+			if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+			zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+			for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+				zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+				zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
 			}
 
 			SetMouseCursor(1);

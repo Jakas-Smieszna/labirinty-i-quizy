@@ -79,6 +79,20 @@ namespace wybor_poziomu {
                 zmienne->poziomik.labirynty[0].etapy_wiatraki[i] = -301;
             }
 
+
+            for (int i = 0; i < zmienne->L_jeze_dyn_N[0]; i++) {
+                zmienne->poziomik.labirynty[0].jeze[i].rotacja = 0;
+                zmienne->poziomik.labirynty[0].jeze[i].x = 0;
+                zmienne->poziomik.labirynty[0].jeze[i].y = 0;
+            }
+
+            if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+            zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[0]];
+            for (int i = 0; i < zmienne->L_jeze_dyn_N[0]; i++) {
+                zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[0].jeze[i].okreslnik;
+                zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[0].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+            }
+
             zmienne->pauza = true;
             if (zmienne->poziomik.etapy[0] == 'l') {//JG:ustawia stan gry zaleznie od pierwszego etapu poziomu
                 stanGry = StanEkranu::GRA_LABIRYNT;

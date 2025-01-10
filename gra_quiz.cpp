@@ -724,8 +724,23 @@ namespace quiz {
 								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 							}
 
+							for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+								zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+							}
+
+							if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+							zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+							for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+								zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+								zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+							}
+
 							if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
 							zmienne->pytanie = NULL;
+							if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
+							zmienne->odp_wytlumaczenie = NULL;
 							stanGry = GRA_LABIRYNT;
 							zmienne->pauza = true;
 
@@ -823,8 +838,23 @@ namespace quiz {
 									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 								}
 
+								for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+									zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+								}
+
+								if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+								zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+								for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+									zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+									zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+								}
+
 								if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
 								zmienne->pytanie = NULL;
+								if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
+								zmienne->odp_wytlumaczenie = NULL;
 								stanGry = GRA_LABIRYNT;
 							}
 							else {//JG:Porazka (wyczerpanie cofniec)
@@ -872,6 +902,8 @@ namespace quiz {
 		else if ((IsKeyDown(KEY_P) && (IsKeyDown(KEY_O))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 163.0f * Skala_liter && zmienne->mysz_x < szer - 93.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter)) {
 			if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
 			zmienne->pytanie = NULL;
+			if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
+			zmienne->odp_wytlumaczenie = NULL;
 			stanGry = MAIN_MENU;
 			zmienne->LAB_czulosc_przycisku[0] = 25;
 			SetMouseCursor(1);
@@ -950,8 +982,23 @@ namespace quiz {
 					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].etapy_wiatraki[i] = -301;
 				}
 
+				for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].rotacja = 0;
+					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].x = 0;
+					zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].y = 0;
+				}
+
+				if (zmienne->L_jeze_dyn != NULL) delete[] zmienne->L_jeze_dyn;
+				zmienne->L_jeze_dyn = new Jez_dane_dyn[zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]];
+				for (int i = 0; i < zmienne->L_jeze_dyn_N[zmienne->biezacy_labirynt]; i++) {
+					zmienne->L_jeze_dyn[i].dyn_okreslnik = zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik;
+					zmienne->L_jeze_dyn[i].etap_animacji = 50 + int(zmienne->poziomik.labirynty[zmienne->biezacy_labirynt].jeze[i].okreslnik - 'a') * DLUGOSC_ETAPU_JEZA;
+				}
+
 				if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
 				zmienne->pytanie = NULL;
+				if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
+				zmienne->odp_wytlumaczenie = NULL;
 				stanGry = GRA_LABIRYNT;
 				zmienne->pauza = true;
 				break;

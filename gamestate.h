@@ -56,6 +56,8 @@ public:
     int* L_zmienne_pomocnicze_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
     int* L_wiatraki_N;//JG:dlugosci tablic wiatrakow w danym labiryncie
     int* L_wiatraki_przyspieszane_N;//JG:dlugosci tablic etapow_wiatrakow w danym labiryncie
+    Jez_dane_dyn* L_jeze_dyn;//JG:dynamiczna tablica odzwierciedlajaca dane dla jezykow ktore sa odczytywane z poziomu przy kazdej probie a nastepnie aktualizowane
+    int* L_jeze_dyn_N;//JG:dlugosci powyzszej tablicy dla wszystkich labiryntow
 
     char kurosr_czulosc;//JG:bez tego kursor miga, uzywane by odczekac 1 klatke przed zmiana kursora na doymslny od czasu najechania na cos co np zmienilo go w lapke
     char epizod;//JG:biezacy epizod; zal inta na 4 uzywane liczby
@@ -140,18 +142,31 @@ public:
     PakietZmiennych() {//inicjalizacja zmiennych po uruchmoieniu (wiele ma teraz wartosci testowe)
 
 
+        L_widzialnosc = NULL;
+        L_widzialnosc_N = NULL;
+        L_etapy_znikania = NULL;
+        L_etapy_znikania_N = NULL;
+        L_zmienne_pomocnicze = NULL;
+        L_zmienne_pomocnicze_N = NULL;
+        L_wiatraki_N = NULL;
+        L_wiatraki_przyspieszane_N = NULL;
+        L_jeze_dyn = NULL;
+        L_jeze_dyn_N = NULL;
+
 
         limit_cofniecia = 25;
         limit_czas = 600.0;
         poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
         //LABIRYNT 1
-        Element* l1_elementy = new Element[20];
+        Element* l1_elementy = new Element[23];
+        Jez* l1_jeze = new Jez[3];
         //Wiatrak* l1_wiatraki = new Wiatrak[13];
         int licznik = 0;
         int NOWY_ID_pole = 0;
         int NOWY_ID_wiatrak = 0;
         int NOWY_ID_odbiornik = 0;//JG: ta zmienna moze byc roznie ustawiana przy inicjalizacji poziomu by przypisywac ta sama komorke tablicy odbiornikow roznym elementom
         int NOWY_ID_przyspieszane_wiatraki = 0;
+        int NOWY_ID_jeze = 0;
         float obecny_x = 0.0f;
         float obecny_y = 0.0f;
         for (licznik; licznik < 1; licznik++) {
@@ -219,13 +234,31 @@ public:
             l1_elementy[licznik].x = obecny_x;
             l1_elementy[licznik].y = obecny_y;
         }
-        for (licznik; licznik < 20; licznik++) {
+
+        for (int i = 0; i < 3; i++) {
+
+            l1_jeze[i].okreslnik = 'a';
+
+            l1_elementy[licznik].typ_tab = new char[2] {'i', '-'};
+            l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_jeze};
+            NOWY_ID_jeze = NOWY_ID_jeze + 1;
+            l1_elementy[licznik].x = obecny_x;
+            l1_elementy[licznik].y = obecny_y;
+            obecny_x = obecny_x + 4 * ODLEGLOSC_MIEDZY_POLAMI;
+
+            licznik++;
+
+        }
+
+        for (licznik; licznik < 23; licznik++) {
             l1_elementy[licznik].typ_tab = new char[1] {'='};
         }
         Pole* l1_pola = new Pole[19];
 
         L_wiatraki_N = new int[2] {0, 0};
         L_wiatraki_przyspieszane_N = new int[2] {0, 0};
+
+        L_jeze_dyn_N = new int[2] {3, 0};
 
         //int* l1_etapy_wiatraki = new int[13];
 
@@ -314,8 +347,8 @@ public:
         double* l2_pojawiajace_czas = new double[9] {0.7, 5.8, 9.0, 1.4, 6.1, 10.0, 2.1, 6.4, 11.0};
 
         poziomik.labirynty = new Labirynt[2]{
-            Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, NULL, NULL, NULL, NULL, NULL, l1_widzialnosc),
-            Labirynt(l2_elementy, l2_pola, l2_zmienne_pomocnicze, l2_zapadnie_czas, l2_pojawiajace_czas, NULL, NULL, l2_etapy_znikania, l2_widzialnosc) };
+            Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, NULL, NULL, NULL, NULL, NULL, l1_widzialnosc, l1_jeze),
+            Labirynt(l2_elementy, l2_pola, l2_zmienne_pomocnicze, l2_zapadnie_czas, l2_pojawiajace_czas, NULL, NULL, l2_etapy_znikania, l2_widzialnosc, NULL) };
 
         int* q1_zakresyID = new int[2] {1, 7};
         int* q2_zakresyID = new int[2] {3, 10};
@@ -403,6 +436,7 @@ public:
 
     void D_Zmienne(){
         
+        if (odp_wytlumaczenie != NULL) delete odp_wytlumaczenie;
         if (pytanie != NULL) delete pytanie;
         if (L_widzialnosc != NULL) delete[] L_widzialnosc;
         if (L_widzialnosc_N != NULL) delete[] L_widzialnosc_N;
@@ -412,6 +446,8 @@ public:
         if (L_zmienne_pomocnicze_N != NULL) delete[] L_zmienne_pomocnicze_N;
         if (L_wiatraki_N != NULL) delete[] L_wiatraki_N;
         if (L_wiatraki_przyspieszane_N != NULL) delete[] L_wiatraki_przyspieszane_N;
+        if (L_jeze_dyn != NULL) delete[] L_jeze_dyn;
+        if (L_jeze_dyn_N != NULL) delete[] L_jeze_dyn_N;
 
     }
 
