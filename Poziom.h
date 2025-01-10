@@ -5,6 +5,7 @@
 
 #define ODLEGLOSC_MIEDZY_POLAMI 100.0f
 #define PREDKOSC_OBROTU 0.54f
+#define DLUGOSC_ETAPU_JEZA 400//JG:okresla jaki przedzial wartosci ma zarezerwowany dany charakter animcaji
 
 /*WIELKA KSIEGA CHAROW:
 
@@ -187,6 +188,52 @@ public:
 
 };
 
+class Jez {//charakter - kolczatka/jez CHAR = 'i'
+public:
+
+	float x;//przesuniecie x od pozycji
+	float y;//przesuniecie y od pozycji
+	float rotacja;//odchylenie od domyslnego kierunku w stopniach
+	char okreslnik;/*uniwersalna zmienna znakowa zawierajaca wszystkie dodatkowe informacje o zmiennym statusie.
+	a - przemiszcza sie po lini prostej z zatrzymaniem na koncach
+	
+	b - krazy wokol punktu zatrzymujac sie u gory
+	c - krazy wokol punktu zatrzymujac sie na dole
+	d - krazy wokol punktu zatrzymujac sie po prawej
+	e - krazy wokol punktu zatrzymujac sie po lewej
+	
+	//WYSKAKUJACE Z PORTALU PO AKTYWACJI PRZYCISKIEM (zmienia stan na od b do e jak aktywowane)
+	f - krazy wokol punktu zatrzymujac sie u gory
+	g - krazy wokol punktu zatrzymujac sie na dole
+	h - krazy wokol punktu zatrzymujac sie po prawej
+	i - krazy wokol punktu zatrzymujac sie po lewej
+	*/
+	
+	Jez() {//jedyny konstruktor
+		x = 0.0;
+		y = 0.0;
+		rotacja = 0.0;
+		okreslnik = 'a';
+	}
+
+};
+
+class Jez_dane_dyn {
+public:
+
+	char dyn_okreslnik;
+	double etap_animacji;
+
+	Jez_dane_dyn() {
+
+		dyn_okreslnik = 'a';
+		etap_animacji = 50.0;
+
+	}
+
+
+};
+
 class Pole {//charakter - pole CHAR = 'p'
 public:
 
@@ -205,6 +252,7 @@ public:
 	Element* elementy;//wszystkie pola i przeciwnicy
 	Pole* pola;//wszystkie dane zrodlowe wycinku grafiki pol
 	Wiatrak* wiatraki;//wszystkie dane zrodlowe wycinku grafiki wiatrakow oraz o ich rotacji
+	Jez* jeze;//wszystkie dane stale i odnawialne kolczatek
 	char* zmienne_pomocnicze;//przechowuje np 2 zmienne ktore trwale ustawiaj sie na TAK po jednorazowym wcisnieciu przycisku
 	double* zapadnie_czas;//dane momentu czasu znikniecia niektorych pol
 	double* pojawiajace_czas;//dane momentu czasu pojawienia sie niektorych pol
@@ -218,6 +266,7 @@ public:
 		elementy = NULL;
 		pola = NULL;
 		wiatraki = NULL;
+		jeze = NULL;
 		zmienne_pomocnicze = NULL;
 		zapadnie_czas = NULL;
 		pojawiajace_czas = NULL;
@@ -227,10 +276,11 @@ public:
 		widzialnosc = NULL;
 	}
 
-	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, Wiatrak* wiatraki0, int* etapy_wiatraki0, char* etapy_znikania0, int* widzialnosc0) {//konstruktor glowny
+	Labirynt(Element* elementy0, Pole* pola0, char* zmienne_pomocnicze0, double* zapadnie_czas0, double* pojawiajace_czas0, Wiatrak* wiatraki0, int* etapy_wiatraki0, char* etapy_znikania0, int* widzialnosc0, Jez* jeze0) {//konstruktor glowny
 		elementy = elementy0;
 		pola = pola0;
 		wiatraki = wiatraki0;
+		jeze = jeze0;
 		zmienne_pomocnicze = zmienne_pomocnicze0;
 		zapadnie_czas = zapadnie_czas0;
 		pojawiajace_czas = pojawiajace_czas0;
@@ -253,6 +303,7 @@ public:
 		}
 		if (pola != NULL) delete[] pola;
 		if (wiatraki != NULL) delete[] wiatraki;
+		if (jeze != NULL) delete[] jeze;
 		if (zmienne_pomocnicze != NULL) delete[] zmienne_pomocnicze;
 		if (zapadnie_czas != NULL) delete[] zapadnie_czas;
 		if (pojawiajace_czas != NULL) delete[] pojawiajace_czas;

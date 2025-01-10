@@ -3,7 +3,6 @@
 
 #define OknoSzerBaz 1080
 #define OknoWysBaz 720
-#define M_PI 3.141592653589793 //JG:ta biblioteczne niegdy mi nie dzialala :(
 
 //JG:OBIEKT GRAFICZNY Z ROZNYMI DANYMI
 class grafika {
@@ -42,6 +41,7 @@ public:
 	grafika puchar;
 	grafika pole1;
 	grafika wiatrak1;
+	grafika jez1;
 	grafika awatar;
 
 	void aktualizuj_tlo(char epizod) {
@@ -56,6 +56,8 @@ public:
 			pole1 = grafika(LoadTexture("Grafika1/Pole1.png"), 1000.0f, 1000.0f);
 			UnloadTexture(wiatrak1.text);
 			wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak11.png"), 1000.0f, 1000.0f);
+			UnloadTexture(jez1.text);
+			jez1 = grafika(LoadTexture("Grafika1/Jez1.png"), 500.0f, 500.0f);
 			break;
 		case 2://JG:EP 2
 			UnloadTexture(tlo.text);
@@ -66,6 +68,8 @@ public:
 			pole1 = grafika(LoadTexture("Grafika1/Pole2.png"), 1000.0f, 1000.0f);
 			UnloadTexture(wiatrak1.text);
 			wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak21.png"), 1000.0f, 1000.0f);
+			UnloadTexture(jez1.text);
+			jez1 = grafika(LoadTexture("Grafika1/Jez2.png"), 500.0f, 500.0f);
 			break;
 		case 3://JG:EP 3
 			UnloadTexture(tlo.text);
@@ -76,6 +80,8 @@ public:
 			pole1 = grafika(LoadTexture("Grafika1/Pole3.png"), 1000.0f, 1000.0f);
 			UnloadTexture(wiatrak1.text);
 			wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak31.png"), 1000.0f, 1000.0f);
+			UnloadTexture(jez1.text);
+			jez1 = grafika(LoadTexture("Grafika1/Jez3.png"), 500.0f, 500.0f);
 			break;
 		case 4://JG:EP 4
 			UnloadTexture(tlo.text);
@@ -86,6 +92,8 @@ public:
 			pole1 = grafika(LoadTexture("Grafika1/Pole4.png"), 1000.0f, 1000.0f);
 			UnloadTexture(wiatrak1.text);
 			wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak41.png"), 1000.0f, 1000.0f);
+			UnloadTexture(jez1.text);
+			jez1 = grafika(LoadTexture("Grafika1/Jez4.png"), 500.0f, 500.0f);
 			break;
 		}
 	}
@@ -101,16 +109,18 @@ public:
 		puchar = grafika(LoadTexture("Grafika1/Puchar1.png"), 293.0f, 471.0f);
 		pole1 = grafika(LoadTexture("Grafika1/Pole1.png"), 1000.0f, 1000.0f);
 		wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak11.png"), 1000.0f, 1000.0f);
+		jez1 = grafika(LoadTexture("Grafika1/Jez1.png"), 500.0f, 500.0f);
 		awatar = grafika(LoadTexture("Grafika1/Kotel1.png"), 334.0f, 433.0f);
 	}
 
-	void D_GRAFIKI() {//JG:destruktor to ZLO
+	void D_GRAFIKI() {//JG:destruktor daje mniejsza kontrole ze wzgledu na automatyczna aktywacje
 		if(IsImageReady(ikona)) UnloadImage(ikona);
 
 		tlo.D_grafika();
 		puchar.D_grafika();
 		pole1.D_grafika();
 		wiatrak1.D_grafika();
+		jez1.D_grafika();
 		awatar.D_grafika();
 	}
 
