@@ -124,7 +124,7 @@ namespace labirynt {
 				case 'i':
 
 					if (zmienne->epizod == 4) duch = 0.5f;
-					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+					if (x + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x * Skala_liter < szer + 50.0f * Skala_liter - TOL && x + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x * Skala_liter > -50.0f * Skala_liter + TOL && y + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y * Skala_liter < wys + 50.0f * Skala_liter + TOL && y + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y * Skala_liter > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 
 						if (Widzialnosc == -1) {//JG:Widoczne i aktywne
 
@@ -134,6 +134,9 @@ namespace labirynt {
 
 								//JG: obrot
 								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja = zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja + 2.0f;
+								if (zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja
+									> 360.0 - TOL) zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja =
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].rotacja - 360.0;
 
 								if (!Gracza_skluty && CheckCollisionCircleRec({ x + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x * Skala_liter, y + zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y * Skala_liter }, 50.0f * Skala_liter, { X_GRANICA * 0.5f, (wys - Y_GRANICA) * 0.5f, 12.5f * Skala_liter, 12.5f * Skala_liter })) {//JG:Jak gracz na polu i nie wiadomo czy na planszy
 									Gracza_skluty = true;//JG:to zaznacz, ze jest na planszy i nie spada
@@ -192,6 +195,201 @@ namespace labirynt {
 									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
 								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 399) {
 									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 1;
+								}
+
+							}
+							else {
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 50;
+							}
+
+							break;
+
+						case 'b'://JG: ruch lewo-prawo na 5 pol
+
+							if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 0 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 100) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x + 4.0f;
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 99) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 201;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 100 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 200) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x - 4.0f;
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 199) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 301;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 200 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 300) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 299) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 300 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 400) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 399) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 1;
+								}
+
+							}
+							else {
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 50;
+							}
+
+							break;
+
+						case 'c'://JG: ruch po okregu - zatrzymanie po lewej
+						case 'd'://JG: ruch po okregu - zatrzymanie u gory
+						case 'e'://JG: ruch po okregu - zatrzymanie po prawej
+						case 'f'://JG: ruch po okregu - zatrzymanie na dole
+
+							if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 200 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 400) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								
+								float poz_pom[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+								Przeciecie_Okrag_Linia_Kat(poz_pom, ODLEGLOSC_MIEDZY_POLAMI, 90.0 * double(zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].dyn_okreslnik - 'c') + 360.0 * (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji - 200.0) / 200.0, x, y);
+
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+									poz_pom[0] - x;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+									poz_pom[1] - y;
+								
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 399) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 0 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 100) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+								
+								switch (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].dyn_okreslnik) {
+								default:
+								case 'c':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x - 2.0f;
+									break;
+								case 'd':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y - 2.0f;
+									break;
+								case 'e':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x + 2.0f;
+									break;
+								case 'f':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y + 2.0f;
+									break;
+								}
+
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 99) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 100 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 200) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 199) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 201;
+								}
+
+							}
+							else {
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 50;
+							}
+
+							break;
+
+							//OBROT W PRZECIWNA STRONE (niezgodnie):
+						case 'g'://JG: ruch po okregu - zatrzymanie po lewej
+						case 'h'://JG: ruch po okregu - zatrzymanie u gory
+						case 'i'://JG: ruch po okregu - zatrzymanie po prawej
+						case 'j'://JG: ruch po okregu - zatrzymanie na dole
+
+							if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 200 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 400) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji - 1.0;
+
+								float poz_pom[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+								Przeciecie_Okrag_Linia_Kat(poz_pom, ODLEGLOSC_MIEDZY_POLAMI, 90.0 * double(zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].dyn_okreslnik - 'c') + 360.0 * (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji - 200.0) / 200.0, x, y);
+
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+									poz_pom[0] - x;
+								zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+									poz_pom[1] - y;
+
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 201) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 0 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 100) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0;
+
+								switch (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].dyn_okreslnik) {
+								default:
+								case 'g':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x - 2.0f;
+									break;
+								case 'h':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y - 2.0f;
+									break;
+								case 'i':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].x + 2.0f;
+									break;
+								case 'j':
+									zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y =
+										zmienne->poziomik.labirynty[obecny_labirynt].jeze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].y + 2.0f;
+									break;
+								}
+
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 99) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 101;
+								}
+
+							}
+							else if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 100 &&
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji < 200) {
+
+								zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji =
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji + 1.0 * (2.0 - tempo);
+								if (zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji > 199) {
+									zmienne->L_jeze_dyn[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]].etap_animacji = 399;
 								}
 
 							}
@@ -783,7 +981,7 @@ namespace labirynt {
 				case 'm':
 					//JG:WEJSCIE
 				case '>':
-					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+					if (Widzialnosc == -1 && x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						
 						if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter] == '>') {
 							helper::DrawTextCentered("DRZWI", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'

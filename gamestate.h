@@ -158,8 +158,8 @@ public:
         limit_czas = 600.0;
         poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
         //LABIRYNT 1
-        Element* l1_elementy = new Element[23];
-        Jez* l1_jeze = new Jez[3];
+        Element* l1_elementy = new Element[20];
+        //Jez* l1_jeze = new Jez[3];
         //Wiatrak* l1_wiatraki = new Wiatrak[13];
         int licznik = 0;
         int NOWY_ID_pole = 0;
@@ -235,9 +235,9 @@ public:
             l1_elementy[licznik].y = obecny_y;
         }
 
-        for (int i = 0; i < 3; i++) {
+        /*for (int i = 0; i < 3; i++) {
 
-            l1_jeze[i].okreslnik = 'a';
+            l1_jeze[i].okreslnik = 'f';
 
             l1_elementy[licznik].typ_tab = new char[2] {'i', '-'};
             l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_jeze};
@@ -248,9 +248,9 @@ public:
 
             licznik++;
 
-        }
+        }*/
 
-        for (licznik; licznik < 23; licznik++) {
+        for (licznik; licznik < 20; licznik++) {
             l1_elementy[licznik].typ_tab = new char[1] {'='};
         }
         Pole* l1_pola = new Pole[19];
@@ -258,7 +258,7 @@ public:
         L_wiatraki_N = new int[2] {0, 0};
         L_wiatraki_przyspieszane_N = new int[2] {0, 0};
 
-        L_jeze_dyn_N = new int[2] {3, 0};
+        L_jeze_dyn_N = new int[2] {0, 0};
 
         //int* l1_etapy_wiatraki = new int[13];
 
@@ -347,7 +347,7 @@ public:
         double* l2_pojawiajace_czas = new double[9] {0.7, 5.8, 9.0, 1.4, 6.1, 10.0, 2.1, 6.4, 11.0};
 
         poziomik.labirynty = new Labirynt[2]{
-            Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, NULL, NULL, NULL, NULL, NULL, l1_widzialnosc, l1_jeze),
+            Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, NULL, NULL, NULL, NULL, NULL, l1_widzialnosc, NULL),
             Labirynt(l2_elementy, l2_pola, l2_zmienne_pomocnicze, l2_zapadnie_czas, l2_pojawiajace_czas, NULL, NULL, l2_etapy_znikania, l2_widzialnosc, NULL) };
 
         int* q1_zakresyID = new int[2] {1, 7};
@@ -448,6 +448,925 @@ public:
         if (L_wiatraki_przyspieszane_N != NULL) delete[] L_wiatraki_przyspieszane_N;
         if (L_jeze_dyn != NULL) delete[] L_jeze_dyn;
         if (L_jeze_dyn_N != NULL) delete[] L_jeze_dyn_N;
+
+    }
+
+
+    //JG: przestawia dane poziomu z biezacych na nowe. (Lepiej by wygladalo w oddzielnym pliku ale juz latwiej dac to tu - mniej pisania).
+    void PRZELADUJ_POZIOM() {
+
+        //Czyszczenie
+        poziomik.D_Poziom();
+        D_Zmienne();
+
+        odp_wytlumaczenie = NULL;
+        pytanie = NULL;
+        L_widzialnosc = NULL;
+        L_widzialnosc_N = NULL;
+        L_etapy_znikania = NULL;
+        L_etapy_znikania_N = NULL;
+        L_zmienne_pomocnicze = NULL;
+        L_zmienne_pomocnicze_N = NULL;
+        L_wiatraki_N = NULL;
+        L_wiatraki_przyspieszane_N = NULL;
+        L_jeze_dyn = NULL;
+        L_jeze_dyn_N = NULL;
+
+        Element* l1_elementy = NULL;
+        Element* l2_elementy = NULL;
+        int licznik = 0;
+        int NOWY_ID_pole = 0;
+        int NOWY_ID_odbiornik = 0;//JG: ta zmienna moze byc roznie ustawiana przy inicjalizacji poziomu by przypisywac ta sama komorke tablicy odbiornikow roznym elementom
+        int NOWY_ID_etapy_znikania = 0;
+        int NOWY_ID_widzialnosc = 0;
+        int NOWY_ID_znikanie_czas = 0;
+        int NOWY_ID_pojawiajace_czas = 0;
+        float obecny_x = 0.0f;
+        float obecny_y = 0.0f;
+
+        Pole* l1_pola = NULL;
+        int* l1_widzialnosc = NULL;
+        char* l1_zmienne_pomocnicze = NULL;
+        char* l1_etapy_znikania = NULL;
+        double* l1_zapadnie_czas = NULL;
+        double* l1_pojawiajace_czas = NULL;
+
+        Pole* l2_pola = NULL;
+        int* l2_widzialnosc = NULL;
+        char* l2_zmienne_pomocnicze = NULL;
+        char* l2_etapy_znikania = NULL;
+        double* l2_zapadnie_czas = NULL;
+        double* l2_pojawiajace_czas = NULL;
+
+        int* q1_zakresyID = NULL;
+        int* q2_zakresyID = NULL;
+
+        switch (epizod) {
+        default:
+        case 1://EPIZOD 1
+
+            switch (poziom) {
+            default:
+            case 1://POZIOM 1 EPIZOD 1
+
+                limit_cofniecia = 25;
+                limit_czas = 600.0;
+                poziomik.etapy = new char[5] {'l', 'q', 'l', 'q', '='};
+                //LABIRYNT 1
+                l1_elementy = new Element[20];
+                licznik = 0;
+                NOWY_ID_pole = 0;
+                NOWY_ID_odbiornik = 0;//JG: ta zmienna moze byc roznie ustawiana przy inicjalizacji poziomu by przypisywac ta sama komorke tablicy odbiornikow roznym elementom
+                obecny_x = 0.0f;
+                obecny_y = 0.0f;
+                for (licznik; licznik < 1; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[3] {'p', 's', '-'};
+                    l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 16; licznik++) {
+
+                    if (licznik != 1 && licznik != 9) {
+                        l1_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                        l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    }
+                    else {
+                        l1_elementy[licznik].typ_tab = new char[2] {'y', '-'};
+                        l1_elementy[licznik].ID_tab = new int[2] {NOWY_ID_pole, NOWY_ID_odbiornik};
+                        NOWY_ID_odbiornik = NOWY_ID_odbiornik + 1;
+                    }
+
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    if (licznik == 1
+                        || (licznik >= 4 && licznik <= 5)
+                        || (licznik >= 8 && licznik <= 9)
+                        || (licznik >= 12 && licznik <= 13)) {
+                        obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    }
+                    else if ((licznik >= 2 && licznik <= 3)
+                        || (licznik >= 14 && licznik <= 15)) {
+                        obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    }
+                    else if ((licznik >= 6 && licznik <= 7)
+                        || (licznik >= 10 && licznik <= 11)) {
+                        obecny_y = obecny_y - ODLEGLOSC_MIEDZY_POLAMI;
+                    }
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 17; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[3] {'p', '>', '-'};
+                    l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 18; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[4] {'q', 'c', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[3] {1, 1, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 19; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[4] {'q', 'c', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[3] {0, 0, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x - 4 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 20; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[1] {'='};
+                }
+                l1_pola = new Pole[19];
+
+                L_wiatraki_N = new int[2] {0, 0};
+                L_wiatraki_przyspieszane_N = new int[2] {0, 0};
+
+                L_jeze_dyn_N = new int[2] {0, 0};
+
+                l1_widzialnosc = new int[2] {0, 0};
+
+                l1_zmienne_pomocnicze = new char[2] {'d', 'd'};
+
+                //LABIRYNT 2
+                l2_elementy = new Element[6];
+                licznik = 0;
+                NOWY_ID_pole = 0;
+                NOWY_ID_etapy_znikania = 0;
+                NOWY_ID_widzialnosc = 0;
+                NOWY_ID_znikanie_czas = 0;
+                NOWY_ID_pojawiajace_czas = 0;
+                NOWY_ID_odbiornik = 0;
+                obecny_x = 0.0f;
+                obecny_y = 0.0f;
+
+                for (licznik; licznik < 1; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', '<', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 2; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[8] {'w', 'a', 'o', 'a', 'z', 'a', 'y', '-'};
+                    l2_elementy[licznik].ID_tab = new int[9] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pojawiajace_czas + 1, NOWY_ID_znikanie_czas + 1, NOWY_ID_pojawiajace_czas + 2, NOWY_ID_pole, NOWY_ID_odbiornik};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_odbiornik = NOWY_ID_odbiornik + 0;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 2;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 3;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 4; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[11] {'w', 'a', 'o', 'b', 'd', 'v', 'd', 'a', 'z', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[11] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pojawiajace_czas + 1, NOWY_ID_odbiornik, NOWY_ID_znikanie_czas + 1, NOWY_ID_odbiornik, NOWY_ID_pojawiajace_czas + 2, NOWY_ID_znikanie_czas + 2, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 3;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 3;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 5; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', '>', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 6; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[1] {'='};
+                }
+
+                l2_pola = new Pole[5];
+
+                l2_widzialnosc = new int[3] {0, 0, 0};
+                L_widzialnosc = NULL;
+                L_widzialnosc_N = new int[2] {2, 3};
+
+                l2_etapy_znikania = new char[3] {1, 1, 1};
+                L_etapy_znikania = NULL;
+                L_etapy_znikania_N = new int[2] {0, 3};//new int[2] {0, 0};
+
+
+                l2_zmienne_pomocnicze = new char[1] {'b'};
+                L_zmienne_pomocnicze = NULL;
+                L_zmienne_pomocnicze_N = new int[2] {2, 1};
+
+
+                l2_zapadnie_czas = new double[8] {2.7, 7.8, 3.4, 8.1, 15.0, 4.1, 8.4, 16.0};
+                l2_pojawiajace_czas = new double[9] {0.7, 5.8, 9.0, 1.4, 6.1, 10.0, 2.1, 6.4, 11.0};
+
+                L_wiatraki_N = new int[2] {0, 0};
+                L_wiatraki_przyspieszane_N = new int[2] {0, 0};
+                L_jeze_dyn_N = new int[2] {0, 0};
+
+                poziomik.labirynty = new Labirynt[2]{
+                    Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, NULL, NULL, NULL, NULL, NULL, l1_widzialnosc, NULL),
+                    Labirynt(l2_elementy, l2_pola, l2_zmienne_pomocnicze, l2_zapadnie_czas, l2_pojawiajace_czas, NULL, NULL, l2_etapy_znikania, l2_widzialnosc, NULL) };
+
+                q1_zakresyID = new int[2] {1, 7};
+                q2_zakresyID = new int[2] {3, 10};
+                poziomik.quizy = new Quiz[2]{
+                    Quiz(q1_zakresyID, 'b', 1, 5, 10.0, 0.0),
+                    Quiz(q2_zakresyID, 's', 1, 6, 12.0, 6.0) };
+
+                break;//KONIEC - POZIOM 1 EPIZOD 1
+
+            case 2://POZIOM 2 EPIZOD 1
+
+                limit_cofniecia = 10;
+                limit_czas = 600.0;
+                poziomik.etapy = new char[5] {'q', 'l', 'q', 'l', '='};
+                //LABIRYNT 1
+                l1_elementy = new Element[37];
+                licznik = 0;
+                NOWY_ID_pole = 0;
+                NOWY_ID_etapy_znikania = 0;
+                NOWY_ID_widzialnosc = 0;
+                NOWY_ID_znikanie_czas = 0;
+                NOWY_ID_pojawiajace_czas = 0;
+                NOWY_ID_odbiornik = rand() % 3;
+                obecny_x = 0.0f;
+                obecny_y = 0.0f;
+
+
+                for (licznik; licznik < 1; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[3] {'p', '<', '-'};
+                    l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_x = obecny_x - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 2; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[2] {'y', '-'};
+                    l1_elementy[licznik].ID_tab = new int[2] {NOWY_ID_pole, NOWY_ID_odbiornik};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_odbiornik = NOWY_ID_odbiornik + 1;
+                    if (NOWY_ID_odbiornik == 3) NOWY_ID_odbiornik = 0;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 3; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 4; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[2] {'y', '-'};
+                    l1_elementy[licznik].ID_tab = new int[2] {NOWY_ID_pole, NOWY_ID_odbiornik};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_odbiornik = NOWY_ID_odbiornik + 1;
+                    if (NOWY_ID_odbiornik == 3) NOWY_ID_odbiornik = 0;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_y = obecny_y - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 5; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[2] {'y', '-'};
+                    l1_elementy[licznik].ID_tab = new int[2] {NOWY_ID_pole, NOWY_ID_odbiornik};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_odbiornik = NOWY_ID_odbiornik + 1;
+                    if (NOWY_ID_odbiornik == 3) NOWY_ID_odbiornik = 0;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 8; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 10; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 12; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 14; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_y = obecny_y - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 16; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 22; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 24; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 26; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_y = obecny_y - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 28; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 30; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 32; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'w', 'a', 'z', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[5] {NOWY_ID_etapy_znikania, NOWY_ID_widzialnosc, NOWY_ID_pojawiajace_czas, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_etapy_znikania = NOWY_ID_etapy_znikania + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    NOWY_ID_pojawiajace_czas = NOWY_ID_pojawiajace_czas + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 33; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[3] {'p', '>', '-'};
+                    l1_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                obecny_x = obecny_x + 7 * ODLEGLOSC_MIEDZY_POLAMI;
+                obecny_y = obecny_y - 3 * ODLEGLOSC_MIEDZY_POLAMI;
+                for (licznik; licznik < 34; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[4] {'q', 'c', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, 0, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 35; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[4] {'q', 'c', 'p', '-'};
+                    l1_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, 1, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 36; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[5] {'q', 'x', 'p', '>', '-'};
+                    l1_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, 2, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l1_elementy[licznik].x = obecny_x;
+                    l1_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 37; licznik++) {
+                    l1_elementy[licznik].typ_tab = new char[1] {'='};
+                }
+
+                l1_pola = new Pole[36];
+
+                l1_widzialnosc = new int[30];
+                for (int i = 0; i < 29; i ++){                    
+                    l1_widzialnosc[i] = 0;
+                }
+                l1_widzialnosc[29] = -1;
+
+
+                L_widzialnosc = NULL;
+                L_widzialnosc_N = new int[2] {30, 12};
+
+                l1_etapy_znikania = new char[27] {1};
+                for (int i = 0; i < 27; i++) {
+                    l1_etapy_znikania[i] = 1;
+                }
+                L_etapy_znikania = NULL;
+                L_etapy_znikania_N = new int[2] {27, 0};
+
+
+                l1_zmienne_pomocnicze = new char[3] {'d', 'd', 'd'};
+                L_zmienne_pomocnicze = NULL;
+                L_zmienne_pomocnicze_N = new int[2] {3, 0};
+
+
+                l1_zapadnie_czas = new double[27];
+                for (int i = 0; i < 27; i++) {
+                    l1_zapadnie_czas[i] = 8.0 + 2.0 * double(i);
+                }
+                l1_pojawiajace_czas = new double[27];
+                for (int i = 0; i < 27; i++) {
+                    l1_pojawiajace_czas[i] = 5.0 + 2.0 * double(i);
+                }
+
+                //LABIRYNT 2
+                l2_elementy = new Element[26];
+                licznik = 0;
+                NOWY_ID_pole = 0;
+                NOWY_ID_widzialnosc = 0;
+                NOWY_ID_znikanie_czas = 0;
+                NOWY_ID_odbiornik = rand() % 3;
+                obecny_x = 0.0f;
+                obecny_y = 0.0f;
+
+                for (licznik; licznik < 1; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', '<', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 3; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 4; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 5; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 6; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 7; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y + 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 8; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 9; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 10; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 11; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y + 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 12; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 13; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y - 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 14; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', 'm', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 15; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', 'm', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y + 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 16; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', 'm', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y + 2 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 17; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[3] {'p', 'm', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y - 6 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 18; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 19; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y + 6 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 20; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 21; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[4] {'q', 'o', 'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[3] {NOWY_ID_widzialnosc, NOWY_ID_znikanie_czas, NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    NOWY_ID_widzialnosc = NOWY_ID_widzialnosc + 1;
+                    NOWY_ID_znikanie_czas = NOWY_ID_znikanie_czas + 1;
+                    obecny_y = obecny_y - 6 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+
+                for (licznik; licznik < 22; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_x = obecny_x - ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 23; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 24; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y + 4 * ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 25; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[2] {'p', '-'};
+                    l2_elementy[licznik].ID_tab = new int[1] {NOWY_ID_pole};
+                    NOWY_ID_pole = NOWY_ID_pole + 1;
+                    obecny_y = obecny_y + ODLEGLOSC_MIEDZY_POLAMI;
+                    l2_elementy[licznik].x = obecny_x;
+                    l2_elementy[licznik].y = obecny_y;
+                }
+                for (licznik; licznik < 26; licznik++) {
+                    l2_elementy[licznik].typ_tab = new char[1] {'='};
+                }
+
+                l2_pola = new Pole[25];
+
+                l2_widzialnosc = new int[12];
+                for (int i = 0; i < 12; i++) {
+                    l2_widzialnosc[i] = -1;
+                }
+
+                l2_zapadnie_czas = new double[6] {0.7, 1.0, 3.0, 2.0, 6.5, 5.5};
+                L_wiatraki_N = new int[2] {0, 0};
+                L_wiatraki_przyspieszane_N = new int[2] {0, 0};
+                L_jeze_dyn_N = new int[2] {0, 0};
+
+                poziomik.labirynty = new Labirynt[2]{
+                    Labirynt(l1_elementy, l1_pola, l1_zmienne_pomocnicze, l1_zapadnie_czas, l1_pojawiajace_czas, NULL, NULL, l1_etapy_znikania, l1_widzialnosc, NULL),
+                    Labirynt(l2_elementy, l2_pola, NULL, l2_zapadnie_czas, NULL, NULL, NULL, NULL, l2_widzialnosc, NULL) };
+
+                q1_zakresyID = new int[2] {1, 26};
+                q2_zakresyID = new int[2] {5, 33};
+                poziomik.quizy = new Quiz[2]{
+                    Quiz(q1_zakresyID, 'b', 1, 3, 10.0, 0.0),
+                    Quiz(q2_zakresyID, 'p', 1, 10, 25.0, 0.0) };
+
+
+                break;//KONIEC - POZIOM 2 EPIZOD 1
+
+            case 3://POZIOM 3 EPIZOD 1
+
+
+
+                break;//KONIEC - POZIOM 3 EPIZOD 1
+
+            case 4://POZIOM 4 EPIZOD 1
+
+
+
+                break;//KONIEC - POZIOM 4 EPIZOD 1
+
+            case 5://POZIOM 5 EPIZOD 1
+
+
+
+                break;//KONIEC - POZIOM 5 EPIZOD 1
+
+            }
+
+            break;//KONIEC - EPIZOD 1
+
+
+
+
+
+        case 2://EPIZOD 2
+
+            switch (poziom) {
+            default:
+            case 1://POZIOM 1 EPIZOD 2
+
+
+
+                break;//KONIEC - POZIOM 1 EPIZOD 2
+
+            case 2://POZIOM 2 EPIZOD 2
+
+
+
+                break;//KONIEC - POZIOM 2 EPIZOD 2
+
+            case 3://POZIOM 3 EPIZOD 2
+
+
+
+                break;//KONIEC - POZIOM 3 EPIZOD 2
+
+            case 4://POZIOM 4 EPIZOD 2
+
+
+
+                break;//KONIEC - POZIOM 4 EPIZOD 2
+
+            case 5://POZIOM 5 EPIZOD 2
+
+
+
+                break;//KONIEC - POZIOM 5 EPIZOD 2
+
+            }
+
+            break;//KONIEC - EPIZOD 2
+
+
+
+
+
+        case 3://EPIZOD 3
+
+            switch (poziom) {
+            default:
+            case 1://POZIOM 1 EPIZOD 3
+
+
+
+                break;//KONIEC - POZIOM 1 EPIZOD 3
+
+            case 2://POZIOM 2 EPIZOD 3
+
+
+
+                break;//KONIEC - POZIOM 2 EPIZOD 3
+
+            case 3://POZIOM 3 EPIZOD 3
+
+
+
+                break;//KONIEC - POZIOM 3 EPIZOD 3
+
+            case 4://POZIOM 4 EPIZOD 3
+
+
+
+                break;//KONIEC - POZIOM 4 EPIZOD 3
+
+            case 5://POZIOM 5 EPIZOD 3
+
+
+
+                break;//KONIEC - POZIOM 5 EPIZOD 3
+
+            }
+
+            break;//KONIEC - EPIZOD 3
+
+
+
+
+
+        case 4://EPIZOD 4
+
+            switch (poziom) {
+            default:
+            case 1://POZIOM 1 EPIZOD 4
+
+
+
+                break;//KONIEC - POZIOM 1 EPIZOD 4
+
+            case 2://POZIOM 2 EPIZOD 4
+
+
+
+                break;//KONIEC - POZIOM 2 EPIZOD 4
+
+            case 3://POZIOM 3 EPIZOD 4
+
+
+
+                break;//KONIEC - POZIOM 3 EPIZOD 4
+
+            case 4://POZIOM 4 EPIZOD 4
+
+
+
+                break;//KONIEC - POZIOM 4 EPIZOD 4
+
+            case 5://POZIOM 5 EPIZOD 4
+
+
+
+                break;//KONIEC - POZIOM 5 EPIZOD 4
+
+            }
+
+            break;//KONIEC - EPIZOD 4
+
+
+
+
+
+        }
 
     }
 

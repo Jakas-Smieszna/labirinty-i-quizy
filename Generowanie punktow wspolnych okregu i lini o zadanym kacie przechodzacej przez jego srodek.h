@@ -97,10 +97,10 @@ double Ywzo(double k, double b, double r, double znak) {//liczenie Y sprzetu
     if (abs(k - M_PI / 2.0) > TOL && abs(k - 3.0 * M_PI / 2.0) > TOL) return (b * tan(k) * tan(k) + b + znak * tan(k) * sqrt(r * r * (tan(k) * tan(k) + 1))) / (tan(k) * tan(k) + 1.0);
     else {
         if (Ywzo(k - M_PI / 4.0, b, r, znak) > b) {//przypadek asymptoty tangens
-            return (b + r);
+            return (b - r);
         }
         else {
-            return (b - r);
+            return (b + r);
         }
     }
 }

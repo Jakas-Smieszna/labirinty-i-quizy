@@ -5,7 +5,7 @@
 
 #define ODLEGLOSC_MIEDZY_POLAMI 100.0f
 #define PREDKOSC_OBROTU 0.54f
-#define DLUGOSC_ETAPU_JEZA 400//JG:okresla jaki przedzial wartosci ma zarezerwowany dany charakter animcaji
+#define DLUGOSC_ETAPU_JEZA 0//JG:okresla jaki przedzial wartosci ma zarezerwowany dany charakter animcaji
 
 /*WIELKA KSIEGA CHAROW:
 
@@ -195,18 +195,26 @@ public:
 	float y;//przesuniecie y od pozycji
 	float rotacja;//odchylenie od domyslnego kierunku w stopniach
 	char okreslnik;/*uniwersalna zmienna znakowa zawierajaca wszystkie dodatkowe informacje o zmiennym statusie.
-	a - przemiszcza sie po lini prostej z zatrzymaniem na koncach
+	a - przemiszcza sie po lini prostej z zatrzymaniem na koncach: gora-dol
+	b - przemiszcza sie po lini prostej z zatrzymaniem na koncach: lewo-prawo
 	
-	b - krazy wokol punktu zatrzymujac sie u gory
-	c - krazy wokol punktu zatrzymujac sie na dole
-	d - krazy wokol punktu zatrzymujac sie po prawej
-	e - krazy wokol punktu zatrzymujac sie po lewej
+	KRAZACE ZGODNIE Z RUCHEM WSKAZOWEK ZEGARA:
+	c - krazy wokol punktu zatrzymujac sie po lewej
+	d - krazy wokol punktu zatrzymujac sie na gorze
+	e - krazy wokol punktu zatrzymujac sie po prawej
+	f - krazy wokol punktu zatrzymujac sie na dole
+
+	KRAZACE NIEZGODNIE Z RUCHEM WSKAZOWEK ZEGARA:
+	g - krazy wokol punktu zatrzymujac sie po lewej
+	h - krazy wokol punktu zatrzymujac sie na gorze
+	i - krazy wokol punktu zatrzymujac sie po prawej
+	j - krazy wokol punktu zatrzymujac sie na dole ***
 	
 	//WYSKAKUJACE Z PORTALU PO AKTYWACJI PRZYCISKIEM (zmienia stan na od b do e jak aktywowane)
-	f - krazy wokol punktu zatrzymujac sie u gory
-	g - krazy wokol punktu zatrzymujac sie na dole
-	h - krazy wokol punktu zatrzymujac sie po prawej
-	i - krazy wokol punktu zatrzymujac sie po lewej
+	g - krazy wokol punktu zatrzymujac sie u gory
+	h - krazy wokol punktu zatrzymujac sie na dole
+	i - krazy wokol punktu zatrzymujac sie po prawej
+	j - krazy wokol punktu zatrzymujac sie po lewej
 	*/
 	
 	Jez() {//jedyny konstruktor
