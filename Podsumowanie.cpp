@@ -397,10 +397,9 @@ namespace podsumowanie {
 				zmienne->poziom_doc = 1;
 				if (zmienne->epizod < 4) {
 					zmienne->epizod = zmienne->epizod + 1;
-					zmienne->epizod = zmienne->epizod_doc;
+					zmienne->epizod_doc = zmienne->epizod_doc + 1;
 					grafiki->aktualizuj_tlo(zmienne->epizod);
 					EpisodeTheme.Update(zmienne->epizod);
-					zmienne->epizod_doc = zmienne->epizod_doc + 1;
 				}
 				else {
 					zmienne->epizod = 1;
@@ -424,6 +423,8 @@ namespace podsumowanie {
 			zmienne->wynik = 100.0;//JG:STARTOWY WYNIK NA POZIOMIE (balansuje dodatkowe punkty zdobyte w trakcie i premie na koniec
 			zmienne->kontrola_wynik = zmienne->wynik;
 			zmienne->opoznienie = 0;
+
+			zmienne->PRZELADUJ_POZIOM();
 
 			if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
 			zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[0]];
