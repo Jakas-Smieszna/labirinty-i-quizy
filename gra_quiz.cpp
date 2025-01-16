@@ -855,6 +855,7 @@ namespace quiz {
 								zmienne->pytanie = NULL;
 								if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
 								zmienne->odp_wytlumaczenie = NULL;
+								zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 								stanGry = GRA_LABIRYNT;
 							}
 							else {//JG:Porazka (wyczerpanie cofniec)
@@ -999,6 +1000,7 @@ namespace quiz {
 				zmienne->pytanie = NULL;
 				if (zmienne->odp_wytlumaczenie != NULL) delete[] zmienne->odp_wytlumaczenie;
 				zmienne->odp_wytlumaczenie = NULL;
+				zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 				stanGry = GRA_LABIRYNT;
 				zmienne->pauza = true;
 				break;

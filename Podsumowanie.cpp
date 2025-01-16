@@ -313,6 +313,7 @@ namespace podsumowanie {
 			zmienne->wynik = 100.0;//JG:STARTOWY WYNIK NA POZIOMIE (balansuje dodatkowe punkty zdobyte w trakcie i premie na koniec
 			zmienne->kontrola_wynik = zmienne->wynik;
 			zmienne->opoznienie = 0;
+			zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 
 			if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
 			zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[0]];
