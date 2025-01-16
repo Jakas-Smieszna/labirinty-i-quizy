@@ -486,6 +486,11 @@ namespace labirynt {
 										case 'j':
 											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'i';
 											break;
+											//JG: specjalne dla poziomu 2 Ep 2:
+										case 'k':
+											zmienne->L_przesuniecie_kontroli_czasu = zmienne->czas - zmienne->kontrola_czas;
+											zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] = 'c';
+											break;
 										}
 
 									}
@@ -964,6 +969,38 @@ namespace labirynt {
 							identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
 
 						}
+						else if (Widzialnosc > 0) {
+
+							//JG:Postep animacji
+							identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
+							if (!zmienne->pauza) {
+								if (Typ_animacji == 'z' || Typ_animacji == 'o' || Typ_animacji == 'v') {//JG:Spadek widzialnosci
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] - 1;
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < 1 + 100 * (Widzialnosc / 100)) {
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = 0;
+										if (Podwojne_przesuniecie && zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 2;
+										else if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+
+									}
+
+								}
+								else if (Typ_animacji == 'a' || Typ_animacji == 'b') {//JG:Wzrost widzialnosci
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] > 99 + 100 * (Widzialnosc / 100)) {
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+										if (Podwojne_przesuniecie && zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 2;
+										else if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+
+									}
+
+								}
+								else {//JG:Nigdy nie powinno miec miejsca
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+								}
+							}
+							identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
+
+						}
 					
 					}
 					break;
@@ -971,7 +1008,7 @@ namespace labirynt {
 
 					//JG:START
 				case 's':
-					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+					if (Widzialnosc == -1 && x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						helper::DrawTextCentered("START", x + 3.0f * Skala_liter, y - 7.0f * Skala_liter, 26.0f * Skala_liter, BLACK);//JG 'cien'
 						helper::DrawTextCentered("START", x, y - 10.0f * Skala_liter, 26.0f * Skala_liter, EpisodeTheme.textColor);
 					}
@@ -1007,6 +1044,7 @@ namespace labirynt {
 								
 								if (zmienne->poziomik.etapy[zmienne->biezacy_etap] == 'l') {//JG:NASTEPNY ETAP - LABIRYNT
 
+									zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 									zmienne->plansza_x = 0.0f;
 									zmienne->plansza_y = 0.0f;
 									zmienne->kontrola_czas = zmienne->czas;//JG:zapis danych do punktu kontrolnego
@@ -1086,7 +1124,7 @@ namespace labirynt {
 
 					//JG:WYJSCIE
 				case '<':
-					if (x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
+					if (Widzialnosc == -1 && x < szer + 50.0f * Skala_liter - TOL && x > -50.0f * Skala_liter + TOL && y < wys + 50.0f * Skala_liter + TOL && y > -50.0f * Skala_liter - TOL) {//JG:Jesli na obszarze okna rysuj
 						helper::DrawTextCentered("WEJSCIE", x + 3.0f * Skala_liter, y - 5.0f * Skala_liter, 20.0f * Skala_liter, BLACK);//JG 'cien'
 						helper::DrawTextCentered("WEJSCIE", x, y - 8.0f * Skala_liter, 20.0f * Skala_liter, EpisodeTheme.textColor);
 					}
@@ -1099,6 +1137,14 @@ namespace labirynt {
 					Typ_animacji = zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[charakter + Wskazik_do_etapu_znikania_pojawiania];
 					if (Typ_animacji == 'c') Typ_animacji = 'a';
 					else if (Typ_animacji == 'x') Typ_animacji = 'z';
+					else if (Typ_animacji == 'b') {
+						Typ_animacji = 'a';
+						Podwojne_przesuniecie = true;
+					}
+					else if (Typ_animacji == 'v') {
+						Typ_animacji = 'z';
+						Podwojne_przesuniecie = true;
+					}
 					break;
 
 					//JG:WIELOKROTNIE ZMIENNA WIDZIALNOSC etapy_znikania
@@ -1237,8 +1283,8 @@ namespace labirynt {
 					//JG:ZAPADNIA - AKTYWACJA I CZAS
 				case 'v':
 					identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
-					if (zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas &&
-						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas){
+					if (zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas - zmienne->L_przesuniecie_kontroli_czasu &&
+						zmienne->poziomik.labirynty[obecny_labirynt].zapadnie_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas - zmienne->L_przesuniecie_kontroli_czasu){
 						
 						if ((zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'c' ||
 							zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'a' ||
@@ -1367,8 +1413,8 @@ namespace labirynt {
 					//JG:POJAWIAJACE SIE - AKTYWACJA I CZAS
 				case 'b':
 					identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
-					if (zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas
-						&& zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas) {
+					if (zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo < zmienne->czas - zmienne->kontrola_czas - zmienne->L_przesuniecie_kontroli_czasu
+						&& zmienne->poziomik.labirynty[obecny_labirynt].pojawiajace_czas[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] * tempo + 0.2 > zmienne->czas - zmienne->kontrola_czas - zmienne->L_przesuniecie_kontroli_czasu) {
 						
 						if ((zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'c' ||
 						     zmienne->L_zmienne_pomocnicze[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator + 1]] == 'a' ||
@@ -1439,6 +1485,7 @@ namespace labirynt {
 					zmienne->LAB_czulosc_przycisku[1] = 25;
 					zmienne->plansza_x = 0.0f;
 					zmienne->plansza_y = 0.0f;
+					zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 
 					if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
 					zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[zmienne->biezacy_labirynt]];
@@ -2003,6 +2050,7 @@ namespace labirynt {
 		}
 		else if (!(zmienne->cofniecia >= zmienne->limit_cofniecia) && ((IsKeyDown(KEY_K) && (IsKeyDown(KEY_L))) || (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && zmienne->mysz_x > szer - 76.0f * Skala_liter && zmienne->mysz_x < szer - 10.0f * Skala_liter && zmienne->mysz_y > 410.0f * Skala_liter && zmienne->mysz_y < 480.0f * Skala_liter))) {
 			
+			zmienne->L_przesuniecie_kontroli_czasu = 0.0;
 			zmienne->opoznienie = 0;
 			zmienne->cofniecia = zmienne->cofniecia + 1;
 			zmienne->wynik = zmienne->kontrola_wynik;
