@@ -7,7 +7,7 @@
 #include "Poziom.h"
 
 
-//Zdjecia kotka nie jest nasze :D
+//Zdjecia kotka nie jest nasze :D :)
 #define TOL (double)(1e-12)
 
 enum StanEkranu {
