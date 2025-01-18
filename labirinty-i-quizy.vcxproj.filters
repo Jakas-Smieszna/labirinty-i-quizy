@@ -163,6 +163,9 @@
     <Image Include="Grafika1\Jez4.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Grafika1\Ikona2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Kursor.cur">

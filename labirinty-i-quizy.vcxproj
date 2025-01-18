@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Grafika1\Ikona1.png" />
+    <Image Include="Grafika1\Ikona2.png" />
     <Image Include="Grafika1\Jez1.png" />
     <Image Include="Grafika1\Jez2.png" />
     <Image Include="Grafika1\Jez3.png" />

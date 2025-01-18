@@ -55,6 +55,9 @@ namespace wybor_poziomu {
 
             zmienne->PRZELADUJ_POZIOM();
 
+
+            zmienne->PRZELADUJ_FABULE();
+
             if (zmienne->L_widzialnosc != NULL) delete[] zmienne->L_widzialnosc;
             zmienne->L_widzialnosc = new int[zmienne->L_widzialnosc_N[0]];
             for (int i = 0; i < zmienne->L_widzialnosc_N[0]; i++) {
