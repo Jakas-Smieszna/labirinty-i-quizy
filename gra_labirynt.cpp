@@ -1003,6 +1003,38 @@ namespace labirynt {
 						}
 					
 					}
+					else if (Widzialnosc > 0) {
+
+							//JG:Postep animacji
+							identyfikator = identyfikator - Wskazik_do_etapu_znikania_pojawiania;
+							if (!zmienne->pauza) {
+								if (Typ_animacji == 'z' || Typ_animacji == 'o' || Typ_animacji == 'v') {//JG:Spadek widzialnosci
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] - 1;
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] < 1 + 100 * (Widzialnosc / 100)) {
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = 0;
+										if (Podwojne_przesuniecie && zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 2;
+										else if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+
+									}
+
+								}
+								else if (Typ_animacji == 'a' || Typ_animacji == 'b') {//JG:Wzrost widzialnosci
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+									if (zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] > 99 + 100 * (Widzialnosc / 100)) {
+										zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+										if (Podwojne_przesuniecie && zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 2;
+										else if (zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].typ_tab[0] == 'w') zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = zmienne->L_etapy_znikania[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] + 1;
+
+									}
+
+								}
+								else {//JG:Nigdy nie powinno miec miejsca
+									zmienne->L_widzialnosc[zmienne->poziomik.labirynty[obecny_labirynt].elementy[element].ID_tab[identyfikator]] = -1;
+								}
+							}
+							identyfikator = identyfikator + Wskazik_do_etapu_znikania_pojawiania;
+
+						}
 					break;
 					
 
@@ -1100,6 +1132,7 @@ namespace labirynt {
 									zmienne->punkty_wymagane = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_punktowy;
 									zmienne->punkty_straznik = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_prog_bezpieczenstwa;
 									zmienne->wyzwanie = zmienne->poziomik.quizy[zmienne->biezacy_quiz].Q_wyzwanie;
+									zmienne->PRZELADUJ_FABULE();
 									stanGry = StanEkranu::GRA_QUIZ;
 
 								}
@@ -1849,10 +1882,19 @@ namespace labirynt {
 			zmienne->plansza_x = zmienne->plansza_x + zmiana_x;
 			zmienne->plansza_y = zmienne->plansza_y + zmiana_y;
 		}
-		//JG:PRZYCISK PAUZA
+		//JG:LICZENIE CZASU
 		if (!zmienne->pauza) {
 			zmienne->czas = zmienne->czas + 0.01;
+			//JG:limit czasu przekroczony - porazka
+			if (zmienne->czas - zmienne->limit_czas > TOL) {
+				zmienne->ministan = 'p';
+				stanGry = PODSUMOWANIE;
+				zmienne->LAB_czulosc_przycisku[0] = 25;
+				SetMouseCursor(1);
+				zmienne->kurosr_czulosc = 0;
+			}
 		}
+		//JG:PRZYCISK PAUZA
 		if (zmienne->pauza_czulosc > 0) {
 			zmienne->pauza_czulosc = zmienne->pauza_czulosc - 1;
 		}
