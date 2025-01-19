@@ -2,6 +2,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <string>
+#include <sqlite3.h>
 #include "raylib.h"
 #include <vector>
 #include "Poziom.h"
@@ -27,7 +28,8 @@ enum StanEkranu {
     EXIT // Na koniec - wyjście.
 };
 extern StanEkranu stanGry;
-
+static int czyt_loc_callback(void* ignore, int count, char** data, char** cols);
+static int czyt_usr_callback(void* ignore, int count, char** data, char** cols);
 //JG:Nie chcialo mi sie robic na to nowego pliku. Mam nadzieje, ze Wam to nie przeszkada. Ogolnie baza czesto uzywanych zmiennych do ,,globalnego" zasiegu.
 class PakietZmiennych {
 public:
@@ -456,7 +458,7 @@ public:
 
     //JG: przestawia dane poziomu z biezacych na nowe. (Lepiej by wygladalo w oddzielnym pliku ale juz latwiej dac to tu - mniej pisania).
     void PRZELADUJ_POZIOM() {
-
+        czytaj_wynik();
         //Czyszczenie
         poziomik.D_Poziom();
         D_Zmienne();
@@ -10345,6 +10347,62 @@ public:
 
     }
 
+#define LVL_AS_STR (std::to_string(trudnosc_pytania)+"-"+std::to_string(trudnosc_labirynt)+"-"+std::to_string((int)epizod) + "-" + std::to_string((int)poziom))
+    void zapisz_wynik() {
+        sqlite3* database;
+        int exit = sqlite3_open("rekordy.db", &database);
+        if (exit != SQLITE_OK)
+        {
+            std::cerr << "Blad otwierania bazy danych: " << sqlite3_errmsg(database) << std::endl;
+            return;
+        }
+        std::string init =
+            R"(CREATE TABLE IF NOT EXISTS "rekordy_local" (
+	`poziom`	TEXT UNIQUE,
+	`rekord`	REAL DEFAULT 100,
+    PRIMARY KEY (`poziom`)
+);)";
+        // Jeżeli tablica nie istnieje, to tworzy nową.
+        // Na wszelki wypadek.
+        sqlite3_exec(database, init.c_str(), NULL, NULL, NULL);
+        std::string upd =
+            "INSERT OR REPLACE INTO rekordy_local (poziom, rekord) VALUES ('" + LVL_AS_STR + "', " + std::to_string(rekord_lokalny) + ");";
+        sqlite3_exec(database, upd.c_str(), NULL, NULL, NULL);
+        std::string upd_usr =
+            "INSERT OR REPLACE INTO rekordy_local (poziom, rekord) VALUES ('" + LVL_AS_STR + "-" + nazwa_uzytkownika + "', " + std::to_string(rekord_wlasny) + ");";
+        sqlite3_exec(database, upd_usr.c_str(), NULL, NULL, NULL);
+        // to używa rekord_lokalny, i jest wywoływane po zmianie tej zmiennej, więc możemy zapisać (na 100% jest większy, wiemy to)
+
+        return;
+    }
+    void czytaj_wynik() {
+        sqlite3* database;
+        int exit = sqlite3_open("rekordy.db", &database);
+        if (exit != SQLITE_OK)
+        {
+            std::cerr << "Blad otwierania bazy danych: " << sqlite3_errmsg(database) << std::endl;
+            return;
+        }
+        std::string sel =
+            "SELECT rekord FROM rekordy_local WHERE poziom = '" + LVL_AS_STR + "';";
+        sqlite3_exec(database, sel.c_str(), czyt_loc_callback, NULL, NULL);
+        std::string sel_usr =
+            "SELECT rekord FROM rekordy_local WHERE poziom = '" + LVL_AS_STR + "-" + nazwa_uzytkownika + "';";
+        sqlite3_exec(database, sel_usr.c_str(), czyt_usr_callback, NULL, NULL);
+    }
 };
 
 extern PakietZmiennych* zmienne;
+
+static int czyt_loc_callback(void* ignore, int count, char** data, char** cols) {
+    zmienne->rekord_lokalny = 100;
+    if (count < 1) return 0;
+    zmienne->rekord_lokalny = std::stod(std::string(data[0]));
+    return 0;
+}
+static int czyt_usr_callback(void* ignore, int count, char** data, char** cols) {
+    zmienne->rekord_wlasny = 100;
+    if (count < 1) return 0;
+    zmienne->rekord_wlasny = std::stod(std::string(data[0]));
+    return 0;
+}
