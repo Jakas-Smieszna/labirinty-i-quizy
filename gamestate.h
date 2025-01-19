@@ -6129,6 +6129,8 @@ public:
 	`rekord`	REAL DEFAULT 100,
     PRIMARY KEY (`poziom`)
 );)";
+        // Jeżeli tablica nie istnieje, to tworzy nową.
+        // Na wszelki wypadek.
         sqlite3_exec(database, init.c_str(), NULL, NULL, NULL);
         std::string upd =
             "INSERT OR REPLACE INTO rekordy_local (poziom, rekord) VALUES ('" + LVL_AS_STR + "', " + std::to_string(rekord_lokalny) + ");";
@@ -6136,6 +6138,8 @@ public:
         std::string upd_usr =
             "INSERT OR REPLACE INTO rekordy_local (poziom, rekord) VALUES ('" + LVL_AS_STR + "-" + nazwa_uzytkownika + "', " + std::to_string(rekord_wlasny) + ");";
         sqlite3_exec(database, upd_usr.c_str(), NULL, NULL, NULL);
+        // to używa rekord_lokalny, i jest wywoływane po zmianie tej zmiennej, więc możemy zapisać (na 100% jest większy, wiemy to)
+
         return;
     }
     void czytaj_wynik() {
