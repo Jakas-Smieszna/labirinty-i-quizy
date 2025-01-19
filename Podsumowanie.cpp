@@ -280,6 +280,7 @@ namespace podsumowanie {
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			zmienne->zapisz_wynik();
 
 			stanGry = MAIN_MENU;
 			zmienne->LAB_czulosc_przycisku[9] = 25;
@@ -299,6 +300,7 @@ namespace podsumowanie {
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			zmienne->zapisz_wynik();
 
 			zmienne->plansza_x = 0.0f;//JG:zerowanie zmiennych pod rozegranie poziomu
 			zmienne->plansza_y = 0.0f;
@@ -390,6 +392,7 @@ namespace podsumowanie {
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			zmienne->zapisz_wynik();
 
 			if (zmienne->poziom < 5) {
 				zmienne->poziom = zmienne->poziom + 1;
