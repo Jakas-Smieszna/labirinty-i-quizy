@@ -62,7 +62,7 @@ namespace podsumowanie {
 		DrawText(TextFormat("Poziom: %d", zmienne->poziom), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 170.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla biezacy poziom
 
 		char* trudnosc_napis = "";
-		//MG: nie by³oby najwydajniej u¿yæ mapy?
+		//MG: nie byÂ³oby najwydajniej uÂ¿yÃ¦ mapy?
 		// https://en.cppreference.com/w/cpp/container/map
 		switch (zmienne->trudnosc_labirynt) {//JG:chyba wydajniejsze niz string i konwersja
 		default:
