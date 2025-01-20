@@ -72,12 +72,18 @@ namespace quiz {
 			DrawRectangle(59.0f * Skala_liter, 79.0f * Skala_liter, szer_pom + 2.0f * Skala_liter, 3.0f * Skala_liter, BLACK);
 
 			if (zmienne->ministan == 'q') {
-				switch (zmienne->fabula_quizu_ID) {
-				case 1:
+				switch (zmienne->wyzwanie) {
+				case 'b':
 					napis_pom = "Tajemnicze drzwi";
 					break;
+				case 's':
+					napis_pom = "Straznik";
+					break;
+				case 'p':
+					napis_pom = "Pulapka";
+					break;
 				default:
-					napis_pom = "Poczucie humoru autorow";
+					napis_pom = "Kto to wie?";
 					break;
 				}
 				helper::DrawTextCentered(napis_pom, 60.0f * Skala_liter + szer_pom * 0.5f + 5.0f * Skala_liter, 100.0f * Skala_liter, 60.0f * Skala_liter, BLACK);//JG 'cien'
@@ -306,7 +312,7 @@ namespace quiz {
 		), szer - 258.0f * Skala_liter, 140.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla obecny wynik biezacego gracza
 		DrawText(TextFormat("Rekord gracza: %0.2lf", zmienne->rekord_wlasny), szer - 258.0f * Skala_liter, 162.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik biezacego gracza
 		DrawText(TextFormat("Rekord lokalny: %0.2lf", zmienne->rekord_lokalny), szer - 258.0f * Skala_liter, 184.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik w tej aplikacji
-		DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), szer - 258.0f * Skala_liter, 206.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
+		DrawText(TextFormat("Rekord autora: %0.2lf", zmienne->rekord_swiata), szer - 258.0f * Skala_liter, 206.0f * Skala_liter, (int)(18.0f * Skala_liter), napis_epizodu);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
 		//JG: WYNIKI - KONIEC
 
 		DrawText("ZAGADKA", szer - 248.0f * Skala_liter, 242.0f * Skala_liter, (int)(33.0f * Skala_liter), napis_epizodu);//JG:wyswietla naglowek
@@ -567,6 +573,16 @@ namespace quiz {
 		//JG:AKTUALIZACJA CZASU
 		if (!zmienne->pauza) {
 			zmienne->czas = zmienne->czas + 0.01;
+			//JG:limit czasu przekroczony - porazka
+			if (zmienne->czas - zmienne->limit_czas > TOL) {
+				zmienne->ministan = 'p';
+				if (zmienne->pytanie != NULL) delete[] zmienne->pytanie;
+				zmienne->pytanie = NULL;
+				stanGry = PODSUMOWANIE;
+				zmienne->LAB_czulosc_przycisku[0] = 25;
+				SetMouseCursor(1);
+				zmienne->kurosr_czulosc = 0;
+			}
 		}
 
 		//JG:PRZYCISK ODPOWIEDZ A

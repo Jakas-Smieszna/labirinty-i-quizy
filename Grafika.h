@@ -99,7 +99,7 @@ public:
 	}
 
 	GRAFIKI() {
-		ikona = LoadImage("Grafika1/ikona1.png");
+		ikona = LoadImage("Grafika1/Ikona2.png");
 	
 		/*tlo = grafika(LoadImage("Grafika1/Tlo3.png"));*/
 		tlo = grafika(LoadTexture("Grafika1/Tlo1.png"), 1920.0f, 1080.0f);
