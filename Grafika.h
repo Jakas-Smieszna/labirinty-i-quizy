@@ -134,7 +134,7 @@ struct Theme {
 	Color bgColor;
 	Font textFont;
 	bool fontInit = false;
-	Theme() { textColor = borderColor = bgColor = BLACK; textFont = GetFontDefault(); }
+	Theme() { textColor = borderColor = bgColor = BLACK; LoadFontEx("resources/arial.ttf", 32, nullptr, 0);; }
 	void Update(int episodenum) {
 		switch (episodenum) {
 		default:
