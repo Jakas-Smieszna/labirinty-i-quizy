@@ -4,6 +4,7 @@
 #include "Grafika.h"
 #include <functional>
 #include <iostream>
+#include "Dzwiek.h"
 enum StanPrzycisku {
 	NIEAKTYWNY = 0,
 	NAJECHANY,

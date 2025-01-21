@@ -5,6 +5,7 @@
 #include "przycisk.h"
 #include <string>
 #include "Baza.h"
+#include "Dzwiek.h"
 namespace quiz {
 
 	// Rysowanie
@@ -553,6 +554,8 @@ namespace quiz {
 
 
 	void updateQuiz(grafika* tlo) {
+		PauseMusicStream(music);
+		PlayMusicStream(music2);
 		//JG:USTAWIANIE ZMIENNYCH ZWIAZANYCH Z WYMIARAMI OKNA
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
