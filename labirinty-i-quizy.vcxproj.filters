@@ -175,9 +175,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <None Include="packages.config" />
-    <None Include="latwe.db" />
-    <None Include="srednie.db" />
-    <None Include="trudne.db" />
+    <None Include="latwe.db">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="srednie.db">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="trudne.db">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Archiwum poziomów.txt">
