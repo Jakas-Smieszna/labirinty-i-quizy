@@ -62,7 +62,7 @@ namespace podsumowanie {
 		DrawText(TextFormat("Poziom: %d", zmienne->poziom), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 170.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla biezacy poziom
 
 		char* trudnosc_napis = "";
-		//MG: nie by³oby najwydajniej u¿yæ mapy?
+		//MG: nie byÂ³oby najwydajniej uÂ¿yÃ¦ mapy?
 		// https://en.cppreference.com/w/cpp/container/map
 		switch (zmienne->trudnosc_labirynt) {//JG:chyba wydajniejsze niz string i konwersja
 		default:
@@ -152,8 +152,8 @@ namespace podsumowanie {
 			DrawText(TextFormat("Twoj rekord: %0.2lf", zmienne->rekord_wlasny), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 370.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik biezacego gracza
 			DrawText(TextFormat("Rekord lokalny: %0.2lf", zmienne->rekord_lokalny), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 413.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
 			DrawText(TextFormat("Rekord lokalny: %0.2lf", zmienne->rekord_lokalny), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 410.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik w tej aplikacji
-			DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 453.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
-			DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 450.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
+			DrawText(TextFormat("Rekord autora: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 453.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
+			DrawText(TextFormat("Rekord autora: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 450.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
 		}
 		else {
 			DrawText(TextFormat("Wynik: %0.2lf   (NOWY REKORD!)", zmienne->wynik), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 333.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
@@ -177,15 +177,15 @@ namespace podsumowanie {
 				DrawText(TextFormat("Rekord lokalny: %0.2lf   (poprzedni: %0.2lf)", zmienne->wynik, zmienne->rekord_lokalny), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 410.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik w tej aplikacji
 			}
 
-			if (zmienne->wynik < zmienne->rekord_swiata + TOL) {//JG:jak nie pobito
-			DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 453.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
-			DrawText(TextFormat("Rekord swiata: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 450.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
-			}
+			//if (zmienne->wynik < zmienne->rekord_swiata + TOL) {//JG:jak nie pobito
+			DrawText(TextFormat("Rekord autora: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 453.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
+			DrawText(TextFormat("Rekord autora: %0.2lf", zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 450.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
+			/* }
 			else {//JG:jak pobito
 				DrawText(TextFormat("Rekord swiata: %0.2lf   (poprzedni: %0.2lf)", zmienne->wynik, zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 453.0f * Skala_liter, (int)(36.0f * Skala_liter), BLACK);//JG:cien
 				DrawText(TextFormat("Rekord swiata: %0.2lf   (poprzedni: %0.2lf)", zmienne->wynik, zmienne->rekord_swiata), 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 450.0f * Skala_liter, (int)(36.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla najlepszy wynik dla tego poziomu na swiecie
 			}
-
+			*/
 			DrawText("Wybierz jeden z ponizszych przyciskow by zapisac rekordy.", 0.5f * (szer - szer_pom) + 53.0f * Skala_liter, 0.5f * (wys - wys_pom) + 503.0f * Skala_liter, (int)(26.0f * Skala_liter), BLACK);//JG:cien
 			DrawText("Wybierz jeden z ponizszych przyciskow by zapisac rekordy.", 0.5f * (szer - szer_pom) + 50.0f * Skala_liter, 0.5f * (wys - wys_pom) + 500.0f * Skala_liter, (int)(26.0f * Skala_liter), EpisodeTheme.textColor);//JG:wyswietla komunikat o tym jak zapisac rekord
 
@@ -279,7 +279,7 @@ namespace podsumowanie {
 			
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
-			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			//if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
 			zmienne->zapisz_wynik();
 
 			stanGry = MAIN_MENU;
@@ -299,7 +299,7 @@ namespace podsumowanie {
 
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
-			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			//if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
 			zmienne->zapisz_wynik();
 
 			zmienne->plansza_x = 0.0f;//JG:zerowanie zmiennych pod rozegranie poziomu
@@ -391,7 +391,7 @@ namespace podsumowanie {
 
 			if (!(zmienne->wynik < zmienne->rekord_wlasny + TOL)) zmienne->rekord_wlasny = zmienne->wynik;
 			if (!(zmienne->wynik < zmienne->rekord_lokalny + TOL)) zmienne->rekord_lokalny = zmienne->wynik;
-			if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
+			//if (!(zmienne->wynik < zmienne->rekord_swiata + TOL)) zmienne->rekord_swiata = zmienne->wynik;
 			zmienne->zapisz_wynik();
 
 			if (zmienne->poziom < 5) {

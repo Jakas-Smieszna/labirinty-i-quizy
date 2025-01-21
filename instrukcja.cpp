@@ -11,8 +11,10 @@
 #define SLAJDY 9
 
 namespace instrukcja {
+
 	/*_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Powróæ",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; }),
+		new PrzyciskTekst("Powrot",{0, 1, 0.1, -1.3}, 30, [&] {stanGry = StanEkranu::MAIN_MENU; }),
+
 	};
 	void drawInstruction() {
 		ClearBackground(BLUE);
@@ -21,7 +23,7 @@ namespace instrukcja {
 		vector<string> lines = DivideText("Instrukcja.txt");
 		for (int i = 0; i < 14 && i<lines.size(); i++)
 		{
-			DrawText(lines[i].c_str(), 10, GetScreenHeight() * (height + 0.05*i), 20, BLACK);
+			DrawText(lines[i].c_str(), 10, GetScreenHeight() * (height + 0.05 * i), 20, BLACK);
 		}
 		for (auto& b : Buttons) {
 			b->draw();
@@ -97,7 +99,7 @@ namespace instrukcja {
 			break;
 		case 8:
 			napis_pom = "Quiz";
-			napis_pom2 = "Poczas quizu przeczytaj uwaznie pytanie (znajdujace sie tuz pod opisem fabularnym) oraz odpowiedzi ponizej, a nastepnie zaznacz kliknieciem 1 z 4 przyciskow A, B, C, D pod panelem quizu, tak by zaznaczony byl ten odpowiadajacy poprawnej odpowiedzi. Nastepnie wcisnij przycisk z ptasziem (fajka) by zatwierdziæ swoja odpowiedz. Panel wyswietli skutek twojej odpowiedzi, a po kliknieciu strzalki mozesz przejsc do kolejnego pytania/etapu poziomu.\nEfekty odpowiedzi:\nSukces - zdobyles/as maksymalna ilosc punktow za pytanie dzieki poprawnej odpowiedzi.\nPowoli do przodu - zdobyles/as troche punktow za czesciowo poprawna odpowiedz.\nNiepowodzenie - nie zdobyles/as punktow - zla odpowiedz.\nDroga wolna - uzbierales/as dosc punktow by ukonczyc ten quiz - mozesz przejsc do kolejnego etapu poziomu (ktorym moze tez byc jego ukonczenie).\nPorazka - nawet jesli odpowiedz byla poprawna, ilosc pytan sie wyczerpala, a ty wciaz nie masz dosc punktow - oznacza przegranie quizu (patrz Rozgrywka dane III).\nMozesz tez korzystac ze skrotow klawiszowych:\nODP A [skr.klaw. A]\tODP B [skr.klaw. W]\tODP C [skr.klaw. S]\nODP D [skr.klaw. D]\tZATWIERDZ [skr.klaw. R]\0";
+			napis_pom2 = "Poczas quizu przeczytaj uwaznie pytanie (znajdujace sie tuz pod opisem fabularnym) oraz odpowiedzi ponizej, a nastepnie zaznacz kliknieciem 1 z 4 przyciskow A, B, C, D pod panelem quizu, tak by zaznaczony byl ten odpowiadajacy poprawnej odpowiedzi. Nastepnie wcisnij przycisk z ptasziem (fajka) by zatwierdziï¿½ swoja odpowiedz. Panel wyswietli skutek twojej odpowiedzi, a po kliknieciu strzalki mozesz przejsc do kolejnego pytania/etapu poziomu.\nEfekty odpowiedzi:\nSukces - zdobyles/as maksymalna ilosc punktow za pytanie dzieki poprawnej odpowiedzi.\nPowoli do przodu - zdobyles/as troche punktow za czesciowo poprawna odpowiedz.\nNiepowodzenie - nie zdobyles/as punktow - zla odpowiedz.\nDroga wolna - uzbierales/as dosc punktow by ukonczyc ten quiz - mozesz przejsc do kolejnego etapu poziomu (ktorym moze tez byc jego ukonczenie).\nPorazka - nawet jesli odpowiedz byla poprawna, ilosc pytan sie wyczerpala, a ty wciaz nie masz dosc punktow - oznacza przegranie quizu (patrz Rozgrywka dane III).\nMozesz tez korzystac ze skrotow klawiszowych:\nODP A [skr.klaw. A]\tODP B [skr.klaw. W]\tODP C [skr.klaw. S]\nODP D [skr.klaw. D]\tZATWIERDZ [skr.klaw. R]\0";
 			break;
 		case 9:
 			napis_pom = "Wyniki";

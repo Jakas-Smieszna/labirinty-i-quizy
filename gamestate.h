@@ -14585,7 +14585,10 @@ public:
             "INSERT OR REPLACE INTO rekordy_local (poziom, rekord) VALUES ('" + LVL_AS_STR + "-" + nazwa_uzytkownika + "', " + std::to_string(rekord_wlasny) + ");";
         sqlite3_exec(database, upd_usr.c_str(), NULL, NULL, NULL);
         // to używa rekord_lokalny, i jest wywoływane po zmianie tej zmiennej, więc możemy zapisać (na 100% jest większy, wiemy to)
-
+        rekord_lokalny = 100;
+        rekord_wlasny = 100;
+        rekord_swiata = 100;
+        wynik = 100;
         return;
     }
     void czytaj_wynik() {
@@ -14596,12 +14599,26 @@ public:
             std::cerr << "Blad otwierania bazy danych: " << sqlite3_errmsg(database) << std::endl;
             return;
         }
+        rekord_lokalny = 100;
+        rekord_wlasny = 100;
+        rekord_swiata = rekordAutora();
         std::string sel =
             "SELECT rekord FROM rekordy_local WHERE poziom = '" + LVL_AS_STR + "';";
         sqlite3_exec(database, sel.c_str(), czyt_loc_callback, NULL, NULL);
         std::string sel_usr =
             "SELECT rekord FROM rekordy_local WHERE poziom = '" + LVL_AS_STR + "-" + nazwa_uzytkownika + "';";
         sqlite3_exec(database, sel_usr.c_str(), czyt_usr_callback, NULL, NULL);
+    }
+    double rekordAutora() {
+        static double rekordy_autora[4][5] = {
+    // poziom 1,  2,   3,   4,   5
+            {460, 300, 420, 480, 427}, // epizod 1
+            {455, 448, 560, 520, 460}, // epizod 2
+            {301, 302, 303, 470, 540}, // epizod 3
+            {401, 402, 403, 404, 405} // epizod 4
+        };
+        if (epizod > 4 || poziom > 5) return 100;
+        return rekordy_autora[epizod - 1][poziom - 1];
     }
 };
 
