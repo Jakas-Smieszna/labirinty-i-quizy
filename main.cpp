@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "wybor_poziomu.h"
 #include "Podsumowanie.h"
+#include "Dzwiek.h"
 
 // !!
 // Gdzie dodać nowy "stan gry"?
@@ -26,6 +27,8 @@ void Update();
 
 int main() {
     InitWindow(1080, 720, "Labirynty i Quizy");
+    InitAudioDevice();
+    InitSounds();
     grafiki = new GRAFIKI;
     UstawEkran0(grafiki->ikona);
     while (!WindowShouldClose() && !zmienne->koniec)
@@ -34,10 +37,17 @@ int main() {
         BeginDrawing();
         Rysowanie();
         EndDrawing();
+        UpdateMusicStream(music);
+        UpdateMusicStream(music2);
+        SetSoundVolume(sound, zmienne->glosnosc/50);
+        SetMusicVolume(music, zmienne->glosnosc/200);
+        SetMusicVolume(music2, zmienne->glosnosc / 200);
     }
     grafiki->D_GRAFIKI();
     zmienne->poziomik.D_Poziom();
     zmienne->D_Zmienne();
+    UnloadSounds();
+    CloseAudioDevice();
     CloseWindow();
     return 0;
 }
@@ -60,7 +70,7 @@ void Update() {
             ustawienia::updateSettings();
             break;
         case TWORCY: // Też się dziwie, że polskie znaki są tu akceptowalne.
-            // update
+            // updat
             credits::updateCredits();
             break;
         case INSTRUKCJA:
@@ -109,8 +119,8 @@ void Rysowanie() {
             // draw
             break;
         case WYBOR_UZYTKOWNIKA:
-           wybor_uzytkownika::drawUserMenu();
-           break;
+            wybor_uzytkownika::drawUserMenu();
+            break;
         case GRA_LABIRYNT:
             // JJJ
             labirynt::drawLabirynt();
@@ -124,8 +134,8 @@ void Rysowanie() {
             podsumowanie::drawPodsumowanie();
             break;
         case INSTRUKCJA:
-           instrukcja::drawInstruction();
-           break;
+            instrukcja::drawInstruction();
+            break;
     }
 }
 
