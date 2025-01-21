@@ -61,6 +61,8 @@ namespace menu {
 		}
 	}
 	void updateMainMenu() {
+		PauseMusicStream(music2);
+		PlayMusicStream(music);
 		if (zmienne->LAB_czulosc_przycisku[0] > 0) zmienne->LAB_czulosc_przycisku[0] = zmienne->LAB_czulosc_przycisku[0] - 1;//JG+
 		else zmienne->LAB_czulosc_przycisku[0] = 0;//JG+
 		for (auto& B : Buttons) {

@@ -64,6 +64,7 @@ void PrzyciskTekst::handleStateChangeConditions() {
 
 void PrzyciskTekst::afterStateChangeLogic() {
 	if (state == NAJECHANY && IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+		PlaySound(sound);
 		onActivation();
 	}
 }

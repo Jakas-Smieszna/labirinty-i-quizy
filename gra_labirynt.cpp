@@ -6,6 +6,7 @@
 #include <string>
 #include "Poziom.h"
 #include "Generowanie punktow wspolnych okregu i lini o zadanym kacie przechodzacej przez jego srodek.h"
+#include "Dzwiek.h"
 
 namespace labirynt {
 
@@ -1849,7 +1850,8 @@ namespace labirynt {
 	}
 
 	void updateLabirynt(grafika* tlo) {
-		
+		PauseMusicStream(music);
+		PlayMusicStream(music2);
 		//JG:USTAWIANIE ZMIENNYCH ZWIAZANYCH Z WYMIARAMI OKNA
 		float szer = (float)GetScreenWidth();
 		float wys = (float)GetScreenHeight();
