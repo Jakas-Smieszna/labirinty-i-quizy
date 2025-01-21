@@ -53,6 +53,7 @@ int main() {
 }
 
 void Update() {
+    SetWindowIcon(grafiki->ikona);//JG:ustawia ikone okna i paska zadan
     if (zmienne->epizod != zmienne->epizod_doc) {
         zmienne->epizod = zmienne->epizod_doc;
         grafiki->aktualizuj_tlo(zmienne->epizod);
@@ -73,7 +74,7 @@ void Update() {
             credits::updateCredits();
             break;
         case INSTRUKCJA:
-           instrukcja::updateInstruction();
+           instrukcja::updateInstruction(&(grafiki->tlo));
             break;
         case WYBOR_UZYTKOWNIKA:
            wybor_uzytkownika::updateUserMenu();
