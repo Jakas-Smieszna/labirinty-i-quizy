@@ -43,6 +43,7 @@ public:
 	grafika wiatrak1;
 	grafika jez1;
 	grafika awatar;
+	grafika slajd;
 
 	void aktualizuj_tlo(char epizod) {
 		switch (epizod) {
@@ -98,6 +99,21 @@ public:
 		}
 	}
 
+	void aktualizuj_slajd(int i){
+		switch (i) {
+		default:
+			break;
+		case 3:
+			UnloadTexture(slajd.text);
+			slajd = grafika(LoadTexture("Grafika1/Slajd1.png"), 1913.0f, 992.0f);
+			break;
+		case 7:
+			UnloadTexture(slajd.text);
+			slajd = grafika(LoadTexture("Grafika1/Slajd2.png"), 1914.0f, 999.0f);
+			break;
+		}
+	}
+
 	GRAFIKI() {
 		ikona = LoadImage("Grafika1/Ikona2.png");
 	
@@ -111,6 +127,7 @@ public:
 		wiatrak1 = grafika(LoadTexture("Grafika1/Wiatrak11.png"), 1000.0f, 1000.0f);
 		jez1 = grafika(LoadTexture("Grafika1/Jez1.png"), 500.0f, 500.0f);
 		awatar = grafika(LoadTexture("Grafika1/Kotel1.png"), 334.0f, 433.0f);
+		slajd = grafika(LoadTexture("Grafika1/Slajd1.png"), 1913.0f, 992.0f);
 	}
 
 	void D_GRAFIKI() {//JG:destruktor daje mniejsza kontrole ze wzgledu na automatyczna aktywacje
@@ -122,6 +139,7 @@ public:
 		wiatrak1.D_grafika();
 		jez1.D_grafika();
 		awatar.D_grafika();
+		slajd.D_grafika();
 	}
 
 };

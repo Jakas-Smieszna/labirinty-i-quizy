@@ -9,8 +9,10 @@
 namespace menu {
 	// Definicja Przycisków w menu
 	_Przycisk* Buttons[] = {
-		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30, [&] { {stanGry = StanEkranu::WYBOR_POZIOMU; }}),
-		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::INSTRUKCJA; }}),
+		new PrzyciskTekst("Wybierz Poziom", {0.5, 0.3, -0.5, 0}, 30, [&] { { stanGry = StanEkranu::WYBOR_POZIOMU; }}),
+		new PrzyciskTekst("Instrukcja",{0.5, 0.4, -0.5, 0}, 20, [&] { { stanGry = StanEkranu::INSTRUKCJA;
+																		zmienne->biezacy_etap = 0;//JG:uzywane jako numer slajdu
+			}}),
 		new PrzyciskTekst("Zmień Użytkownika", {0.5, 0.5, -0.5, 0}, 20, [&] { {stanGry = StanEkranu::WYBOR_UZYTKOWNIKA; }}),
 		new PrzyciskTekst("Ustawienia", {0.5, 0.6, -0.5, 0}, 20, [&] {stanGry = StanEkranu::USTAWIENIA; ustawienia::initSettings();}),
 		new PrzyciskTekst("Twórcy", {0.5, 0.7, -0.5, 0}, 20, [&] {stanGry = StanEkranu::TWORCY;}),
