@@ -157,6 +157,6 @@ void getdata()
       }
    }
    zmienne->odp_pop = 'A' + (char)maxiind;
-   int ind = 0;
+   int ind = 0;;;;;;
    std::cout << zmienne->pytanie;
 }
