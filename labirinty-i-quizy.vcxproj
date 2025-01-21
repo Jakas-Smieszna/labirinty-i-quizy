@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="credits.cpp" />
+    <ClCompile Include="Dzwiek.cpp" />
     <ClCompile Include="gra_labirynt.cpp" />
     <ClCompile Include="gra_quiz.cpp" />
     <ClCompile Include="instrukcja.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Baza.h" />
     <ClInclude Include="credits.h" />
     <ClInclude Include="DivideText.h" />
+    <ClInclude Include="Dzwiek.h" />
     <ClInclude Include="funkcjePomocnicze.h" />
     <ClInclude Include="gamestate.h" />
     <ClInclude Include="Generowanie punktow wspolnych okregu i lini o zadanym kacie przechodzacej przez jego srodek.h" />
@@ -190,11 +192,16 @@
     <None Include="Kursor.cur" />
     <None Include="latwe.db" />
     <None Include="packages.config" />
+    <None Include="Sounds\bgmusic.ogg" />
+    <None Include="Sounds\bgmusic2.ogg" />
     <None Include="srednie.db" />
     <None Include="trudne.db" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Archiwum poziomów.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sounds\Przycisk.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

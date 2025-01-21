@@ -54,6 +54,9 @@
     <ClCompile Include="Podsumowanie.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dzwiek.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="funkcjePomocnicze.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Generowanie punktow wspolnych okregu i lini o zadanym kacie przechodzacej przez jego srodek.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dzwiek.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -175,6 +181,11 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <None Include="packages.config" />
+    <None Include="Sounds\bgmusic.ogg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Sounds\bgmusic2.ogg">
+      <Filter>Resource Files</Filter>
     <None Include="latwe.db">
       <Filter>Source Files</Filter>
     </None>
@@ -189,5 +200,10 @@
     <Text Include="Archiwum poziomów.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sounds\Przycisk.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>
