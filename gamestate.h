@@ -10387,7 +10387,7 @@ public:
             return;
         }
         rekord_lokalny = 100;
-        rekord_wlasny = 100;
+        rekord_wlasny = 100;;;
         rekord_swiata = rekordAutora();
         std::string sel =
             "SELECT rekord FROM rekordy_local WHERE poziom = '" + LVL_AS_STR + "';";
