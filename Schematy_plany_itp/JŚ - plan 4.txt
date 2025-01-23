@@ -1,0 +1,6 @@
+Zagadnienie 1:
+1. Diagram Wymagań (Requirements) SysML
+2. Diagramy przypadków użycia (Use-case) UML
+3. Opisy przypadków użycia/historie użytkownika (User stories).
+4. Różne warianty odbiorców.
+5. Analiza części możliwych błędów spowodowanych przypadkami użycia, przed którymi należy zabezpieczyć aplikację.

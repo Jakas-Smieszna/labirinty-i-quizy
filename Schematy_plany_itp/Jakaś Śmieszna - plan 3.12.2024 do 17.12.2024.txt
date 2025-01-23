@@ -1,0 +1,6 @@
+Temat - Baza Danych - numer 4
+1. Zapoznanie się z dostępnymi technologiami i metodami przechowywania danych w relacyjnych bazach danych oraz dostępnymi implementacjami relacyjnych baz danych.
+2. Zaprojektowanie struktur/tablic przechowujących dane oraz relacji między nimi.
+3. Analiza problemów, które mogą wystąpić podczas dostępu do bazy danych, oraz zapoznanie się z metodami im zapobiegania.
+4. Zapoznanie się ze sposobami oraz metodami przechowywania danych poziomów w grach
+5. Zaprojektowanie przybliżonego formatu, w jakim zapisywać będziemy dane dotyczące poziomów w naszej grze

@@ -1,0 +1,8 @@
+Jakaś Śmieszna - ostatni plan:
+1. Nadanie aplikacji ostatecznego kształtu i funkcjonalności.
+2. Wykorzystujący między innymi serwer system przeładowania i zapisywania punktacji.
+3. Zabezpieczenie rozgrywki przed oszustwami i całego programu przed niezalecanymi rodzajami użytkowania.
+4. System użytkowników.
+5. System wyboru poziomów.
+6. Testy wszystkich wprowadzonych wcześniej i na bieżąco funkcjonalności oparte min. na celowym wywoływaniu sytuacji, w których kod mógłby nie zadziałać prawidłowo.
+7. Wyszukiwanie i poprawianie istniejących, nie wykrytych wcześniej błędów.
